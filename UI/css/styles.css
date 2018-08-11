@@ -1,0 +1,263 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    background-color: #f4f4f4;
+}
+
+/* Global Styling */
+.container{
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+ul {
+    margin: 0;
+    padding: 0;
+}
+.btn {
+    background: #4E9CAF;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-card{
+    width: 380px;;
+    margin: 0 auto;
+    height: auto;
+    border: 1px solid #e4e6e8;
+    background: #FFF;
+    box-shadow: 1px 1px 1px #e4e6e8;
+    border-radius: 5px;
+}
+.form-card-header {
+    font-size: 20px;
+    text-align: center;
+    margin-top:10%;
+}
+
+/*header */
+header{
+    background-color: #161925;
+    color: #fff;
+    min-width: 100%;
+    min-height: 10%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+}
+
+header a{
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+header li{
+    display: inline;
+    padding: 0 20px 0 20px;
+}
+
+header #company-logo{
+    float:left;
+}
+header #company-logo h1{
+    margin-top: 12px;
+    font-size: 20px;
+}
+
+header nav{
+    float: right;
+    margin-top: 17px;
+}
+
+.highlight, .highlight-current a{
+    font-weight: bold;
+    color: rgb(142,168,195);
+}
+
+header a:hover{
+    color: #4E9CAF;
+    font-weight: bold;
+}
+/* Signup Display Section*/
+section{
+    background-color:#23395B;
+    margin-top: 5%
+}
+
+#signup-display{
+    min-height: 400px;
+    background:url();
+    text-align: justify;
+    color: #fff;
+}
+
+#signup-display h1{
+    font-size: 50px;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+
+#signup-display p{
+    font-size: 15px;
+    line-height: 2.0;
+}
+
+#signup-display a{
+    display: block;
+    width: 115px;
+    height: 5%;
+    padding: 10px;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+/*Search Question */
+
+.search-section{
+    background-color:#CBF7ED;
+    min-height: 50px;
+    width: 100%;
+}
+#search-question label{
+    color: #4E9CAF;
+    margin-right: 20px;
+}
+
+
+#search-question form{
+    margin-top: 10px;
+}
+
+#search-question input[type="text"]{
+    padding:4px;
+    height: 10%;
+    width: 25%;
+  }
+
+#search-question button{
+    height: 27px;
+    border: 0;
+    width: 100px;
+}
+/*main  */
+
+main{
+    display: absolute;
+}
+
+/*Side Navigation */
+aside {
+    margin:25px 25px 0 0;
+    padding: 0;
+    float:left;
+    min-width: 20%;
+    min-height: 550px;
+    border-right: 2px solid rgba(102,102,102, 0.3);
+}
+
+main:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#left-sidebar ul li{
+    list-style: none;
+}
+
+#left-sidebar ul li a{
+    text-decoration: none;
+    padding: 10px 10px 10px 0;
+    color: #666;
+}
+
+#left-sidebar ul li a:hover{
+  font-weight: bold;
+  color: #4E9CAF;
+}
+
+#left-sidebar li.highlight-current{
+    border-right: 2px solid blueviolet;
+}
+
+/*Content title */
+div.main-content-title{
+    width: 40%;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+.main-content-title h1{
+  display: inline;
+  font-size: 25px;
+
+}
+
+.main-content-title button{
+    margin-left: 25%;
+    height: 30px;
+    background: #4E9CAF;
+    text-align: center;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    width: 100px;
+    cursor: pointer;
+}
+
+.top-question-list{
+    width: 100%;
+    padding-left: 8px;
+}
+
+.question-summary{
+    margin-top: 20px;
+    border-bottom:1px solid rgba(102,102,102, 0.1);
+}
+.summary{
+    padding: 5px;
+}
+
+.summary a{
+    text-decoration: none;
+    color:rgb(0,89,153);
+}
+
+.summary a:hover{
+    color:rgb(0,89,153, 0.4);
+}
+
+.asked-by-author{
+    text-decoration: none;
+    color: rgb(0,89,153);
+}
+
+.asked-by-author:hover{
+    color:rgb(0,89,153, 0.4);
+}
+
+footer{
+    background-color: #161925;
+    min-height: 100px;
+}
+
+footer p{
+    color: #fff;
+    text-align: center;
+}
+footer a{
+    color: #fff;
+}
+footer a:hover{
+    color: #183ccc;
+}
