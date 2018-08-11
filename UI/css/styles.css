@@ -221,6 +221,11 @@ div.main-content-title{
     cursor: pointer;
 }
 
+.main-content-btn a {
+    text-decoration: none;
+    color: white;
+}
+
 .top-question-list{
     width: 100%;
     padding-left: 8px;
