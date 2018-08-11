@@ -44,6 +44,12 @@ ul {
     margin-top:10%;
 }
 
+.question-content{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 2.0;
+    text-align: justify;
+}
+
 /*header */
 header{
     background-color: #161925;
@@ -160,7 +166,7 @@ aside {
     margin:25px 25px 0 0;
     padding: 0;
     float:left;
-    min-width: 20%;
+    min-width: 15%;
     min-height: 550px;
     border-right: 2px solid rgba(102,102,102, 0.3);
 }
@@ -203,7 +209,7 @@ div.main-content-title{
 
 }
 
-.main-content-title button{
+.main-content-title .main-content-btn{
     margin-left: 25%;
     height: 30px;
     background: #4E9CAF;
