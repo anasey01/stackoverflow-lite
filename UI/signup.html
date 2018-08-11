@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/signup.css">
+    <title>Signup | StackOverFlow-Lite</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="company-logo">
+                <h1>Stack <span class="highlight">OverFlow-Lite</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="./index.html">Home</a></li>
+                    <li><a href="./login.html">Login</a></li>
+                    <li class="highlight-current"><a href="./signup.html">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+        </header>
+        <h1 class="form-card-header">Signup</h1>
+        <div class="form-card">
+            <form>
+                <label class="label" for="name">Full Name:</label>
+                <input type="text" name="name" id="name" placeholder="Enter your Full name..." required>
+                <label class="label" for="username">Username:</label>
+                <input type="text" name="username" id="username" placeholder="Enter your Username for display..." required>
+                <p>Gender:</p>
+                <div>
+                    <input type="radio" id="male"
+                        name="gender" value="male">
+                    <label for="male">Male</label>
+                    <input type="radio" id="female"
+                        name="gender" value="female">
+                    <label for="female">female</label>
+                    <input type="radio" id="notSay"
+                        name="gender" value="i'ld rather not say">
+                    <label for="notSay">I'ld rather not say</label>
+                </div>
+                <label class="label" for="email">Email:</label>
+                <input type="email" name="email" id="email" placeholder="Enter your Email..." required>
+                <label class="label" for="password">Password:</label>
+                <input type="password" name="password" id="password" placeholder="Enter your Password" required>
+                <button type="submit" class="btn">Signup</button>
+                <p id="login">Do you have an account? <a href="./login.html">Login </a></p>
+            </form>
+        </div>
+</body>
+</html>
