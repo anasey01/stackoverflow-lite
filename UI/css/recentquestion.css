@@ -1,0 +1,23 @@
+main.container{
+    margin-top: 50px;
+}
+
+div.main-content-title{
+    width: 80%;
+}
+
+@media(max-width: 1000px){
+    div.main-content-title{
+        width: 60%;
+    }
+}
+
+@media(max-width: 600px){
+    div.main-content-title{
+        width: 100%;
+    }
+
+    aside#left-sidebar{
+        margin-top: 50px;
+    }
+}
