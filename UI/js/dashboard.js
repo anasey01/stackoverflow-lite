@@ -19,7 +19,7 @@ mostAnswered.onclick = ()=>{
 
 //populate Blog Content
 let createBlogContent = (textTitle,textBody)=>{
-    // textContent.innerHTML = "<h1>All Question By user</h1>";
+    textContent.innerHTML = "<h1>All Question By user</h1>";
     var link = document.createElement("a");
     var title = document.createElement("h3");
     link.appendChild(title);
@@ -33,9 +33,6 @@ let createBlogContent = (textTitle,textBody)=>{
 //Functions implementation
 let viewAllQuestionsByUser = ()=>{
    createBlogContent("Retrieve WFS Map Content with Geotools in Java", "I am trying to retrieve Map content via WFS Geoserver connection in Java with Geotools 18.4. But I am getting the following error: Content type is required for org.geotools.data.ows.Response.");
-   createBlogContent("Remove a prop from cloned React component", "I need to perform some post-processing of React components that involve removing some props. I tried to use React.cloneElement passing {myprop: undefined} as second argument");
-   createBlogContent("Laravel multiauth per domain", "So i have problem with laravel authentication.. So lets explain little I have site with dynamic subdomains.. Main site www.mydomain.comhas one authentication with user name,email and password");
-
 }
 
 let viewAllAnswersByUser = ()=>{
