@@ -188,11 +188,12 @@ main:after{
 
 #left-sidebar ul li{
     list-style: none;
+    padding-right: 1px;
 }
 
 #left-sidebar ul li a{
     text-decoration: none;
-    padding: 10px 10px 10px 0;
+    padding: 10px 1px 10px 0;
     color: #666;
 }
 
