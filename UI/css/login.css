@@ -38,6 +38,12 @@ button{
     text-align: center;
 }
 
+footer{
+   position:absolute;
+   bottom:0;
+   width:100%;
+}
+
 /* Media Query */
 @media(max-width: 660px){
     .form-card-header{
