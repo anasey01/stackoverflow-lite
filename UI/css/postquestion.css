@@ -8,6 +8,12 @@ li .highlight-current {
     padding-right: 10px;
 }
 
+.main:after{
+    content: "";
+    display: table;
+    clear: both;
+}
+
 div.main-content-title{
     width: 500px;
 }
@@ -41,6 +47,13 @@ div.main-content-title{
     background-color: #f8f8f8;
     resize: none;
 }
+
+footer{
+    position:absolute;
+    bottom:0;
+    width:100%;
+ }
+ 
 /* Media Query */
 @media(max-width:643px){
     aside#left-sidebar{
