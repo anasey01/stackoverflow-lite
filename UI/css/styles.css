@@ -30,8 +30,8 @@ ul {
 }
 
 .form-card{
-    width: 380px;;
-    margin: 0 auto;
+    max-width: 380px;
+    margin: auto;
     height: auto;
     border: 1px solid #e4e6e8;
     background: #FFF;

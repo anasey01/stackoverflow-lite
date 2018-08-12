@@ -37,3 +37,10 @@ button{
     margin-top: 10%;
     text-align: center;
 }
+
+/* Media Query */
+@media(max-width: 660px){
+    .form-card-header{
+        margin-top: 5em;
+    }
+}
