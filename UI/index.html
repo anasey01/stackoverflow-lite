@@ -27,9 +27,9 @@
     </header>
     <section>
         <div class="container" id="signup-display">
-            <div>
-                <h1>A place to Learn, Share and Build</h1>
-                <p>Thinking of a place to learn, share your knowledge, and build your careers? Think Stack Overflow Lite!</p>
+            <div id="welcome-text">
+                <h1>Learn, Share and Build with other Developers</h1>
+                <p>Thinking of a place to learn, share your knowledge, and build your careers?</p>
                 <p>Join the developer's online community</p>
             </div>
             <div>
@@ -49,19 +49,17 @@
         </div>
     </div>
     <main class="container">
-        <aside>
-            <div id="left-sidebar">
-                <nav>
-                    <ul>
-                        <li class="highlight-current"><a href="/">Home</a></li>
-                        <li><a href="./viewQuestion.html">Recent Questions</a></li>
-                        <li><a href="./postQuestion.html">Ask a Question</a></li>
-                    </ul>
-                </nav>
-            </div>
+        <aside id="left-sidebar">
+            <nav>
+                <ul>
+                    <li class="highlight-current"><a href="/">Home</a></li>
+                    <li><a href="./viewQuestion.html">Recent Questions</a></li>
+                    <li><a id="hidden" href="./postQuestion.html">Ask a Question</a></li>
+                </ul>
+            </nav>
         </aside>
         <div class="main-content-title">
-            <h1>Top Questions</h1>
+            <h1>Recent Questions</h1>
             <button class="btn main-content-btn"><a href="./postQuestion.html">Ask Question</a></button>
             <div class="top-questions-list">
                 <div class="question-summary">
@@ -69,6 +67,7 @@
                         <h3><a href="#">Unable to SSH from inside Kubernetes container</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">1 <span>answer</span></span>
                         <a class="asked-by-time">46 secs ago</a>
                         <a class="asked-by-author" href="#">Oluseyi</a>
                     </div>
@@ -78,6 +77,7 @@
                         <h3><a href="#">Python: Compare first line of files and save their path</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">0 <span>answer</span></span>
                         <a class="asked-by-time">58 secs ago</a>
                         <a class="asked-by-author" href="#">Oluseyi</a>
                     </div>
@@ -87,6 +87,7 @@
                         <h3><a href="#">Removing information from MS Word default template</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">5 <span>answer</span></span>
                         <a class="asked-by-time">1 min ago</a>
                         <a class="asked-by-author" href="#">Akinola</a>
                     </div>
@@ -96,6 +97,7 @@
                         <h3><a href="#">Simple demo Node JS localhost server not responding</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">1 <span>answer</span></span>
                         <a class="asked-by-time">3 mins ago</a>
                         <a class="asked-by-author" href="#">Emeka</a>
                     </div>
@@ -105,6 +107,7 @@
                         <h3><a href="#">Posting audio files from Angular assets to server</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">0 <span>answer</span></span>
                         <a class="asked-by-time">4 mins ago</a>
                         <a class="asked-by-author" href="#">Emeka</a>
                     </div>
@@ -114,6 +117,7 @@
                         <h3><a href="#">Login does not work on ios(apple) devices</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">2 <span>answer</span></span>
                         <a class="asked-by-time">5 mins ago</a>
                         <a class="asked-by-author" href="#">Annu</a>
                     </div>
@@ -123,6 +127,7 @@
                         <h3><a href="#">How to read the logs from TFS Build/Release and change the task status accordingly?</a></h3>
                     </div>
                     <div class="asked-by">
+                        <span class="number-of-answers">0 <span>answer</span></span>
                         <a class="asked-by-time">10 mins ago</a>
                         <a class="asked-by-author" href="#">williams</a>
                     </div>
