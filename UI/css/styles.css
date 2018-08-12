@@ -360,3 +360,9 @@ footer a:hover{
     }
 
 }
+
+@media(max-width:282px){
+    header a{
+        font-size: 12px;
+    }
+}
