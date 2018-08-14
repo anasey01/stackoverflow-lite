@@ -1,0 +1,1 @@
+{"version":3,"sources":["../server/text.js"],"names":["console","log","server"],"mappings":";;;;;;AAAA;;;;;;AAEAA,QAAQC,GAAR,CAAYC,gBAAZ;AACAF,QAAQC,GAAR,CAAY,uBAAZ;;kBAEeC,gB","file":"text.js","sourcesContent":["import server from \"./server\";\r\n\r\nconsole.log(server);\r\nconsole.log(\"Test File is working!\");\r\n\r\nexport default server;"]}
