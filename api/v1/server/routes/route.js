@@ -16,8 +16,17 @@ router.get("/", (req, res)=>{
 
 //GET All Questions
 router.get("/questions", (req, res)=>{
-    console.log(data);
     res.send(data);
+});
+
+//GET Specific Question
+router.get("/questions/:id", (req, res)=>{
+    let dataId = req.params.id;
+    data.forEach(item=>{
+       if(item.id == dataId)
+            res.send(item)
+    });
+    res.send("Data not found!");
 });
 
 
