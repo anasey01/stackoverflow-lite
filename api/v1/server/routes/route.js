@@ -1,7 +1,10 @@
+import fs from "fs";
 import express from "express";
 import bodyParser from "body-parser";
-import data from "../data/data";
 const router = express.Router();
+
+//Simulate DataBase in Memory
+let sampleData = [];
 
 // parse application/x-www-form-urlencoded
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -16,18 +19,29 @@ router.get("/", (req, res)=>{
 
 //GET All Questions
 router.get("/questions", (req, res)=>{
-    res.send(data);
+    res.send(sampleData);
 });
 
 //GET Specific Question
 router.get("/questions/:id", (req, res)=>{
     let dataId = req.params.id;
-    data.forEach(item=>{
-       if(item.id == dataId)
-            res.send(item)
-    });
-    res.send("Data not found!");
+    sampleData.forEach(item=>{
+        if(item.id == dataId)
+             res.send(item)
+     });
+     res.send("Data not found!");
 });
 
+//POST a Question
+router.post("/questions", (req, res)=>{
+    let id = sampleData.length + 1;
+    let newQuestion = {
+        id : id,
+        title : req.body.title,
+        content : req.body.content
+    }
+    sampleData.push(newQuestion);
+    res.send("Successfully added!");
+});
 
 export default router;
