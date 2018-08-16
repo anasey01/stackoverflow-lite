@@ -44,4 +44,21 @@ router.post("/questions", (req, res)=>{
     res.send("Successfully added!");
 });
 
+//POST an answer
+router.post("/questions/:id/answers", (req, res)=>{
+    let dataId = req.params.id;
+    sampleData.forEach(item=>{
+        if(item.id == dataId){
+           if(!item["answer"]){
+                item.answer = [req.body.answer];
+                res.send("Your answer has been added!")
+           }else{
+               item["answer"].push(req.body.answer);
+               res.send("Your answer has been added!")
+           }
+        }
+     });
+     res.send("Data not found!");
+});
+
 export default router;
