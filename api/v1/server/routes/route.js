@@ -22,11 +22,10 @@ router.get("/questions", (req, res)=>{
 //GET Specific Question
 router.get("/questions/:id", (req, res)=>{
     let dataId = req.params.id;
-    for(let dataItem of data){
-        if(dataId == dataItem.id){
-            res.send(dataItem);
-        }
-    }
+    data.forEach(item=>{
+       if(item.id == dataId)
+            res.send(item)
+    });
     res.send("Data not found!");
 });
 
