@@ -22,13 +22,13 @@ router.get("/questions", (req, res)=>{
 //GET Specific Question
 router.get("/questions/:id", (req, res)=>{
     let dataId = req.params.id;
-    data.forEach(item=>{
-       if(item.id == dataId)
-            res.send(item)
-    });
+    for(let dataItem of data){
+        if(dataId == dataItem.id){
+            res.send(dataItem);
+        }
+    }
     res.send("Data not found!");
 });
-
 
 
 export default router;
