@@ -1,1 +1,0 @@
-{"version":3,"sources":["../server/server.js"],"names":["app","console","log"],"mappings":";;AAAA;;;;AACA;;;;;;AACA,IAAMA,MAAM,wBAAZ;;AAEAC,QAAQC,GAAR,CAAYF,GAAZ","file":"server.js","sourcesContent":["import express from \"express\";\r\nimport test from \"./text\";\r\nconst app = express();\r\n\r\nconsole.log(app);\r\n"]}
