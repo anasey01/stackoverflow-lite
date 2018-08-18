@@ -36,3 +36,21 @@ describe('/GET', () => {
             });
     });
 });
+
+describe('/POST', () => {
+    it('add a question', (done) => {
+        chai.request(server)
+            .post('/api/v1/questions/')
+            .set('content-type', 'application/json')
+            .send({
+                'title' : 'Help rectify this error',
+                'content' : 'This is the nature of the error'
+            })
+            .end((err, res) => {
+                res.body.should.have.property('id');
+                res.body.should.have.property('title');
+                res.body.should.have.property('content');
+                done();
+            });
+    });
+});
