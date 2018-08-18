@@ -22,3 +22,17 @@ describe('/GET', () => {
             });
     });
 });
+
+describe('/GET', () => {
+    it('fetch a specific question', (done) => {
+        chai.request(server)
+            .get('/api/v1/questions/1')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('id');
+                res.body.should.have.property('title');
+                res.body.should.have.property('content');
+                done();
+            });
+    });
+});
