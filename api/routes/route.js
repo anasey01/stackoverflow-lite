@@ -41,7 +41,7 @@ router.post("/questions", (req, res)=>{
         content : req.body.content
     }
     sampleData.push(newQuestion);
-    res.status(200).json('Question added Successfully!');
+    res.status(200).json(sampleData[sampleData.length - 1]);
 });
 
 //POST an answer
