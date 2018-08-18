@@ -51,10 +51,10 @@ router.post("/questions/:id/answers", (req, res)=>{
         if(item.id == dataId){
            if(!item["answer"]){
                 item.answer = [req.body.answer];
-                res.json("Your answer has been added!")
+                res.json(item);
            }else{
                item["answer"].push(req.body.answer);
-               res.json("Your answer has been added!")
+               res.json(item);
            }
         }
      });

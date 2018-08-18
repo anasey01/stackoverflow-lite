@@ -54,3 +54,21 @@ describe('/POST', () => {
             });
     });
 });
+
+describe('/POST', () => {
+    it('add an answer to a specific question', (done) => {
+        chai.request(server)
+            .post('/api/v1/questions/1/answers')
+            .set('content-type', 'application/json')
+            .send({
+                'answer' : 'Answer to question'
+            })
+            .end((err, res) => {
+                res.body.should.have.property('id');
+                res.body.should.have.property('title');
+                res.body.should.have.property('content');
+                res.body.should.have.property('answer');
+                done();
+            });
+    });
+});
