@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe('/GET', () => {
     it('fetch all questions', (done) => {
-        return chai.request(server)
+        chai.request(server)
             .get('/api/v1/questions')
             .end((err, res) => {
                 res.should.have.status(200);
@@ -25,7 +25,7 @@ describe('/GET', () => {
 
 describe('/GET', () => {
     it('fetch a specific question', (done) => {
-       return chai.request(server)
+       chai.request(server)
             .get('/api/v1/questions/1')
             .end((err, res) => {
                 res.should.have.status(200);
@@ -39,7 +39,7 @@ describe('/GET', () => {
 
 describe('/POST', () => {
     it('add a question', (done) => {
-       return chai.request(server)
+       chai.request(server)
             .post('/api/v1/questions/')
             .set('content-type', 'application/json')
             .send({
@@ -57,7 +57,7 @@ describe('/POST', () => {
 
 describe('/POST', () => {
     it('add an answer to a specific question', (done) => {
-      return chai.request(server)
+      chai.request(server)
             .post('/api/v1/questions/1/answers')
             .set('content-type', 'application/json')
             .send({
