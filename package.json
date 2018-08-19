@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "babel": "rm -rf server-babel.js && babel server/server.js -o server/server-babel.js",
-    "start": "node bin/dev",
+    "start": "node bin/production",
     "clean": "rm dist -rf",
     "lint": "./node_modules/.bin/eslint ./app/app.js",
     "clean-test": "cd dist && rm test -rf",

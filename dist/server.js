@@ -20,7 +20,7 @@ var app = (0, _express2.default)();
 app.use("/api/v1", _route2.default);
 
 //Set Up PORT
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT);
 
 //FIRE Up Server to listen on PORT
 app.listen(app.get("port"), function () {

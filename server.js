@@ -8,7 +8,7 @@ app.use("/api/v1", routes);
 
 
 //Set Up PORT
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT);
 
 //FIRE Up Server to listen on PORT
 app.listen(app.get("port"), ()=>{
