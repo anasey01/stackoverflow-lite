@@ -27,7 +27,7 @@ router.use(_bodyParser2.default.json());
 
 //GET API homepage
 router.get("/", function (req, res) {
-    res.json("<h1>Welcome to API homepage</h1>");
+    res.send("<h1>Welcome to API homepage</h1>");
 });
 
 //GET All Questions
@@ -40,10 +40,10 @@ router.get("/questions/:id", function (req, res) {
     var dataId = req.params.id;
     sampleData.forEach(function (item) {
         if (item.id == dataId) {
-            res.json(item);
+            return res.json(item);
         }
     });
-    res.status(400).json('Data Not Found!');
+    return res.status(400).json('Data Not Found!');
 });
 
 //POST a Question
@@ -65,15 +65,19 @@ router.post("/questions/:id/answers", function (req, res) {
         if (item.id == dataId) {
             if (!item["answer"]) {
                 item.answer = [req.body.answer];
-                res.json(item);
+                return res.json(item);
             } else {
                 item["answer"].push(req.body.answer);
-                res.json(item);
+                return res.json(item);
             }
         }
     });
-    res.status(400).json('Data Not Found!');
+    return res.status(400).json('Data Not Found!');
 });
 
+//Anyother routes
+router.get("*", function (req, res) {
+    return res.json("API URL NOT CORRECT!");
+});
 exports.default = router;
 //# sourceMappingURL=route.js.map

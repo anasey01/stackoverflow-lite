@@ -62,7 +62,7 @@ router.post("/questions/:id/answers", (req, res)=>{
 });
 
 //Anyother routes
-router.post("*", (req, res) => {
+router.get("*", (req, res) => {
     return res.json("API URL NOT CORRECT!");
 });
 export default router;
