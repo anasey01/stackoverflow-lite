@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 
 //GET API homepage
 router.get("/", (req, res)=>{
-    res.json("<h1>Welcome to API homepage</h1>");
+    res.send("<h1>Welcome to API homepage</h1>");
 });
 
 //GET All Questions
@@ -61,4 +61,8 @@ router.post("/questions/:id/answers", (req, res)=>{
      return res.status(400).json('Data Not Found!');
 });
 
+//Anyother routes
+router.post("*", (req, res) => {
+    return res.json("API URL NOT CORRECT!");
+});
 export default router;

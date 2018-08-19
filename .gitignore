@@ -2,3 +2,5 @@ node_modules/
 .vscode
 .coveralls.yml
 api/
+.nyc_output/
+coverage/
