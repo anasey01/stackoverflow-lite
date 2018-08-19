@@ -26,10 +26,10 @@ router.get("/questions/:id", (req, res)=>{
     let dataId = req.params.id;
     sampleData.forEach(item=>{
         if(item.id == dataId){
-            res.json(item);
+            return res.json(item);
         }
      });
-     res.status(400).json('Data Not Found!');
+    return res.status(400).json('Data Not Found!');
 });
 
 //POST a Question
@@ -51,14 +51,14 @@ router.post("/questions/:id/answers", (req, res)=>{
         if(item.id == dataId){
            if(!item["answer"]){
                 item.answer = [req.body.answer];
-                res.json(item);
+                return res.json(item);
            }else{
                item["answer"].push(req.body.answer);
-               res.json(item);
+               return res.json(item);
            }
         }
      });
-     res.status(400).json('Data Not Found!');
+     return res.status(400).json('Data Not Found!');
 });
 
 export default router;
