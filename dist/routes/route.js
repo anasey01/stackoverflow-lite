@@ -12,6 +12,8 @@ var _bodyParser = require("body-parser");
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
+var _vm = require("vm");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -36,14 +38,20 @@ router.get("/questions", function (req, res) {
 });
 
 //GET Specific Question
-router.get("/questions/:id", function (req, res) {
+router.get("/questions/:id", function (req, res, next) {
     var dataId = req.params.id;
+    var existing = "Data Not Found!";
     sampleData.forEach(function (item) {
         if (item.id == dataId) {
-            return res.json(item);
+            existing = item;
         }
     });
-    return res.status(400).json('Data Not Found!');
+
+    if (existing === "Data Not Found!") {
+        res.status(404).json(existing);
+    } else {
+        res.status(200).json(existing);
+    }
 });
 
 //POST a Question
@@ -61,21 +69,24 @@ router.post("/questions", function (req, res) {
 //POST an answer
 router.post("/questions/:id/answers", function (req, res) {
     var dataId = req.params.id;
+    var existing = "Data Not Found!";
     sampleData.forEach(function (item) {
         if (item.id == dataId) {
-            if (!item["answer"]) {
-                item.answer = [req.body.answer];
-                return res.json(item);
-            } else {
-                item["answer"].push(req.body.answer);
-                return res.json(item);
-            }
+            existing = item;
         }
     });
-    return res.status(400).json('Data Not Found!');
+    if (existing === "Data Not Found!") {
+        return res.status(400).json(existing);
+    } else if (!existing["answers"]) {
+        existing.answers = [req.body.answers];
+        return res.json(existing);
+    } else {
+        existing.answers.push(req.body.answers);
+        return res.json(existing);
+    }
 });
 
-//Anyother routes
+//Any other routes
 router.get("*", function (req, res) {
     return res.json("API URL NOT CORRECT!");
 });
