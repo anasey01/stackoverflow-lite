@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { runInNewContext } from "vm";
 const router = express.Router();
 
 //Simulate DataBase in Memory
@@ -22,14 +23,20 @@ router.get("/questions", (req, res)=>{
 });
 
 //GET Specific Question
-router.get("/questions/:id", (req, res)=>{
+router.get("/questions/:id", (req, res, next)=>{
     let dataId = req.params.id;
+    let existing = "Data Not Found!";
     sampleData.forEach(item=>{
         if(item.id == dataId){
-            return res.json(item);
+            existing = item;
         }
      });
-    return res.status(400).json('Data Not Found!');
+
+     if(existing === "Data Not Found!"){
+        res.status(404).json(existing);
+     }else{
+        res.status(200).json(existing);
+     }
 });
 
 //POST a Question
@@ -47,21 +54,24 @@ router.post("/questions", (req, res)=>{
 //POST an answer
 router.post("/questions/:id/answers", (req, res)=>{
     let dataId = req.params.id;
+    let existing = "Data Not Found!";
     sampleData.forEach(item=>{
         if(item.id == dataId){
-           if(!item["answer"]){
-                item.answer = [req.body.answer];
-                return res.json(item);
-           }else{
-               item["answer"].push(req.body.answer);
-               return res.json(item);
-           }
+            existing = item;
         }
      });
-     return res.status(400).json('Data Not Found!');
+     if(existing === "Data Not Found!"){
+        return res.status(400).json(existing);
+     }else if(!existing["answers"]){
+        existing.answers = [req.body.answers]
+        return res.json(existing);
+     }else{
+        existing.answers.push(req.body.answers);
+        return res.json(existing);
+     }
 });
 
-//Anyother routes
+//Any other routes
 router.get("*", (req, res) => {
     return res.json("API URL NOT CORRECT!");
 });
