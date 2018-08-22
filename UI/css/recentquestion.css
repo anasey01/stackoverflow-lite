@@ -6,6 +6,14 @@ div.main-content-title{
     width: 80%;
 }
 
+main#main-recent-question.container{
+    margin-top: 100px;
+}
+
+h1#recent-title{
+    font-size: 1.5em;
+}
+
 @media(max-width: 1000px){
     div.main-content-title{
         width: 60%;

@@ -30,7 +30,8 @@ button{
 
 #forgotPassword{
     font-size: 12px;
-    text-align: end;
+    text-align: left;
+    margin-top: 10px;
 }
 
 #signup{
