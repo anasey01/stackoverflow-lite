@@ -23,6 +23,10 @@ input[type=text], input[type=email], input[type=password] {
     cursor: auto;
 }
 
+input[type=radio]{
+    margin-bottom: 10px;
+}
+
 button{
     display: block;
     width: 115px;
