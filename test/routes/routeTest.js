@@ -67,7 +67,7 @@ describe('/POST', () => {
                 res.body.should.have.property('id');
                 res.body.should.have.property('title');
                 res.body.should.have.property('content');
-                res.body.should.have.property('answer');
+                res.body.should.have.property('answers');
                 done();
             });
     });
