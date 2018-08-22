@@ -12,7 +12,7 @@
     "build-test": "npm run clean-test && cd dist && mkdir test && babel ../test -s -d test",
     "clean-routes": "cd dist && rm routes -rf",
     "build-routes": "npm run clean-routes && cd dist && mkdir routes && babel ../routes -s -d routes",
-    "build": "npm run clean && mkdir dist && babel server.js -s -d dist",
+    "build": "npm run clean && mkdir dist && babel server.js -s -d dist ",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test": "npm run clean-test && npm run build-test && nyc --reporter=html --reporter=text mocha \"dist/test/routes/routeTest.js\" --exit",
     "production": "npm run build && npm run build-routes && npm run test && node bin/production"
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "pg": "^7.4.3"
   }
 }
