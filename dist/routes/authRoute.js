@@ -8,9 +8,17 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
+var _morgan = require('morgan');
+
+var _morgan2 = _interopRequireDefault(_morgan);
+
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
 var _Authentication = require('../auth/Authentication');
 
@@ -28,6 +36,7 @@ var auth = new _Authentication2.default(db);
 var authRouter = _express2.default.Router();
 authRouter.use(_bodyParser2.default.urlencoded({ extended: false }));
 authRouter.use(_bodyParser2.default.json());
+authRouter.use((0, _morgan2.default)(':method :url :response-time'));
 
 authRouter.get('/signup', function (req, res) {
   res.status(200).json({
@@ -56,7 +65,14 @@ authRouter.post('/signup', function (req, res) {
 authRouter.post('/login', function (req, res) {
   var obj = req.body;
   auth.login(obj.username, obj.password, function (result) {
-    res.json(result);
+    var token = _jsonwebtoken2.default.sign({
+      _id: result.id,
+      name: result.fullname,
+      gender: result.gender,
+      username: result.username,
+      email: result.email
+    }, 'jwtPrivateKey');
+    res.json(token);
   });
 });
 

@@ -30,7 +30,6 @@ var Authentication = function () {
       var _this = this;
 
       this.conn.selectUserByUsername(username, function (err, result) {
-        console.log('The result from register user ', result);
         if (err) {
           callback(err);
         } else if (result.length < 1 && result.length !== 1) {
