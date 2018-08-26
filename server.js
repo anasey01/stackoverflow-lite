@@ -1,16 +1,16 @@
-import express from "express";
-import routes from "./routes/route";
+import express from 'express';
+import routes from './routes/route';
+import authRouter from './routes/authRoute';
 
 const app = express();
 
-//USE ROUTES
-app.use("/api/v1", routes);
+app.use('/api/v1', routes);
+app.use('/auth/', authRouter);
 
 
-//Set Up PORT
 app.set('port', process.env.PORT || 8080);
 
-//FIRE Up Server to listen on PORT
+
 app.listen(app.get("port"), ()=>{
     console.log(`Action happening on port ${app.get("port")}`);
 });
