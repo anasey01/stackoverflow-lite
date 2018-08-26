@@ -1,12 +1,16 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
+
+var _morgan = require('morgan');
+
+var _morgan2 = _interopRequireDefault(_morgan);
 
 var _route = require('./routes/route');
 
@@ -25,8 +29,8 @@ app.use('/auth/', _authRoute2.default);
 
 app.set('port', process.env.PORT || 8080);
 
-app.listen(app.get("port"), function () {
-    console.log('Action happening on port ' + app.get("port"));
+app.listen(app.get('port'), function () {
+  console.log('Action happening on port ' + app.get('port'));
 });
 
 exports.default = app;

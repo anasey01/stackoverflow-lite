@@ -1,5 +1,7 @@
 import express from 'express';
+import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 import Authentication from '../auth/Authentication';
 import DatabaseManager from '../controllers/DatabaseManager';
 
@@ -9,6 +11,7 @@ const auth = new Authentication(db);
 const authRouter = express.Router();
 authRouter.use(bodyParser.urlencoded({ extended: false }));
 authRouter.use(bodyParser.json());
+authRouter.use(morgan(':method :url :response-time'));
 
 authRouter.get('/signup', (req, res) => {
   res.status(200).json({
@@ -37,7 +40,16 @@ authRouter.post('/signup', (req, res) => {
 authRouter.post('/login', (req, res) => {
   const obj = req.body;
   auth.login(obj.username, obj.password, (result) => {
-    res.json(result);
+    const token = jwt.sign(
+      {
+        _id: result.id,
+        name: result.fullname,
+        gender: result.gender,
+        username: result.username,
+        email: result.email,
+      }, 'jwtPrivateKey',
+    );
+    res.json(token);
   });
 });
 
