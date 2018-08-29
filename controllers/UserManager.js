@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-class Authentication {
+class UserManager {
   constructor(connection) {
     this.conn = connection;
     this.table = 'users';
@@ -23,7 +23,7 @@ class Authentication {
       if (err) {
         callback('There was an error adding user!');
       }
-      callback(`Welcome ${fullname}`);
+      callback(result);
     });
   }
 
@@ -44,4 +44,4 @@ class Authentication {
     });
   }
 }
-export default Authentication;
+export default UserManager;

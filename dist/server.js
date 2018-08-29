@@ -8,13 +8,13 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _morgan = require('morgan');
+var _bodyParser = require('body-parser');
 
-var _morgan2 = _interopRequireDefault(_morgan);
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _route = require('./routes/route');
+var _questionRoute = require('./routes/questionRoute');
 
-var _route2 = _interopRequireDefault(_route);
+var _questionRoute2 = _interopRequireDefault(_questionRoute);
 
 var _authRoute = require('./routes/authRoute');
 
@@ -24,7 +24,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = (0, _express2.default)();
 
-app.use('/api/v1', _route2.default);
+app.use(_bodyParser2.default.urlencoded({ extended: false }));
+app.use(_bodyParser2.default.json());
+app.use('/api/v1', _questionRoute2.default);
 app.use('/auth/', _authRoute2.default);
 
 app.set('port', process.env.PORT || 8080);
