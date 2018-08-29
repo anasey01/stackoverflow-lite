@@ -16,65 +16,24 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _jsonwebtoken = require('jsonwebtoken');
+var _UsersRoute = require('../controllers/UsersRoute');
 
-var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+var _UsersRoute2 = _interopRequireDefault(_UsersRoute);
 
-var _Authentication = require('../auth/Authentication');
+var _validateToken = require('../middleware/validateToken');
 
-var _Authentication2 = _interopRequireDefault(_Authentication);
-
-var _DatabaseManager = require('../controllers/DatabaseManager');
-
-var _DatabaseManager2 = _interopRequireDefault(_DatabaseManager);
+var _validateToken2 = _interopRequireDefault(_validateToken);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var db = new _DatabaseManager2.default();
-var auth = new _Authentication2.default(db);
-
 var authRouter = _express2.default.Router();
+
 authRouter.use(_bodyParser2.default.urlencoded({ extended: false }));
 authRouter.use(_bodyParser2.default.json());
 authRouter.use((0, _morgan2.default)(':method :url :response-time'));
 
-authRouter.get('/signup', function (req, res) {
-  res.status(200).json({
-    success: true,
-    message: 'Welcome to signup API route'
-  });
-});
-
-authRouter.post('/signup', function (req, res) {
-  var obj = req.body;
-  auth.registerUser(obj.fullname, obj.gender, obj.username, obj.password, obj.email, function (result) {
-    if (result === 'existing') {
-      res.status(400).json({
-        success: false,
-        message: 'username already exists'
-      });
-    } else {
-      res.status(200).json({
-        status: true,
-        message: 'user succesfully registered'
-      });
-    }
-  });
-});
-
-authRouter.post('/login', function (req, res) {
-  var obj = req.body;
-  auth.login(obj.username, obj.password, function (result) {
-    var token = _jsonwebtoken2.default.sign({
-      _id: result.id,
-      name: result.fullname,
-      gender: result.gender,
-      username: result.username,
-      email: result.email
-    }, 'jwtPrivateKey');
-    res.json(token);
-  });
-});
+authRouter.post('/signup', _UsersRoute2.default.signup);
+authRouter.post('/login', _UsersRoute2.default.login);
 
 exports.default = authRouter;
 //# sourceMappingURL=authRoute.js.map

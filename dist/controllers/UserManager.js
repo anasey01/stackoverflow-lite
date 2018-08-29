@@ -16,15 +16,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Authentication = function () {
-  function Authentication(connection) {
-    _classCallCheck(this, Authentication);
+var UserManager = function () {
+  function UserManager(connection) {
+    _classCallCheck(this, UserManager);
 
     this.conn = connection;
     this.table = 'users';
   }
 
-  _createClass(Authentication, [{
+  _createClass(UserManager, [{
     key: 'registerUser',
     value: function registerUser(fullname, gender, username, password, email, callback) {
       var _this = this;
@@ -46,7 +46,7 @@ var Authentication = function () {
         if (err) {
           callback('There was an error adding user!');
         }
-        callback('Welcome ' + fullname);
+        callback(result);
       });
     }
   }, {
@@ -69,8 +69,8 @@ var Authentication = function () {
     }
   }]);
 
-  return Authentication;
+  return UserManager;
 }();
 
-exports.default = Authentication;
-//# sourceMappingURL=Authentication.js.map
+exports.default = UserManager;
+//# sourceMappingURL=UserManager.js.map

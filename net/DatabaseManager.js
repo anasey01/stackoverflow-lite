@@ -1,0 +1,149 @@
+import { Pool } from 'pg';
+import bcrypt from 'bcrypt';
+import config from '../model/dbConfig';
+
+class DbManager {
+  constructor() {
+    let configString = '';
+    if (process.env.NODE_ENV) {
+      if (process.env.NODE_ENV.trim() === 'test') configString = config.test;
+      if (process.env.NODE_ENV.trim() === 'production') configString = config.production;
+    }
+    this.pool = new Pool(configString || config.development);
+    this.createUserTable();
+    this.createQuestionTable();
+    this.createTableAnswer();
+  }
+
+  createUserTable() {
+    const query = `
+    CREATE TABLE IF NOT EXISTS users(
+        id SERIAL NOT NULL PRIMARY KEY,
+        fullname text NOT NULL,
+        gender text NOT NULL,
+        username text UNIQUE NOT NULL,
+        password text NOT NULL,
+        email text UNIQUE NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );`;
+
+    return this.pool.query(query, (err, result) => result);
+  }
+
+  createQuestionTable() {
+    const query = `
+    CREATE TABLE IF NOT EXISTS questions(
+        id SERIAL NOT NULL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id),
+        title text NOT NULL,
+        content text NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+    );`;
+
+    return this.pool.query(query, (err, result) => result);
+  }
+
+  createTableAnswer() {
+    const query = `
+    CREATE TABLE IF NOT EXISTS answers(
+        id SERIAL NOT NULL PRIMARY KEY,
+        user_id integer REFERENCES users(id),
+        question_id INTEGER REFERENCES questions(id),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        answer text NOT NULL
+    );`;
+
+    return this.pool.query(query, (err, result) => result);
+  }
+
+  insertUser(fullname, gender, username, password, email, callback) {
+    const salt = bcrypt.genSaltSync(10);
+    const hashed = bcrypt.hashSync(password, salt);
+    password = hashed;
+    const query = 'INSERT INTO users (fullname, gender, username, password, email) VALUES($1, $2, $3, $4, $5);';
+    const values = [fullname, gender, username, password, email];
+    this.pool.query(query, values, (error, result) => {
+      if (error) {
+        throw error;
+      }
+      callback(error, result);
+    });
+  }
+
+  selectUserByUsername(username, callback) {
+    const query = {
+      name: 'fetch-username',
+      text: 'SELECT * FROM users WHERE username = $1',
+      values: [username],
+    };
+    this.pool.query(query, (error, result) => {
+      if (error) {
+        throw error;
+      }
+      if (result.rows.length < 1) {
+        callback(error, result.rows);
+      } else {
+        callback(error, result.rows);
+      }
+    });
+  }
+
+  insertQuestion(user_id, title, content, callback) {
+    const query = 'INSERT INTO questions (user_id, title, content) VALUES ($1, $2, $3)';
+    const values = [user_id, title, content];
+    this.pool.query(query, values, (err, result) => {
+      callback(err, result);
+    });
+  }
+
+  insertAnswer(user_id, question_id, answer, callback) {
+    let questionId = Number(question_id);
+    const query = 'INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3)';
+    const values = [user_id, questionId, answer];
+    this.pool.query(query, values, (err, result) => {
+      callback(err, result);
+    });
+  }
+
+  selectQuestions(callback) {
+    const query = 'SELECT * FROM questions';
+    this.pool.query(query, (err, result) => {
+      if (err) {
+        callback('There was and Error getting questions', err);
+      }
+      callback(result.rows);
+    });
+  }
+
+  selectAnswer(table, question_id, callback) {
+    console.log('Here is the table', table)
+    const questionId = Number(question_id);
+    const query = {
+      name: 'fetch-byid',
+      text: `SELECT * FROM ${table} WHERE question_id = $1`,
+      values: [questionId],
+    };
+
+    this.pool.query(query, (err, result) => {
+      callback(err, result);
+    });
+  }
+
+  selectById(table, id, callback) {
+    const query = {
+      name: 'fetch-byid',
+      text: `SELECT * FROM ${table} WHERE id = $1`,
+      values: [id],
+    };
+
+    this.pool.query(query, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(result.rows[0]);
+      }
+    });
+  }
+}
+
+export default DbManager;
