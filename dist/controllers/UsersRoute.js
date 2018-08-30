@@ -25,7 +25,7 @@ var UsersRoutes = {
   login: function login(req, res) {
     userManager.login(req.body.username, req.body.password, function (result) {
       if (!result[0].id) {
-        return res.status(400).json({
+        return res.status(401).json({
           success: false,
           message: 'username or password incorrect'
         });
@@ -51,7 +51,7 @@ var UsersRoutes = {
     var email = req.body.email;
     userManager.registerUser(fullname, gender, username, password, email, function (result) {
       if (result === 'existing') {
-        res.status(400).json({
+        res.status(401).json({
           success: false,
           message: 'username already exists'
         });
@@ -63,7 +63,7 @@ var UsersRoutes = {
           email: result.email
         }, process.env.PRIVATE_KEY);
         res.header('x-auth-token', token).status(200).json({
-          status: true,
+          success: true,
           message: 'user succesfully registered'
         });
       }

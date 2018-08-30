@@ -98,19 +98,18 @@ var DbManager = function () {
     }
   }, {
     key: 'insertQuestion',
-    value: function insertQuestion(user_id, title, content, callback) {
+    value: function insertQuestion(userId, title, content, callback) {
       var query = 'INSERT INTO questions (user_id, title, content) VALUES ($1, $2, $3)';
-      var values = [user_id, title, content];
+      var values = [userId, title, content];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
       });
     }
   }, {
     key: 'insertAnswer',
-    value: function insertAnswer(user_id, question_id, answer, callback) {
-      var questionId = Number(question_id);
+    value: function insertAnswer(userId, questionId, answer, callback) {
       var query = 'INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3)';
-      var values = [user_id, questionId, answer];
+      var values = [userId, Number(questionId), answer];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
       });
@@ -128,13 +127,11 @@ var DbManager = function () {
     }
   }, {
     key: 'selectAnswer',
-    value: function selectAnswer(table, question_id, callback) {
-      console.log('Here is the table', table);
-      var questionId = Number(question_id);
+    value: function selectAnswer(table, questionId, callback) {
       var query = {
-        name: 'fetch-byid',
-        text: 'SELECT * FROM ' + table + ' WHERE question_id = $1',
-        values: [questionId]
+        name: 'fetch-answer',
+        text: 'SELECT * FROM ' + table + ' WHERE answers.question_id = $1',
+        values: [Number(questionId)]
       };
 
       this.pool.query(query, function (err, result) {

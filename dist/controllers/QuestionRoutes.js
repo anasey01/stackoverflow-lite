@@ -31,7 +31,7 @@ var QuestionRoute = function () {
     value: function allQuestion(req, res) {
       questionManager.getAllQuestion(function (data, err) {
         if (err) {
-          return res.status(404).json({
+          return res.status(500).json({
             success: false,
             message: 'No question found'
           });
@@ -52,6 +52,7 @@ var QuestionRoute = function () {
     value: function postQuestion(req, res) {
       var title = req.body.title;
       var content = req.body.content;
+      console.log(req.user);
       var userId = req.user._id;
       questionManager.createQuestion(userId, title, content, function (result) {
         var error = false;
@@ -64,39 +65,53 @@ var QuestionRoute = function () {
             success: false,
             message: 'unable to create question'
           });
-        } else {
-          return res.status(200).json({
-            success: true,
-            message: 'question successfully created',
-            id: userId,
-            title: title,
-            content: content
-          });
         }
+        return res.status(200).json({
+          success: true,
+          message: 'question successfully created',
+          id: userId,
+          title: title,
+          content: content
+        });
       });
     }
   }, {
     key: 'addAnswer',
     value: function addAnswer(req, res) {
       var id = Number(req.params.id);
-      var answer = req.body.answer;
+      var answer = req.body;
       questionManager.getQuestion(id, function (result) {
+        var questionAndAnswer = {
+          id: result.id,
+          userId: result.user_id,
+          title: result.title,
+          content: result.content,
+          created: result.created_at,
+          answers: []
+        };
+        console.log('User question', questionAndAnswer);
         if (result.title && result.content) {
-          var user_id = req.user._id;
-          questionManager.createAnswer(user_id, id, answer, function (results, err) {
-            var questionAndAnswer = {
-              title: results.title,
-              content: results.content,
-              created: results.created_at,
-              answers: []
-            };
-            questionManager.getAnswer(Number(results.id), function (answers, err) {
-              console.log('Answer gotten', answers, 'And err', err);
-            });
+          var userId = questionAndAnswer.userId;
+          questionManager.createAnswer(userId, id, answer, function (results, err) {
+            if (results.rows.length > 1) {
+              results.rows.forEach(function (item) {
+                questionAndAnswer.answers.push(item);
+              });
+              res.status(200).json(questionAndAnswer);
+            }
+            if (results.rows.length === 1) {
+              var singleAnswer = results.rows;
+              questionAndAnswer.answers.push({ singleAnswer: singleAnswer });
+              res.status(200).json(questionAndAnswer);
+            }
+          });
+        } else {
+          res.status(404).json({
+            success: false,
+            message: 'No Answer found'
           });
         }
       });
-      res.status(200).json({});
     }
   }, {
     key: 'notFound',

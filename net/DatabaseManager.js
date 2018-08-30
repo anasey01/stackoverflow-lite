@@ -88,18 +88,17 @@ class DbManager {
     });
   }
 
-  insertQuestion(user_id, title, content, callback) {
+  insertQuestion(userId, title, content, callback) {
     const query = 'INSERT INTO questions (user_id, title, content) VALUES ($1, $2, $3)';
-    const values = [user_id, title, content];
+    const values = [userId, title, content];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
     });
   }
 
-  insertAnswer(user_id, question_id, answer, callback) {
-    let questionId = Number(question_id);
+  insertAnswer(userId, questionId, answer, callback) {
     const query = 'INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3)';
-    const values = [user_id, questionId, answer];
+    const values = [userId, Number(questionId), answer];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
     });
@@ -115,13 +114,11 @@ class DbManager {
     });
   }
 
-  selectAnswer(table, question_id, callback) {
-    console.log('Here is the table', table)
-    const questionId = Number(question_id);
+  selectAnswer(table, questionId, callback) {
     const query = {
-      name: 'fetch-byid',
-      text: `SELECT * FROM ${table} WHERE question_id = $1`,
-      values: [questionId],
+      name: 'fetch-answer',
+      text: `SELECT * FROM ${table} WHERE answers.question_id = $1`,
+      values: [Number(questionId)],
     };
 
     this.pool.query(query, (err, result) => {

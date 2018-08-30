@@ -6,12 +6,12 @@ class QuestionManager {
     this.answerTable = 'answers';
   }
 
-  createQuestion(user_id, title, content, callback) {
-    this.conn.insertQuestion(user_id, title, content, (err, result) => {
+  createQuestion(userId, title, content, callback) {
+    this.conn.insertQuestion(userId, title, content, (err, result) => {
       if (err) {
         callback('error');
       }
-      this.conn.selectById(this.table, user_id, (res, err) => {
+      this.conn.selectById(this.table, userId, (res, err) => {
         if (err) {
           callback(err);
         } else {
@@ -39,30 +39,23 @@ class QuestionManager {
     });
   }
 
-  createAnswer(user_id, question_id, answer, callback) {
-    this.conn.insertAnswer(user_id, question_id, answer, (err, result) => {
+  createAnswer(userId, questionId, answer, callback) {
+    this.conn.insertAnswer(userId, questionId, answer, (err, result) => {
       if (err) {
         callback(err);
       }
-      this.getQuestion(question_id, (result, err) => {
+      this.getAnswer(questionId, (result, err) => {
         callback(result);
       });
     });
   }
 
-  getAnswer(question_id, callback) {
-    this.conn.selectAnswer(this.answerTable, question_id, (err, result) => {
-      console.log('Table is ', this.answerTable, 'question id is ', question_id);
-      console.log('Result from geting answer ', result, 'error is ', err);
-      callback(result, err)
+  getAnswer(questionId, callback) {
+    this.conn.selectAnswer(this.answerTable, questionId, (err, result) => {
+      callback(result, err);
     });
   }
 
-  getQuestionAnswer(id, callback) {
-    this.getQuestion(id, (result, err) => {
-      console.log('get question from getQuestionAndAnswer', result, 'err', err);
-    })
-  }
 }
 
 export default QuestionManager;
