@@ -19,14 +19,14 @@ var QuestionManager = function () {
 
   _createClass(QuestionManager, [{
     key: 'createQuestion',
-    value: function createQuestion(user_id, title, content, callback) {
+    value: function createQuestion(userId, title, content, callback) {
       var _this = this;
 
-      this.conn.insertQuestion(user_id, title, content, function (err, result) {
+      this.conn.insertQuestion(userId, title, content, function (err, result) {
         if (err) {
           callback('error');
         }
-        _this.conn.selectById(_this.table, user_id, function (res, err) {
+        _this.conn.selectById(_this.table, userId, function (res, err) {
           if (err) {
             callback(err);
           } else {
@@ -57,34 +57,23 @@ var QuestionManager = function () {
     }
   }, {
     key: 'createAnswer',
-    value: function createAnswer(user_id, question_id, answer, callback) {
+    value: function createAnswer(userId, questionId, answer, callback) {
       var _this2 = this;
 
-      this.conn.insertAnswer(user_id, question_id, answer, function (err, result) {
+      this.conn.insertAnswer(userId, questionId, answer, function (err, result) {
         if (err) {
           callback(err);
         }
-        _this2.getQuestion(question_id, function (result, err) {
+        _this2.getAnswer(questionId, function (result, err) {
           callback(result);
         });
       });
     }
   }, {
     key: 'getAnswer',
-    value: function getAnswer(question_id, callback) {
-      var _this3 = this;
-
-      this.conn.selectAnswer(this.answerTable, question_id, function (err, result) {
-        console.log('Table is ', _this3.answerTable, 'question id is ', question_id);
-        console.log('Result from geting answer ', result, 'error is ', err);
+    value: function getAnswer(questionId, callback) {
+      this.conn.selectAnswer(this.answerTable, questionId, function (err, result) {
         callback(result, err);
-      });
-    }
-  }, {
-    key: 'getQuestionAnswer',
-    value: function getQuestionAnswer(id, callback) {
-      this.getQuestion(id, function (result, err) {
-        console.log('get question from getQuestionAndAnswer', result, 'err', err);
       });
     }
   }]);
