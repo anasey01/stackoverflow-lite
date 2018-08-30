@@ -15,6 +15,7 @@ class DbManager {
     this.createTableAnswer();
   }
 
+
   createUserTable() {
     const query = `
     CREATE TABLE IF NOT EXISTS users(

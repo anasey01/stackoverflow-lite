@@ -52,7 +52,6 @@ var QuestionRoute = function () {
     value: function postQuestion(req, res) {
       var title = req.body.title;
       var content = req.body.content;
-      console.log(req.user);
       var userId = req.user._id;
       questionManager.createQuestion(userId, title, content, function (result) {
         var error = false;
@@ -89,7 +88,6 @@ var QuestionRoute = function () {
           created: result.created_at,
           answers: []
         };
-        console.log('User question', questionAndAnswer);
         if (result.title && result.content) {
           var userId = questionAndAnswer.userId;
           questionManager.createAnswer(userId, id, answer, function (results, err) {
