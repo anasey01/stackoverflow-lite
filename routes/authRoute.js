@@ -8,4 +8,3 @@ authRouter.post('/signup', users.signup);
 authRouter.post('/login', users.login);
 
 export default authRouter;
-

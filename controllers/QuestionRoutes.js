@@ -25,7 +25,6 @@ class QuestionRoute {
   static postQuestion(req, res) {
     const title = req.body.title;
     const content = req.body.content;
-    console.log(req.user);
     const userId = req.user._id;
     questionManager.createQuestion(userId, title, content, (result) => {
       let error = false;
@@ -61,7 +60,6 @@ class QuestionRoute {
         created: result.created_at,
         answers: [],
       };
-      console.log('User question', questionAndAnswer);
       if (result.title && result.content) {
         const userId = questionAndAnswer.userId;
         questionManager.createAnswer(userId, id, answer, (results, err) => {

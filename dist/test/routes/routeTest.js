@@ -29,7 +29,6 @@ describe('/POST', function () {
       password: 'password',
       email: 'janet_doe@email.com'
     }).end(function (err, res) {
-      console.log('sign up users TEST', res.body);
       res.should.have.status(200);
       res.body.should.be.a('object');
       res.body.success.should.equal(true);
@@ -61,7 +60,6 @@ describe('/POST', function () {
       title: 'Using R to create a data table',
       content: 'I have something I would like to do in R but I don\'t even know how to begin. I want to create a data table, let\'s say 8 columns wide. I want to set conditions for each column i.e. Maximum of column value 10, 70, 100, 100, 100, 100, 100, 100 Minimum of column value 0, 0, 0, 0, 0, 0, 0, 20 Sum of the row = 100 Steps of say 5. The idea is that each column steps down until the row = 100 and then it moves to the next row.'
     }).end(function (err, res) {
-      console.log('Add a question from test', res.body);
       res.body.should.have.property('id');
       res.body.should.have.property('title');
       res.body.should.have.property('content');
@@ -73,7 +71,6 @@ describe('/POST', function () {
 describe('/GET', function () {
   it('fetch all questions', function (done) {
     _chai2.default.request(_server2.default).get('/api/v1/questions').end(function (err, res) {
-      console.log('Fetch all question TEST', res.body);
       res.should.have.status(200);
       res.body.should.be.a('array');
       res.body[0].should.have.property('id');
@@ -87,7 +84,6 @@ describe('/GET', function () {
 describe('/GET', function () {
   it('fetch a specific question', function (done) {
     _chai2.default.request(_server2.default).get('/api/v1/questions/1').set('x-auth-token', validToken).end(function (err, res) {
-      console.log('Fetch a specific Question TEST', res.body);
       res.should.have.status(200);
       res.body.should.have.property('id');
       res.body.should.have.property('title');
@@ -103,7 +99,6 @@ describe('/POST', function () {
     _chai2.default.request(_server2.default).post('/api/v1/questions/' + id + '/answers').set('content-type', 'application/json').set('x-auth-token', validToken).send({
       answer: 'Here is an answer for this question comming from the TEST file'
     }).end(function (err, res) {
-      console.log(res.body);
       res.body.should.have.property('id');
       res.body.should.have.property('answers');
       done();
