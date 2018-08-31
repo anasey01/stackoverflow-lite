@@ -26,6 +26,7 @@ const UsersRoutes = {
       return res.header('x-auth-token', token).status(200).json({
         success: true,
         message: 'Successfully logged in',
+        token,
       });
     });
   },
