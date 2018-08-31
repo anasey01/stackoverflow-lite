@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/v1', questionRoute);
-app.use('/auth/', authRouter);
+app.use('/api/v1/auth/', authRouter);
 app.use(morgan(':method :url :response-time'));
 
 app.set('port', process.env.PORT || 8080);

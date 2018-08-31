@@ -50,8 +50,10 @@ var QuestionRoute = function () {
   }, {
     key: 'postQuestion',
     value: function postQuestion(req, res) {
-      var title = req.body.title;
-      var content = req.body.content;
+      var _req$body = req.body,
+          title = _req$body.title,
+          content = _req$body.content;
+
       var userId = req.user._id;
       questionManager.createQuestion(userId, title, content, function (result) {
         var error = false;
@@ -90,6 +92,7 @@ var QuestionRoute = function () {
         };
         if (result.title && result.content) {
           var userId = questionAndAnswer.userId;
+
           questionManager.createAnswer(userId, id, answer, function (results, err) {
             if (results.rows.length > 1) {
               results.rows.forEach(function (item) {

@@ -23,8 +23,7 @@ class QuestionRoute {
   }
 
   static postQuestion(req, res) {
-    const title = req.body.title;
-    const content = req.body.content;
+    const { title, content } = req.body;
     const userId = req.user._id;
     questionManager.createQuestion(userId, title, content, (result) => {
       let error = false;
@@ -61,7 +60,7 @@ class QuestionRoute {
         answers: [],
       };
       if (result.title && result.content) {
-        const userId = questionAndAnswer.userId;
+        const { userId } = questionAndAnswer;
         questionManager.createAnswer(userId, id, answer, (results, err) => {
           if (results.rows.length > 1) {
             results.rows.forEach((item) => {

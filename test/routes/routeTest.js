@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 describe('/POST', () => {
   it('signup a new user', (done) => {
     chai.request(server)
-      .post('/auth/signup')
+      .post('/api/v1/auth/signup')
       .send({
         fullname: 'Janet Doe',
         gender: 'F',
@@ -32,7 +32,7 @@ describe('/POST', () => {
 describe('/POST', () => {
   it('Login a user and issue a valid TOKEN', (done) => {
     chai.request(server)
-      .post('/auth/login')
+      .post('/api/v1/auth/login')
       .send({
         username: 'janet_Doe',
         password: 'password',

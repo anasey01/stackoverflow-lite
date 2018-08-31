@@ -31,7 +31,7 @@ var app = (0, _express2.default)();
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
 app.use('/api/v1', _questionRoute2.default);
-app.use('/auth/', _authRoute2.default);
+app.use('/api/v1/auth/', _authRoute2.default);
 app.use((0, _morgan2.default)(':method :url :response-time'));
 
 app.set('port', process.env.PORT || 8080);

@@ -22,7 +22,7 @@ _chai2.default.use(_chaiHttp2.default);
 
 describe('/POST', function () {
   it('signup a new user', function (done) {
-    _chai2.default.request(_server2.default).post('/auth/signup').send({
+    _chai2.default.request(_server2.default).post('/api/v1/auth/signup').send({
       fullname: 'Janet Doe',
       gender: 'F',
       username: 'janet_Doe',
@@ -40,7 +40,7 @@ describe('/POST', function () {
 
 describe('/POST', function () {
   it('Login a user and issue a valid TOKEN', function (done) {
-    _chai2.default.request(_server2.default).post('/auth/login').send({
+    _chai2.default.request(_server2.default).post('/api/v1/auth/login').send({
       username: 'janet_Doe',
       password: 'password'
     }).end(function (err, res) {

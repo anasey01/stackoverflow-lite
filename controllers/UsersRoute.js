@@ -31,11 +31,9 @@ const UsersRoutes = {
   },
 
   signup(req, res) {
-    const fullname = req.body.fullname;
-    const gender = req.body.gender;
-    const username = req.body.username;
-    const password = req.body.password;
-    const email = req.body.email;
+    const {
+      fullname, gender, username, password, email,
+    } = req.body;
     userManager.registerUser(fullname, gender, username, password, email, (result) => {
       if (result === 'existing') {
         res.status(401).json({

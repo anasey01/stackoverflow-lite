@@ -44,11 +44,13 @@ var UsersRoutes = {
     });
   },
   signup: function signup(req, res) {
-    var fullname = req.body.fullname;
-    var gender = req.body.gender;
-    var username = req.body.username;
-    var password = req.body.password;
-    var email = req.body.email;
+    var _req$body = req.body,
+        fullname = _req$body.fullname,
+        gender = _req$body.gender,
+        username = _req$body.username,
+        password = _req$body.password,
+        email = _req$body.email;
+
     userManager.registerUser(fullname, gender, username, password, email, function (result) {
       if (result === 'existing') {
         res.status(401).json({
