@@ -17,7 +17,7 @@
     "test": "npm run migration && npm run clean-test && npm run build-test && nyc --reporter=html --reporter=text mocha \"dist/test/routes/routeTest.js\" --exit",
     "production": "npm run build && npm run build-routes && npm run test && babel-node migrations/dropdatabase.js && node bin/production",
     "dev" : "npm run build && npm run build-routes && node bin/production",
-    "migration": "babel-node migrations/index.js --exit"
+    "migration": "babel-node migrations/dropdatabase.js && babel-node migrations/index.js --exit"
   },
   "author": "Anani Oluseyi",
   "license": "ISC",

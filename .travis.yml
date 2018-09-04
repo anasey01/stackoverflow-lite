@@ -10,6 +10,12 @@ branches:
 install:
   - npm install
 
+services:
+  - postgresql
+
+  before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+
 script:
   - npm test
 

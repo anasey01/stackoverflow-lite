@@ -17,14 +17,9 @@ const questionsQuery = 'DROP TABLE IF EXISTS questions';
 
 pool.query(answersQuery)
   .then((data) => {
-    console.log('Answer Database Dropped');
     pool.query(questionsQuery)
       .then((data) => {
-        console.log('Question Database Dropped');
         pool.query(usersQuery)
-          .then((data) => {
-            console.log('User Database Dropped');
-            return null;
-          }).catch(err => console.log(err));
-      }).catch(err => console.log(err));
-  }).catch(err => console.log(err));
+          .then(data => console.log('All Tables Dropped!')).catch(err => err);
+      }).catch(err => err);
+  }).catch(err => err);
