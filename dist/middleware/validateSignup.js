@@ -35,15 +35,16 @@ var validateSignup = function validateSignup(req, res, next) {
       message: 'Enter valid Email'
     });
   }
-  if (password === '') {
+  if (password === '' || password.length < 6) {
+    if (password.length < 6) {
+      return res.status(401).json({
+        success: false,
+        message: 'Password must be more than 6 characters'
+      });
+    }
     return res.status(401).json({
       success: false,
       message: 'Enter your password'
-    });
-  }if (password.length < 6) {
-    return res.status(401).json({
-      success: false,
-      message: 'Password must be more than 6 characters'
     });
   }
 

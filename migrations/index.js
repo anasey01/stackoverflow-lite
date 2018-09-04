@@ -39,15 +39,10 @@ const questionsQuery = `
 
 
 pool.query(usersQuery)
-  .then((data) =>{
-    console.log('User Database Created');
+  .then((data) => {
     pool.query(questionsQuery)
       .then((data) => {
-        console.log('Question Database Created');
         pool.query(answersQuery)
-          .then((data) => {
-            console.log('Answer Database created');
-            return null;
-          }).catch(err => console.log(err));
-      }).catch(err => console.log(err));
-  }).catch(err => console.log(err));
+          .then(data => console.log('All Tables created')).catch(err => err);
+      }).catch(err => err);
+  }).catch(err => err);

@@ -39,7 +39,8 @@ var UsersRoutes = {
       }, process.env.PRIVATE_KEY);
       return res.header('x-auth-token', token).status(200).json({
         success: true,
-        message: 'Successfully logged in'
+        message: 'Successfully logged in',
+        token: token
       });
     });
   },

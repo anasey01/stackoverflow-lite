@@ -30,36 +30,32 @@ var DbManager = function () {
       if (process.env.NODE_ENV.trim() === 'production') configString = _dbConfig2.default.production;
     }
     this.pool = new _pg.Pool(configString || _dbConfig2.default.development);
-    this.createUserTable();
-    this.createQuestionTable();
-    this.createTableAnswer();
+    this.createAllTables();
   }
 
   _createClass(DbManager, [{
-    key: 'createUserTable',
-    value: function createUserTable() {
-      var query = '\n    CREATE TABLE IF NOT EXISTS users(\n        id SERIAL NOT NULL PRIMARY KEY,\n        fullname text NOT NULL,\n        gender text NOT NULL,\n        username text UNIQUE NOT NULL,\n        password text NOT NULL,\n        email text UNIQUE NOT NULL,\n        created_at TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+    key: 'createAllTables',
+    value: function createAllTables() {
+      var _this = this;
 
-      return this.pool.query(query, function (err, result) {
-        return result;
-      });
-    }
-  }, {
-    key: 'createQuestionTable',
-    value: function createQuestionTable() {
-      var query = '\n    CREATE TABLE IF NOT EXISTS questions(\n        id SERIAL NOT NULL PRIMARY KEY,\n        user_id INTEGER REFERENCES users(id),\n        title text NOT NULL,\n        content text NOT NULL,\n        created_at TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n        id SERIAL NOT NULL PRIMARY KEY,\n        fullname text NOT NULL,\n        gender text NOT NULL,\n        username text UNIQUE NOT NULL,\n        password text NOT NULL,\n        email text UNIQUE NOT NULL,\n        created_at TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
-      return this.pool.query(query, function (err, result) {
-        return result;
-      });
-    }
-  }, {
-    key: 'createTableAnswer',
-    value: function createTableAnswer() {
-      var query = '\n    CREATE TABLE IF NOT EXISTS answers(\n        id SERIAL NOT NULL PRIMARY KEY,\n        user_id integer REFERENCES users(id),\n        question_id INTEGER REFERENCES questions(id),\n        created_at TIMESTAMP NOT NULL DEFAULT NOW(),\n        answer text NOT NULL\n    );';
+      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n        id SERIAL NOT NULL PRIMARY KEY,\n        user_id INTEGER REFERENCES users(id),\n        title text NOT NULL,\n        content text NOT NULL,\n        created_at TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
-      return this.pool.query(query, function (err, result) {
-        return result;
+      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n        id SERIAL NOT NULL PRIMARY KEY,\n        user_id integer REFERENCES users(id),\n        question_id INTEGER REFERENCES questions(id),\n        created_at TIMESTAMP NOT NULL DEFAULT NOW(),\n        answer text NOT NULL\n    );';
+
+      this.pool.query(usersQuery).then(function (data) {
+        _this.pool.query(questionsQuery).then(function (data) {
+          _this.pool.query(answersQuery).then(function (data) {
+            return null;
+          }).catch(function (err) {
+            return err;
+          });
+        }).catch(function (err) {
+          return err;
+        });
+      }).catch(function (err) {
+        return err;
       });
     }
   }, {

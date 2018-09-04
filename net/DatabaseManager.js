@@ -10,14 +10,11 @@ class DbManager {
       if (process.env.NODE_ENV.trim() === 'production') configString = config.production;
     }
     this.pool = new Pool(configString || config.development);
-    this.createUserTable();
-    this.createQuestionTable();
-    this.createTableAnswer();
+    this.createAllTables();
   }
 
-
-  createUserTable() {
-    const query = `
+  createAllTables() {
+    const usersQuery = `
     CREATE TABLE IF NOT EXISTS users(
         id SERIAL NOT NULL PRIMARY KEY,
         fullname text NOT NULL,
@@ -28,11 +25,7 @@ class DbManager {
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
-    return this.pool.query(query, (err, result) => result);
-  }
-
-  createQuestionTable() {
-    const query = `
+    const questionsQuery = `
     CREATE TABLE IF NOT EXISTS questions(
         id SERIAL NOT NULL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
@@ -41,11 +34,7 @@ class DbManager {
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
-    return this.pool.query(query, (err, result) => result);
-  }
-
-  createTableAnswer() {
-    const query = `
+    const answersQuery = `
     CREATE TABLE IF NOT EXISTS answers(
         id SERIAL NOT NULL PRIMARY KEY,
         user_id integer REFERENCES users(id),
@@ -54,7 +43,14 @@ class DbManager {
         answer text NOT NULL
     );`;
 
-    return this.pool.query(query, (err, result) => result);
+    this.pool.query(usersQuery)
+      .then((data) => {
+        this.pool.query(questionsQuery)
+          .then((data) => {
+            this.pool.query(answersQuery)
+              .then(data => null).catch(err => err);
+          }).catch(err => err);
+      }).catch(err => err);
   }
 
   insertUser(fullname, gender, username, password, email, callback) {
