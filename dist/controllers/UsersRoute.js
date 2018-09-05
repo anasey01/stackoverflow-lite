@@ -24,18 +24,15 @@ var userManager = new _UserManager2.default(db);
 var UsersRoutes = {
   login: function login(req, res) {
     userManager.login(req.body.username, req.body.password, function (result) {
-      if (!result[0].id) {
+      if (!result[0].userid) {
         return res.status(401).json({
           success: false,
           message: 'username or password incorrect'
         });
       }
       var token = _jsonwebtoken2.default.sign({
-        _id: result[0].id,
-        name: result[0].fullname,
-        gender: result[0].gender,
-        username: result[0].username,
-        email: result[0].email
+        userId: result[0].userid,
+        username: result[0].username
       }, process.env.PRIVATE_KEY);
       return res.header('x-auth-token', token).status(200).json({
         success: true,
@@ -60,8 +57,6 @@ var UsersRoutes = {
         });
       } else {
         var token = _jsonwebtoken2.default.sign({
-          fullname: result.fullname,
-          gender: result.gender,
           username: result.username,
           email: result.email
         }, process.env.PRIVATE_KEY);
