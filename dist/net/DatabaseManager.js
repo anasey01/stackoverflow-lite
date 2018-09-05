@@ -38,11 +38,11 @@ var DbManager = function () {
     value: function createAllTables() {
       var _this = this;
 
-      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n        id SERIAL NOT NULL PRIMARY KEY,\n        fullname text NOT NULL,\n        gender text NOT NULL,\n        username text UNIQUE NOT NULL,\n        password text NOT NULL,\n        email text UNIQUE NOT NULL,\n        created_at TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
-      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n        id SERIAL NOT NULL PRIMARY KEY,\n        user_id INTEGER REFERENCES users(id),\n        title text NOT NULL,\n        content text NOT NULL,\n        created_at TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId),\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
-      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n        id SERIAL NOT NULL PRIMARY KEY,\n        user_id integer REFERENCES users(id),\n        question_id INTEGER REFERENCES questions(id),\n        created_at TIMESTAMP NOT NULL DEFAULT NOW(),\n        answer text NOT NULL\n    );';
+      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId  SERIAL NOT NULL PRIMARY KEY),\n      questionId INTEGER REFERENCES questions(questionId),\n      userId INTEGER REFERENCES users(userId),\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
       this.pool.query(usersQuery).then(function (data) {
         _this.pool.query(questionsQuery).then(function (data) {
@@ -94,9 +94,9 @@ var DbManager = function () {
     }
   }, {
     key: 'insertQuestion',
-    value: function insertQuestion(userId, title, content, callback) {
-      var query = 'INSERT INTO questions (user_id, title, content) VALUES ($1, $2, $3)';
-      var values = [userId, title, content];
+    value: function insertQuestion(userId, questionTitle, questionContent, callback) {
+      var query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3)';
+      var values = [userId, questionTitle, questionContent];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
       });
@@ -104,8 +104,8 @@ var DbManager = function () {
   }, {
     key: 'insertAnswer',
     value: function insertAnswer(userId, questionId, answer, callback) {
-      var query = 'INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3)';
-      var values = [userId, Number(questionId), answer];
+      var query = 'INSERT INTO answers (userid, questionid, answer) VALUES ($1, $2, $3)';
+      var values = [userId, questionId, answer];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
       });
@@ -126,7 +126,7 @@ var DbManager = function () {
     value: function selectAnswer(table, questionId, callback) {
       var query = {
         name: 'fetch-answer',
-        text: 'SELECT * FROM ' + table + ' WHERE answers.question_id = $1',
+        text: 'SELECT * FROM ' + table + ' WHERE answers.questionId = $1',
         values: [Number(questionId)]
       };
 
@@ -136,13 +136,29 @@ var DbManager = function () {
     }
   }, {
     key: 'selectById',
-    value: function selectById(table, id, callback) {
+    value: function selectById(table, userId, callback) {
       var query = {
         name: 'fetch-byid',
-        text: 'SELECT * FROM ' + table + ' WHERE id = $1',
-        values: [id]
+        text: 'SELECT * FROM ' + table + ' WHERE userid = $1',
+        values: [userId]
       };
 
+      this.pool.query(query, function (error, result) {
+        if (error) {
+          callback(error);
+        } else {
+          callback(result.rows[0]);
+        }
+      });
+    }
+  }, {
+    key: 'selectByQuestionId',
+    value: function selectByQuestionId(table, questionId, callback) {
+      var query = {
+        name: 'fetch-by-questionid',
+        text: 'SELECT * FROM ' + table + ' WHERE questionid = $1',
+        values: [questionId]
+      };
       this.pool.query(query, function (error, result) {
         if (error) {
           callback(error);

@@ -55,13 +55,14 @@ describe('/POST', () => {
       .set('x-auth-token', validToken)
       .set('content-type', 'application/json')
       .send({
-        title: 'Using R to create a data table',
-        content: 'I have something I would like to do in R but I don\'t even know how to begin. I want to create a data table, let\'s say 8 columns wide. I want to set conditions for each column i.e. Maximum of column value 10, 70, 100, 100, 100, 100, 100, 100 Minimum of column value 0, 0, 0, 0, 0, 0, 0, 20 Sum of the row = 100 Steps of say 5. The idea is that each column steps down until the row = 100 and then it moves to the next row.',
+        questionTitle: 'Using R to create a data table',
+        questionContent: 'I have something I would like to do in R but I don\'t even know how to begin. I want to create a data table, let\'s say 8 columns wide. I want to set conditions for each column i.e. Maximum of column value 10, 70, 100, 100, 100, 100, 100, 100 Minimum of column value 0, 0, 0, 0, 0, 0, 0, 20 Sum of the row = 100 Steps of say 5. The idea is that each column steps down until the row = 100 and then it moves to the next row.',
       })
       .end((err, res) => {
-        res.body.should.have.property('id');
-        res.body.should.have.property('title');
-        res.body.should.have.property('content');
+        res.body.should.have.property('userid');
+        res.body.should.have.property('questionid');
+        res.body.should.have.property('questiontitle');
+        res.body.should.have.property('questioncontent');
         done();
       });
   });
@@ -73,10 +74,12 @@ describe('/GET', () => {
       .get('/api/v1/questions')
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('array');
-        res.body[0].should.have.property('id');
-        res.body[0].should.have.property('title');
-        res.body[0].should.have.property('content');
+        res.body.should.be.a('object');
+        res.body.questions[0].should.have.property('userid');
+        res.body.questions[0].should.have.property('questionid');
+        res.body.questions[0].should.have.property('questiontitle');
+        res.body.questions[0].should.have.property('questioncontent');
+        res.body.questions[0].should.have.property('createdat');
         done();
       });
   });
@@ -89,9 +92,12 @@ describe('/GET', () => {
       .set('x-auth-token', validToken)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property('id');
-        res.body.should.have.property('title');
-        res.body.should.have.property('content');
+        res.body.should.have.property('userId');
+        res.body.should.have.property('questionId');
+        res.body.should.have.property('createdAt');
+        res.body.should.have.property('questionTitle');
+        res.body.should.have.property('answers');
+        res.body.should.have.property('questionContent');
         done();
       });
   });
@@ -100,16 +106,18 @@ describe('/GET', () => {
 
 describe('/POST', () => {
   it('add an answer to a specific question', (done) => {
-    const id = 1;
+    const questionId = 1;
     chai.request(server)
-      .post(`/api/v1/questions/${id}/answers`)
+      .post(`/api/v1/questions/${questionId}/answers`)
       .set('content-type', 'application/json')
       .set('x-auth-token', validToken)
       .send({
         answer: 'Here is an answer for this question comming from the TEST file',
       })
       .end((err, res) => {
-        res.body.should.have.property('id');
+        console.log(res.body)
+        res.body.should.have.property('questionId');
+        res.body.should.have.property('userId');
         res.body.should.have.property('answers');
         done();
       });

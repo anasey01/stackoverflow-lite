@@ -13,19 +13,43 @@ class QuestionRoute {
           message: 'No question found',
         });
       }
-      return res.status(200).json(data);
+      return res.status(200).json({ questions: data });
     });
   }
 
   static specificQuestion(req, res) {
     const questionId = req.params.id;
-    questionManager.getQuestion(questionId, result => res.status(200).json(result));
+    const questionData = {};
+    questionManager.getQuestion(questionId, (result) => {
+      questionData.success = true;
+      questionData.message = 'Questions retrieved';
+      questionData.questionId = result.questionid;
+      questionData.userId = result.userid;
+      questionData.questionTitle = result.questiontitle;
+      questionData.questionContent = result.questioncontent;
+      questionData.createdAt = result.createdat;
+      questionData.answers = [];
+      questionManager.getAnswer(questionId, (answer) => {
+        if (answer.rows.length > 1) {
+          answer.rows.forEach((item) => {
+            questionData.answers.push({ item });
+          });
+          res.status(200).json(questionData);
+        }
+        if (answer.rows.length === 1) {
+          const singleAnswer = answer.rows;
+          questionData.answers.push({ singleAnswer });
+          res.status(200).json(questionData);
+        }
+      });
+      res.status(200).json(questionData);
+    });
   }
 
   static postQuestion(req, res) {
-    const { title, content } = req.body;
-    const userId = req.user._id;
-    questionManager.createQuestion(userId, title, content, (result) => {
+    const { questionTitle, questionContent } = req.body;
+    const { userId } = req.user;
+    questionManager.createQuestion(userId, questionTitle, questionContent, (result) => {
       let error = false;
       if (result === 'error') {
         error = true;
@@ -40,28 +64,32 @@ class QuestionRoute {
       return res.status(200).json({
         success: true,
         message: 'question successfully created',
-        id: userId,
-        title,
-        content,
+        userid: result.userid,
+        questionid: result.questionid,
+        questiontitle: result.questiontitle,
+        questioncontent: result.questioncontent,
       });
     });
   }
 
   static addAnswer(req, res) {
-    const id = Number(req.params.id);
-    const answer = req.body;
-    questionManager.getQuestion(id, (result) => {
-      let questionAndAnswer = {
-        id: result.id,
-        userId: result.user_id,
-        title: result.title,
-        content: result.content,
-        created: result.created_at,
+    const questionId = Number(req.params.id);
+    const { answer } = req.body;
+    questionManager.getQuestion(questionId, (result) => {
+      const questionAndAnswer = {
+        success: true,
+        message: `Answer added to question ${questionId}`,
+        questionId: result.questionid,
+        userId: result.userid,
+        questionTitle: result.questiontitle,
+        questionContent: result.questioncontent,
+        createdAt: result.createdat,
         answers: [],
       };
-      if (result.title && result.content) {
+
+      if (result.questiontitle && result.questioncontent) {
         const { userId } = questionAndAnswer;
-        questionManager.createAnswer(userId, id, answer, (results, err) => {
+        questionManager.createAnswer(userId, questionId, answer, (results, err) => {
           if (results.rows.length > 1) {
             results.rows.forEach((item) => {
               questionAndAnswer.answers.push(item);

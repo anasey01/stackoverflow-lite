@@ -6,8 +6,8 @@ class QuestionManager {
     this.answerTable = 'answers';
   }
 
-  createQuestion(userId, title, content, callback) {
-    this.conn.insertQuestion(userId, title, content, (err, result) => {
+  createQuestion(userId, questionTitle, questionContent, callback) {
+    this.conn.insertQuestion(userId, questionTitle, questionContent, (err, result) => {
       if (err) {
         callback('error');
       }
@@ -30,8 +30,8 @@ class QuestionManager {
     });
   }
 
-  getQuestion(id, callback) {
-    this.conn.selectById(this.table, id, (result, err) => {
+  getQuestion(questionId, callback) {
+    this.conn.selectByQuestionId(this.table, questionId, (result, err) => {
       if (err) {
         callback(err);
       }

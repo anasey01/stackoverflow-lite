@@ -19,10 +19,10 @@ var QuestionManager = function () {
 
   _createClass(QuestionManager, [{
     key: 'createQuestion',
-    value: function createQuestion(userId, title, content, callback) {
+    value: function createQuestion(userId, questionTitle, questionContent, callback) {
       var _this = this;
 
-      this.conn.insertQuestion(userId, title, content, function (err, result) {
+      this.conn.insertQuestion(userId, questionTitle, questionContent, function (err, result) {
         if (err) {
           callback('error');
         }
@@ -47,8 +47,8 @@ var QuestionManager = function () {
     }
   }, {
     key: 'getQuestion',
-    value: function getQuestion(id, callback) {
-      this.conn.selectById(this.table, id, function (result, err) {
+    value: function getQuestion(questionId, callback) {
+      this.conn.selectByQuestionId(this.table, questionId, function (result, err) {
         if (err) {
           callback(err);
         }

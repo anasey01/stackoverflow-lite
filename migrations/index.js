@@ -8,35 +8,34 @@ if (process.env.NODE_ENV) {
 }
 const pool = new Pool(configString || config.development);
 
-const answersQuery = `
-CREATE TABLE IF NOT EXISTS answers(
-    id SERIAL NOT NULL PRIMARY KEY,
-    user_id integer REFERENCES users(id),
-    question_id INTEGER REFERENCES questions(id),
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    answer text NOT NULL
-);`;
-
 const usersQuery = `
     CREATE TABLE IF NOT EXISTS users(
-        id SERIAL NOT NULL PRIMARY KEY,
+        userId SERIAL NOT NULL PRIMARY KEY,
         fullname text NOT NULL,
-        gender text NOT NULL,
-        username text UNIQUE NOT NULL,
+        gender varchar(1) NOT NULL,
+        username varchar(10) UNIQUE NOT NULL,
         password text NOT NULL,
-        email text UNIQUE NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+        email varchar(60) UNIQUE NOT NULL,
+        createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
 const questionsQuery = `
     CREATE TABLE IF NOT EXISTS questions(
-        id SERIAL NOT NULL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id),
-        title text NOT NULL,
-        content text NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+        questionId SERIAL NOT NULL PRIMARY KEY,
+        userId INTEGER REFERENCES users(userId),
+        questionTitle varchar(100) NOT NULL,
+        questionContent varchar(500) NOT NULL,
+        createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
+const answersQuery = `
+    CREATE TABLE IF NOT EXISTS answers(
+        answerId  SERIAL NOT NULL PRIMARY KEY,
+        questionId INTEGER REFERENCES questions(questionId),
+        userId INTEGER REFERENCES users(userId),
+        answer varchar(500) NOT NULL,
+        createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+    );`;
 
 pool.query(usersQuery)
   .then((data) => {

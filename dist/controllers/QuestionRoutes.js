@@ -36,26 +36,48 @@ var QuestionRoute = function () {
             message: 'No question found'
           });
         }
-        return res.status(200).json(data);
+        return res.status(200).json({ questions: data });
       });
     }
   }, {
     key: 'specificQuestion',
     value: function specificQuestion(req, res) {
       var questionId = req.params.id;
+      var questionData = {};
       questionManager.getQuestion(questionId, function (result) {
-        return res.status(200).json(result);
+        questionData.success = true;
+        questionData.message = 'Questions retrieved';
+        questionData.questionId = result.questionid;
+        questionData.userId = result.userid;
+        questionData.questionTitle = result.questiontitle;
+        questionData.questionContent = result.questioncontent;
+        questionData.createdAt = result.createdat;
+        questionData.answers = [];
+        questionManager.getAnswer(questionId, function (answer) {
+          if (answer.rows.length > 1) {
+            answer.rows.forEach(function (item) {
+              questionData.answers.push({ item: item });
+            });
+            res.status(200).json(questionData);
+          }
+          if (answer.rows.length === 1) {
+            var singleAnswer = answer.rows;
+            questionData.answers.push({ singleAnswer: singleAnswer });
+            res.status(200).json(questionData);
+          }
+        });
+        res.status(200).json(questionData);
       });
     }
   }, {
     key: 'postQuestion',
     value: function postQuestion(req, res) {
       var _req$body = req.body,
-          title = _req$body.title,
-          content = _req$body.content;
+          questionTitle = _req$body.questionTitle,
+          questionContent = _req$body.questionContent;
+      var userId = req.user.userId;
 
-      var userId = req.user._id;
-      questionManager.createQuestion(userId, title, content, function (result) {
+      questionManager.createQuestion(userId, questionTitle, questionContent, function (result) {
         var error = false;
         if (result === 'error') {
           error = true;
@@ -70,30 +92,35 @@ var QuestionRoute = function () {
         return res.status(200).json({
           success: true,
           message: 'question successfully created',
-          id: userId,
-          title: title,
-          content: content
+          userid: result.userid,
+          questionid: result.questionid,
+          questiontitle: result.questiontitle,
+          questioncontent: result.questioncontent
         });
       });
     }
   }, {
     key: 'addAnswer',
     value: function addAnswer(req, res) {
-      var id = Number(req.params.id);
-      var answer = req.body;
-      questionManager.getQuestion(id, function (result) {
+      var questionId = Number(req.params.id);
+      var answer = req.body.answer;
+
+      questionManager.getQuestion(questionId, function (result) {
         var questionAndAnswer = {
-          id: result.id,
-          userId: result.user_id,
-          title: result.title,
-          content: result.content,
-          created: result.created_at,
+          success: true,
+          message: 'Answer added to question ' + questionId,
+          questionId: result.questionid,
+          userId: result.userid,
+          questionTitle: result.questiontitle,
+          questionContent: result.questioncontent,
+          createdAt: result.createdat,
           answers: []
         };
-        if (result.title && result.content) {
+
+        if (result.questiontitle && result.questioncontent) {
           var userId = questionAndAnswer.userId;
 
-          questionManager.createAnswer(userId, id, answer, function (results, err) {
+          questionManager.createAnswer(userId, questionId, answer, function (results, err) {
             if (results.rows.length > 1) {
               results.rows.forEach(function (item) {
                 questionAndAnswer.answers.push(item);

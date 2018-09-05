@@ -16,31 +16,31 @@ class DbManager {
   createAllTables() {
     const usersQuery = `
     CREATE TABLE IF NOT EXISTS users(
-        id SERIAL NOT NULL PRIMARY KEY,
-        fullname text NOT NULL,
-        gender text NOT NULL,
-        username text UNIQUE NOT NULL,
-        password text NOT NULL,
-        email text UNIQUE NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      userId SERIAL NOT NULL PRIMARY KEY,
+      fullname text NOT NULL,
+      gender varchar(1) NOT NULL,
+      username varchar(10) UNIQUE NOT NULL,
+      password text NOT NULL,
+      email varchar(60) UNIQUE NOT NULL,
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
     const questionsQuery = `
     CREATE TABLE IF NOT EXISTS questions(
-        id SERIAL NOT NULL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id),
-        title text NOT NULL,
-        content text NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      questionId SERIAL NOT NULL PRIMARY KEY,
+      userId INTEGER REFERENCES users(userId),
+      questionTitle varchar(100) NOT NULL,
+      questionContent varchar(500) NOT NULL,
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
     const answersQuery = `
     CREATE TABLE IF NOT EXISTS answers(
-        id SERIAL NOT NULL PRIMARY KEY,
-        user_id integer REFERENCES users(id),
-        question_id INTEGER REFERENCES questions(id),
-        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-        answer text NOT NULL
+      answerId  SERIAL NOT NULL PRIMARY KEY),
+      questionId INTEGER REFERENCES questions(questionId),
+      userId INTEGER REFERENCES users(userId),
+      answer varchar(500) NOT NULL,
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
     this.pool.query(usersQuery)
@@ -85,17 +85,17 @@ class DbManager {
     });
   }
 
-  insertQuestion(userId, title, content, callback) {
-    const query = 'INSERT INTO questions (user_id, title, content) VALUES ($1, $2, $3)';
-    const values = [userId, title, content];
+  insertQuestion(userId, questionTitle, questionContent, callback) {
+    const query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3)';
+    const values = [userId, questionTitle, questionContent];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
     });
   }
 
   insertAnswer(userId, questionId, answer, callback) {
-    const query = 'INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3)';
-    const values = [userId, Number(questionId), answer];
+    const query = 'INSERT INTO answers (userid, questionid, answer) VALUES ($1, $2, $3)';
+    const values = [userId, questionId, answer];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
     });
@@ -114,7 +114,7 @@ class DbManager {
   selectAnswer(table, questionId, callback) {
     const query = {
       name: 'fetch-answer',
-      text: `SELECT * FROM ${table} WHERE answers.question_id = $1`,
+      text: `SELECT * FROM ${table} WHERE answers.questionId = $1`,
       values: [Number(questionId)],
     };
 
@@ -123,13 +123,28 @@ class DbManager {
     });
   }
 
-  selectById(table, id, callback) {
+  selectById(table, userId, callback) {
     const query = {
       name: 'fetch-byid',
-      text: `SELECT * FROM ${table} WHERE id = $1`,
-      values: [id],
+      text: `SELECT * FROM ${table} WHERE userid = $1`,
+      values: [userId],
     };
 
+    this.pool.query(query, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(result.rows[0]);
+      }
+    });
+  }
+
+  selectByQuestionId(table, questionId, callback) {
+    const query = {
+      name: 'fetch-by-questionid',
+      text: `SELECT * FROM ${table} WHERE questionid = $1`,
+      values: [questionId],
+    };
     this.pool.query(query, (error, result) => {
       if (error) {
         callback(error);
