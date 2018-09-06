@@ -129,7 +129,7 @@ var QuestionRoute = function () {
             }
             if (results.rows.length === 1) {
               var singleAnswer = results.rows;
-              questionAndAnswer.answers.push({ singleAnswer: singleAnswer });
+              questionAndAnswer.answers.push(singleAnswer);
               res.status(200).json(questionAndAnswer);
             }
           });
@@ -141,6 +141,33 @@ var QuestionRoute = function () {
         }
       });
     }
+  }, {
+    key: 'deleteQuestion',
+    value: function deleteQuestion(req, res) {
+      var id = req.params.id;
+
+      questionManager.deleteOne(id, function (result, err) {
+        var isDeleted = '';
+        if (result.rowCount === 1) {
+          isDeleted = 'deleted';
+        }
+        if (isDeleted === 'deleted') {
+          return res.status(200).json({
+            success: true,
+            message: 'Question deleted!'
+          });
+        }
+        if (isDeleted === '') {
+          return res.status(401).json({
+            success: false,
+            message: 'Unable to delete question'
+          });
+        }
+      });
+    }
+  }, {
+    key: 'updateQuestion',
+    value: function updateQuestion(req, res) {}
   }, {
     key: 'notFound',
     value: function notFound(req, res) {

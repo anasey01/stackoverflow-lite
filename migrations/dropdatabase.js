@@ -17,9 +17,18 @@ const questionsQuery = 'DROP TABLE IF EXISTS questions';
 
 pool.query(answersQuery)
   .then((data) => {
+    console.log('Answer Table Dropped!');
     pool.query(questionsQuery)
       .then((data) => {
+        console.log('Questions Table Dropped!');
         pool.query(usersQuery)
-          .then(data => console.log('All Tables Dropped!')).catch(err => err);
-      }).catch(err => err);
-  }).catch(err => err);
+          .then(data => console.log('User Table Dropped'))
+          .catch((err) => {
+            console.log('Error creating User Table', err);
+          });
+      }).catch((err) => {
+        console.log('Error creating Questions Table', err);
+      });
+  }).catch((err) => {
+    console.log('Error creating Answers Table', err);
+  });

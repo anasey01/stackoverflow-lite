@@ -76,6 +76,13 @@ var QuestionManager = function () {
         callback(result, err);
       });
     }
+  }, {
+    key: 'deleteOne',
+    value: function deleteOne(questionId, callback) {
+      this.conn.deleteQuestionById(this.table, questionId, function (result, err) {
+        callback(result, err);
+      });
+    }
   }]);
 
   return QuestionManager;

@@ -10,12 +10,11 @@ class DbManager {
       if (process.env.NODE_ENV.trim() === 'production') configString = config.production;
     }
     this.pool = new Pool(configString || config.development);
-    this.createAllTables();
   }
 
   createAllTables() {
     const usersQuery = `
-    CREATE TABLE IF NOT EXISTS users(
+    CREATE TABLE IF NOT EXISTS users CASCADE(
       userId SERIAL NOT NULL PRIMARY KEY,
       fullname text NOT NULL,
       gender varchar(1) NOT NULL,
@@ -26,19 +25,19 @@ class DbManager {
     );`;
 
     const questionsQuery = `
-    CREATE TABLE IF NOT EXISTS questions(
+    CREATE TABLE IF NOT EXISTS questions CASCADE(
       questionId SERIAL NOT NULL PRIMARY KEY,
       userId INTEGER REFERENCES users(userId),
       questionTitle varchar(100) NOT NULL,
-      questionContent varchar(500) NOT NULL,
+      questionContent varchar(500) NOT NULL ON DELETE CASCADE,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
 
     const answersQuery = `
-    CREATE TABLE IF NOT EXISTS answers(
+    CREATE TABLE IF NOT EXISTS answers CASCADE(
       answerId  SERIAL NOT NULL PRIMARY KEY),
-      questionId INTEGER REFERENCES questions(questionId),
-      userId INTEGER REFERENCES users(userId),
+      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
+      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
       answer varchar(500) NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
@@ -115,7 +114,7 @@ class DbManager {
     const query = {
       name: 'fetch-answer',
       text: `SELECT * FROM ${table} WHERE answers.questionId = $1`,
-      values: [Number(questionId)],
+      values: [questionId],
     };
 
     this.pool.query(query, (err, result) => {
@@ -150,6 +149,20 @@ class DbManager {
         callback(error);
       } else {
         callback(result.rows[0]);
+      }
+    });
+  }
+
+  deleteQuestionById(table, questionId, callback) {
+    const query = `DELETE FROM ${table} WHERE questionid = $1`;
+    const values = [questionId];
+
+    console.log(query);
+    this.pool.query(query, values, (error, result) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(result);
       }
     });
   }
