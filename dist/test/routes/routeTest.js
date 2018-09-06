@@ -105,7 +105,6 @@ describe('/POST', function () {
     _chai2.default.request(_server2.default).post('/api/v1/questions/' + questionId + '/answers').set('content-type', 'application/json').set('x-auth-token', validToken).send({
       answer: 'Here is an answer for this question comming from the TEST file'
     }).end(function (err, res) {
-      console.log(res.body);
       res.body.should.have.property('questionId');
       res.body.should.have.property('userId');
       res.body.should.have.property('answers');

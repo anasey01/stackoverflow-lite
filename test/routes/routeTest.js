@@ -115,7 +115,6 @@ describe('/POST', () => {
         answer: 'Here is an answer for this question comming from the TEST file',
       })
       .end((err, res) => {
-        console.log(res.body)
         res.body.should.have.property('questionId');
         res.body.should.have.property('userId');
         res.body.should.have.property('answers');
