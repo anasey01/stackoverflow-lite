@@ -98,7 +98,7 @@ class QuestionRoute {
           }
           if (results.rows.length === 1) {
             const singleAnswer = results.rows;
-            questionAndAnswer.answers.push({ singleAnswer });
+            questionAndAnswer.answers.push(singleAnswer);
             res.status(200).json(questionAndAnswer);
           }
         });
@@ -109,6 +109,32 @@ class QuestionRoute {
         });
       }
     });
+  }
+
+  static deleteQuestion(req, res) {
+    const { id } = req.params;
+    questionManager.deleteOne(id, (result, err) => {
+      let isDeleted = '';
+      if (result.rowCount === 1) {
+        isDeleted = 'deleted';
+      }
+      if (isDeleted === 'deleted') {
+        return res.status(200).json({
+          success: true,
+          message: 'Question deleted!',
+        });
+      }
+      if (isDeleted === '') {
+        return res.status(401).json({
+          success: false,
+          message: 'Unable to delete question',
+        });
+      }
+    });
+  }
+
+  static updateQuestion(req, res) {
+    
   }
 
   static notFound(req, res) {

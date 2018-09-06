@@ -56,6 +56,11 @@ class QuestionManager {
     });
   }
 
+  deleteOne(questionId, callback) {
+    this.conn.deleteQuestionById(this.table, questionId, (result, err) => {
+      callback(result, err);
+    });
+  }
 }
 
 export default QuestionManager;

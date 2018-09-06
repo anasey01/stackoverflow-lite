@@ -30,7 +30,6 @@ var DbManager = function () {
       if (process.env.NODE_ENV.trim() === 'production') configString = _dbConfig2.default.production;
     }
     this.pool = new _pg.Pool(configString || _dbConfig2.default.development);
-    this.createAllTables();
   }
 
   _createClass(DbManager, [{
@@ -38,11 +37,11 @@ var DbManager = function () {
     value: function createAllTables() {
       var _this = this;
 
-      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users CASCADE(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
-      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId),\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions CASCADE(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId),\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
-      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId  SERIAL NOT NULL PRIMARY KEY),\n      questionId INTEGER REFERENCES questions(questionId),\n      userId INTEGER REFERENCES users(userId),\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers CASCADE(\n      answerId  SERIAL NOT NULL PRIMARY KEY),\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
       this.pool.query(usersQuery).then(function (data) {
         _this.pool.query(questionsQuery).then(function (data) {
@@ -127,7 +126,7 @@ var DbManager = function () {
       var query = {
         name: 'fetch-answer',
         text: 'SELECT * FROM ' + table + ' WHERE answers.questionId = $1',
-        values: [Number(questionId)]
+        values: [questionId]
       };
 
       this.pool.query(query, function (err, result) {
@@ -164,6 +163,21 @@ var DbManager = function () {
           callback(error);
         } else {
           callback(result.rows[0]);
+        }
+      });
+    }
+  }, {
+    key: 'deleteQuestionById',
+    value: function deleteQuestionById(table, questionId, callback) {
+      var query = 'DELETE FROM ' + table + ' WHERE questionid = $1';
+      var values = [questionId];
+
+      console.log(query);
+      this.pool.query(query, values, function (error, result) {
+        if (error) {
+          callback(error);
+        } else {
+          callback(result);
         }
       });
     }

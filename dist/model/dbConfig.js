@@ -29,7 +29,7 @@ var config = {
     host: process.env.DATABASE_HOSTNAME_TEST,
     port: '5432',
     max: 20,
-    idleTimeoutMillis: 30000
+    idleTimeoutMillis: 70000
   },
   production: {
     user: process.env.DATABASE_URL,

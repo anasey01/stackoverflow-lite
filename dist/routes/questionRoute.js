@@ -12,6 +12,10 @@ var _validateToken = require('../middleware/validateToken');
 
 var _validateToken2 = _interopRequireDefault(_validateToken);
 
+var _validateAuthor = require('../middleware/validateAuthor');
+
+var _validateAuthor2 = _interopRequireDefault(_validateAuthor);
+
 var _QuestionRoutes = require('../controllers/QuestionRoutes');
 
 var _QuestionRoutes2 = _interopRequireDefault(_QuestionRoutes);
@@ -24,6 +28,7 @@ router.get('/questions', _QuestionRoutes2.default.allQuestion);
 router.get('/questions/:id', _validateToken2.default, _QuestionRoutes2.default.specificQuestion);
 router.post('/questions', _validateToken2.default, _QuestionRoutes2.default.postQuestion);
 router.post('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.addAnswer);
+router.delete('/questions/:id/', _validateToken2.default, _validateAuthor2.default, _QuestionRoutes2.default.deleteQuestion);
 router.get('*', _QuestionRoutes2.default.notFound);
 
 exports.default = router;
