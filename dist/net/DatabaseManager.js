@@ -30,6 +30,7 @@ var DbManager = function () {
       if (process.env.NODE_ENV.trim() === 'production') configString = _dbConfig2.default.production;
     }
     this.pool = new _pg.Pool(configString || _dbConfig2.default.development);
+    this.createAllTables();
   }
 
   _createClass(DbManager, [{
@@ -37,24 +38,30 @@ var DbManager = function () {
     value: function createAllTables() {
       var _this = this;
 
-      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users CASCADE(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-
-      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions CASCADE(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId),\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-
-      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers CASCADE(\n      answerId  SERIAL NOT NULL PRIMARY KEY),\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId SERIAL NOT NULL PRIMARY KEY,\n      accepted BOOLEAN NOT NULL,\n      upvotes INT NOT NULL,\n      downvotes INT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var commentsQuery = '\n    CREATE TABLE IF NOT EXISTS comments(\n      commentId SERIAL NOT NULL PRIMARY KEY,\n      comment varchar(250) NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
       this.pool.query(usersQuery).then(function (data) {
+        console.log('Users Table Created');
         _this.pool.query(questionsQuery).then(function (data) {
+          console.log('Questions Table Created');
           _this.pool.query(answersQuery).then(function (data) {
-            return null;
+            console.log('Answers Table Created');
+            _this.pool.query(commentsQuery).then(function (data) {
+              console.log('comments Table Created');
+            }).catch(function (err) {
+              return console.log('Error creating comments table', err);
+            });
           }).catch(function (err) {
-            return err;
+            return console.log('Error creating Answers table', err);
           });
         }).catch(function (err) {
-          return err;
+          return console.log('Error creating Quesions table', err);
         });
       }).catch(function (err) {
-        return err;
+        return console.log('Error creating Users table', err);
       });
     }
   }, {
@@ -103,10 +110,19 @@ var DbManager = function () {
   }, {
     key: 'insertAnswer',
     value: function insertAnswer(userId, questionId, answer, callback) {
-      var query = 'INSERT INTO answers (userid, questionid, answer) VALUES ($1, $2, $3)';
-      var values = [userId, questionId, answer];
+      var query = 'INSERT INTO answers (userid, questionid, answer, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6)';
+      var values = [userId, questionId, answer, false, 0, 0];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
+      });
+    }
+  }, {
+    key: 'selectOneAnswer',
+    value: function selectOneAnswer(questionId, answerId, callback) {
+      var query = 'SELECT * FROM answers where answers.questionid = $1 and answers.answerid = $2';
+      var values = [questionId, answerId];
+      this.pool.query(query, values, function (error, result) {
+        callback(error, result.rows[0]);
       });
     }
   }, {
@@ -167,12 +183,34 @@ var DbManager = function () {
       });
     }
   }, {
+    key: 'updateQuestionAnswer',
+    value: function updateQuestionAnswer(answerId, answer, callback) {
+      var query = {
+        name: 'update-answer',
+        text: 'UPDATE answers SET answer = $1 WHERE answers.answerid = $2',
+        values: [answer, answerId]
+      };
+
+      this.pool.query(query, function (error, result) {
+        callback(error, result);
+      });
+    }
+  }, {
+    key: 'updateMarkedAnswer',
+    value: function updateMarkedAnswer(answerId, callback) {
+      var query = 'UPDATE answers SET accepted = true WHERE answers.answerid = $1';
+      var values = [answerId];
+
+      this.pool.query(query, values, function (error, result) {
+        callback(error, result);
+      });
+    }
+  }, {
     key: 'deleteQuestionById',
     value: function deleteQuestionById(table, questionId, callback) {
       var query = 'DELETE FROM ' + table + ' WHERE questionid = $1';
       var values = [questionId];
 
-      console.log(query);
       this.pool.query(query, values, function (error, result) {
         if (error) {
           callback(error);

@@ -30,27 +30,43 @@ CREATE TABLE questions (
 
 const answersQuery = `DROP TABLE IF EXISTS answers CASCADE;
 CREATE TABLE answers (
-  answerId  SERIAL NOT NULL PRIMARY KEY,
+  answerId SERIAL NOT NULL PRIMARY KEY,
+  accepted BOOLEAN NOT NULL,
+  upvotes INT NOT NULL,
+  downvotes INT NOT NULL,
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
   answer varchar(500) NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 
+const commentsQuery = `DROP TABLE IF EXISTS comments CASCADE;
+CREATE TABLE comments (
+  commentId SERIAL NOT NULL PRIMARY KEY,
+  comment varchar(250) NOT NULL,
+  questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
+  userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+  answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+  createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+);`;
+
 pool.query(usersQuery)
   .then((data) => {
-    console.log('User Table Created');
+    console.log('Users Table Created')
     pool.query(questionsQuery)
       .then((data) => {
-        console.log('Questions Table Created');
+        console.log('Questions Table Created')
         pool.query(answersQuery)
-          .then(data => console.log('Answers Table Created'))
-          .catch((err) => {
-            console.log('Error creating Answers Table', err);
-          });
-      }).catch((err) => {
-        console.log('Error creating Questions Table', err);
-      });
-  }).catch((err) => {
-    console.log('Error creating Users Table', err);
-  });
+          .then((data) => {
+            console.log('Answers Table Created');
+            pool.query(commentsQuery)
+              .then((data) => {
+                console.log('comments Table Created');
+              })
+              .catch(err => console.log('Error creating comments table', err));
+          })
+          .catch(err => console.log('Error creating Answers table', err));
+      })
+      .catch(err => console.log('Error creating Quesions table', err));
+  })
+  .catch(err => console.log('Error creating Users table', err));

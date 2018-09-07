@@ -50,9 +50,33 @@ class QuestionManager {
     });
   }
 
+  getSpecificAnswer(questionId, answerId, callback) {
+    this.conn.selectOneAnswer(questionId, answerId, (result, err) => {
+      callback(result, err);
+    });
+  }
+
   getAnswer(questionId, callback) {
     this.conn.selectAnswer(this.answerTable, questionId, (err, result) => {
       callback(result, err);
+    });
+  }
+
+  markAnswer(answerId, callback) {
+    this.conn.updateMarkedAnswer(answerId, (err, result) => {
+      if (err) {
+        callback('error');
+      }
+      callback('successfully marked');
+    });
+  }
+
+  updateAnswer(answerId, answer, callback) {
+    this.conn.updateQuestionAnswer(answerId, answer, (err, result) => {
+      if (err) {
+        callback('error');
+      }
+      callback('answer updated');
     });
   }
 
