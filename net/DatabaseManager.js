@@ -10,11 +10,12 @@ class DbManager {
       if (process.env.NODE_ENV.trim() === 'production') configString = config.production;
     }
     this.pool = new Pool(configString || config.development);
+    this.createAllTables();
   }
 
   createAllTables() {
     const usersQuery = `
-    CREATE TABLE IF NOT EXISTS users CASCADE(
+    CREATE TABLE IF NOT EXISTS users(
       userId SERIAL NOT NULL PRIMARY KEY,
       fullname text NOT NULL,
       gender varchar(1) NOT NULL,
@@ -23,33 +24,51 @@ class DbManager {
       email varchar(60) UNIQUE NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
-
     const questionsQuery = `
-    CREATE TABLE IF NOT EXISTS questions CASCADE(
+    CREATE TABLE IF NOT EXISTS questions(
       questionId SERIAL NOT NULL PRIMARY KEY,
-      userId INTEGER REFERENCES users(userId),
+      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
       questionTitle varchar(100) NOT NULL,
-      questionContent varchar(500) NOT NULL ON DELETE CASCADE,
+      questionContent varchar(500) NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
-
     const answersQuery = `
-    CREATE TABLE IF NOT EXISTS answers CASCADE(
-      answerId  SERIAL NOT NULL PRIMARY KEY),
+    CREATE TABLE IF NOT EXISTS answers(
+      answerId SERIAL NOT NULL PRIMARY KEY,
+      accepted BOOLEAN NOT NULL,
+      upvotes INT NOT NULL,
+      downvotes INT NOT NULL,
       questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
       userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
       answer varchar(500) NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
+    const commentsQuery = `
+    CREATE TABLE IF NOT EXISTS comments(
+      commentId SERIAL NOT NULL PRIMARY KEY,
+      comment varchar(250) NOT NULL,
+      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
+      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+    );`;
 
     this.pool.query(usersQuery)
       .then((data) => {
+        console.log('Users Table Created');
         this.pool.query(questionsQuery)
           .then((data) => {
+            console.log('Questions Table Created');
             this.pool.query(answersQuery)
-              .then(data => null).catch(err => err);
-          }).catch(err => err);
-      }).catch(err => err);
+              .then((data) => {
+                console.log('Answers Table Created');
+                this.pool.query(commentsQuery)
+                  .then((data) => {
+                    console.log('comments Table Created');
+                  }).catch(err => console.log('Error creating comments table', err));
+              }).catch(err => console.log('Error creating Answers table', err));
+          }).catch(err => console.log('Error creating Quesions table', err));
+      }).catch(err => console.log('Error creating Users table', err));
   }
 
   insertUser(fullname, gender, username, password, email, callback) {
@@ -93,10 +112,18 @@ class DbManager {
   }
 
   insertAnswer(userId, questionId, answer, callback) {
-    const query = 'INSERT INTO answers (userid, questionid, answer) VALUES ($1, $2, $3)';
-    const values = [userId, questionId, answer];
+    const query = 'INSERT INTO answers (userid, questionid, answer, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6)';
+    const values = [userId, questionId, answer, false, 0, 0];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
+    });
+  }
+
+  selectOneAnswer(questionId, answerId, callback) {
+    const query = 'SELECT * FROM answers where answers.questionid = $1 and answers.answerid = $2';
+    const values = [questionId, answerId];
+    this.pool.query(query, values, (error, result) => {
+      callback(error, result.rows[0]);
     });
   }
 
@@ -153,11 +180,31 @@ class DbManager {
     });
   }
 
+  updateQuestionAnswer(answerId, answer, callback) {
+    const query = {
+      name: 'update-answer',
+      text: 'UPDATE answers SET answer = $1 WHERE answers.answerid = $2',
+      values: [answer, answerId],
+    };
+
+    this.pool.query(query, (error, result) => {
+      callback(error, result);
+    });
+  }
+
+  updateMarkedAnswer(answerId, callback) {
+    const query = 'UPDATE answers SET accepted = true WHERE answers.answerid = $1';
+    const values = [answerId];
+
+    this.pool.query(query, values, (error, result) => {
+      callback(error, result);
+    });
+  }
+
   deleteQuestionById(table, questionId, callback) {
     const query = `DELETE FROM ${table} WHERE questionid = $1`;
     const values = [questionId];
 
-    console.log(query);
     this.pool.query(query, values, (error, result) => {
       if (error) {
         callback(error);

@@ -16,7 +16,7 @@
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test": "cross-env NODE_ENV=test npm run migration && cross-env NODE_ENV=test npm run clean-test && cross-env NODE_ENV=test npm run build-test && cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 10000 \"dist/test/routes/routeTest.js\" --exit",
     "production": "npm run build && npm run build-routes && npm run migration && node bin/production",
-    "dev": "babel-node migrations/index.js && npm run build && npm run build-routes && node bin/production",
+    "dev": "npm run build && npm run build-routes && node bin/production",
     "migration": "babel-node migrations/dropdatabase.js && babel-node migrations/index.js --exit"
   },
   "author": "Anani Oluseyi",

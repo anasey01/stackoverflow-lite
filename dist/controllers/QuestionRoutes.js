@@ -118,7 +118,7 @@ var QuestionRoute = function () {
         };
 
         if (result.questiontitle && result.questioncontent) {
-          var userId = questionAndAnswer.userId;
+          var userId = req.user.userId;
 
           questionManager.createAnswer(userId, questionId, answer, function (results, err) {
             if (results.rows.length > 1) {
@@ -167,7 +167,55 @@ var QuestionRoute = function () {
     }
   }, {
     key: 'updateQuestion',
-    value: function updateQuestion(req, res) {}
+    value: function updateQuestion(req, res) {
+      var _req$params = req.params,
+          questionId = _req$params.questionId,
+          answerId = _req$params.answerId;
+
+      var currentUserId = req.user.userId;
+      questionManager.getSpecificAnswer(questionId, answerId, function (err, answerResult) {
+        req.userAnswer = answerResult;
+      });
+      questionManager.getQuestion(questionId, function (result) {
+        var questionUserId = result.userid;
+        if (currentUserId === questionUserId) {
+          questionManager.markAnswer(answerId, function (ansResult) {
+            if (ansResult === 'successfully marked') {
+              res.status(200).json({
+                success: true,
+                message: 'Answer marked as approved!'
+              });
+            } else {
+              res.status(500).json({
+                success: false,
+                message: 'unable to mark answer'
+              });
+            }
+          });
+        } else if (currentUserId === req.userAnswer.userid) {
+          var answer = req.body.answer;
+
+          questionManager.updateAnswer(answerId, answer, function (ansResult) {
+            if (ansResult === 'answer updated') {
+              res.status(200).json({
+                success: true,
+                message: 'Your answer has been updated'
+              });
+            } else {
+              res.status(500).json({
+                success: false,
+                message: 'Not updated, try again'
+              });
+            }
+          });
+        } else {
+          res.status(401).json({
+            success: false,
+            message: 'Not authorized to approve answer'
+          });
+        }
+      });
+    }
   }, {
     key: 'notFound',
     value: function notFound(req, res) {

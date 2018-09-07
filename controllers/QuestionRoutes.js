@@ -88,7 +88,7 @@ class QuestionRoute {
       };
 
       if (result.questiontitle && result.questioncontent) {
-        const { userId } = questionAndAnswer;
+        const { userId } = req.user;
         questionManager.createAnswer(userId, questionId, answer, (results, err) => {
           if (results.rows.length > 1) {
             results.rows.forEach((item) => {
@@ -133,8 +133,51 @@ class QuestionRoute {
     });
   }
 
+
   static updateQuestion(req, res) {
-    
+    const { questionId, answerId } = req.params;
+    const currentUserId = req.user.userId;
+    questionManager.getSpecificAnswer(questionId, answerId, (err, answerResult) => {
+      req.userAnswer = answerResult;
+    });
+    questionManager.getQuestion(questionId, (result) => {
+      const questionUserId = result.userid;
+      if (currentUserId === questionUserId) {
+        questionManager.markAnswer(answerId, (ansResult) => {
+          if (ansResult === 'successfully marked') {
+            res.status(200).json({
+              success: true,
+              message: 'Answer marked as approved!',
+            });
+          } else {
+            res.status(500).json({
+              success: false,
+              message: 'unable to mark answer',
+            });
+          }
+        });
+      } else if (currentUserId === req.userAnswer.userid) {
+        const { answer } = req.body;
+        questionManager.updateAnswer(answerId, answer, (ansResult) => {
+          if (ansResult === 'answer updated') {
+            res.status(200).json({
+              success: true,
+              message: 'Your answer has been updated',
+            });
+          } else {
+            res.status(500).json({
+              success: false,
+              message: 'Not updated, try again',
+            });
+          }
+        });
+      } else {
+        res.status(401).json({
+          success: false,
+          message: 'Not authorized to accept answer',
+        });
+      }
+    });
   }
 
   static notFound(req, res) {

@@ -70,10 +70,37 @@ var QuestionManager = function () {
       });
     }
   }, {
+    key: 'getSpecificAnswer',
+    value: function getSpecificAnswer(questionId, answerId, callback) {
+      this.conn.selectOneAnswer(questionId, answerId, function (result, err) {
+        callback(result, err);
+      });
+    }
+  }, {
     key: 'getAnswer',
     value: function getAnswer(questionId, callback) {
       this.conn.selectAnswer(this.answerTable, questionId, function (err, result) {
         callback(result, err);
+      });
+    }
+  }, {
+    key: 'markAnswer',
+    value: function markAnswer(answerId, callback) {
+      this.conn.updateMarkedAnswer(answerId, function (err, result) {
+        if (err) {
+          callback('error');
+        }
+        callback('successfully marked');
+      });
+    }
+  }, {
+    key: 'updateAnswer',
+    value: function updateAnswer(answerId, answer, callback) {
+      this.conn.updateQuestionAnswer(answerId, answer, function (err, result) {
+        if (err) {
+          callback('error');
+        }
+        callback('answer updated');
       });
     }
   }, {
