@@ -52,6 +52,16 @@ class DbManager {
       answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
+    const votesQuery = `
+    CREATE TABLE IF NOT EXISTS votes(
+      voteId SERIAL NOT NULL PRIMARY KEY,
+      upvotes INTEGER NOT NULL,
+      downvotes INTEGER NOT NULL,
+      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
+      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+    );`;
 
     this.pool.query(usersQuery)
       .then((data) => {
@@ -65,6 +75,10 @@ class DbManager {
                 this.pool.query(commentsQuery)
                   .then((data) => {
                     console.log('comments Table Created');
+                    this.pool.query(votesQuery)
+                      .then((data) => {
+                        console.log('Votes table Created');
+                      }).catch(err => console.log('Err creating votes table', err));
                   }).catch(err => console.log('Error creating comments table', err));
               }).catch(err => console.log('Error creating Answers table', err));
           }).catch(err => console.log('Error creating Quesions table', err));
@@ -198,6 +212,24 @@ class DbManager {
 
     this.pool.query(query, values, (error, result) => {
       callback(error, result);
+    });
+  }
+
+  insertVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
+    const query = {
+      name: 'insert-votes',
+      text: `INSERT INTO votes (${currentVote}, ${otherVote}, questionid, userid, answerid) VALUES ($1, $2, $3, $4, $5)`,
+      values: [1, 0, questionId, userId, answerId],
+    };
+    this.pool.query(query, (error, result) => {
+      if (error) throw error;
+      if (result.rowCount === 1) {
+        const selectQuery = 'SELECT * FROM votes WHERE answerid = $1';
+        const selectValue = [answerId];
+        this.pool.query(selectQuery, selectValue, (error, result) => {
+          callback(error, result.rows);
+        });
+      }
     });
   }
 

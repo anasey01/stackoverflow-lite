@@ -16,13 +16,17 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _questionRoute = require('./routes/questionRoute');
-
-var _questionRoute2 = _interopRequireDefault(_questionRoute);
-
 var _authRoute = require('./routes/authRoute');
 
 var _authRoute2 = _interopRequireDefault(_authRoute);
+
+var _votesRoute = require('./routes/votesRoute');
+
+var _votesRoute2 = _interopRequireDefault(_votesRoute);
+
+var _questionRoute = require('./routes/questionRoute');
+
+var _questionRoute2 = _interopRequireDefault(_questionRoute);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,6 +36,7 @@ app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
 app.use('/api/v1', _questionRoute2.default);
 app.use('/api/v1/auth/', _authRoute2.default);
+app.use('/api/v1', _votesRoute2.default);
 app.use((0, _morgan2.default)(':method :url :response-time'));
 
 app.set('port', process.env.PORT || 8080);

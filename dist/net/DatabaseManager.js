@@ -42,6 +42,7 @@ var DbManager = function () {
       var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
       var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId SERIAL NOT NULL PRIMARY KEY,\n      accepted BOOLEAN NOT NULL,\n      upvotes INT NOT NULL,\n      downvotes INT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
       var commentsQuery = '\n    CREATE TABLE IF NOT EXISTS comments(\n      commentId SERIAL NOT NULL PRIMARY KEY,\n      comment varchar(250) NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var votesQuery = '\n    CREATE TABLE IF NOT EXISTS votes(\n      voteId SERIAL NOT NULL PRIMARY KEY,\n      upvotes INTEGER NOT NULL,\n      downvotes INTEGER NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
       this.pool.query(usersQuery).then(function (data) {
         console.log('Users Table Created');
@@ -51,6 +52,11 @@ var DbManager = function () {
             console.log('Answers Table Created');
             _this.pool.query(commentsQuery).then(function (data) {
               console.log('comments Table Created');
+              _this.pool.query(votesQuery).then(function (data) {
+                console.log('Votes table Created');
+              }).catch(function (err) {
+                return console.log('Err creating votes table', err);
+              });
             }).catch(function (err) {
               return console.log('Error creating comments table', err);
             });
@@ -203,6 +209,27 @@ var DbManager = function () {
 
       this.pool.query(query, values, function (error, result) {
         callback(error, result);
+      });
+    }
+  }, {
+    key: 'insertVotes',
+    value: function insertVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
+      var _this2 = this;
+
+      var query = {
+        name: 'insert-votes',
+        text: 'INSERT INTO votes (' + currentVote + ', ' + otherVote + ', questionid, userid, answerid) VALUES ($1, $2, $3, $4, $5)',
+        values: [1, 0, questionId, userId, answerId]
+      };
+      this.pool.query(query, function (error, result) {
+        if (error) throw error;
+        if (result.rowCount === 1) {
+          var selectQuery = 'SELECT * FROM votes WHERE answerid = $1';
+          var selectValue = [answerId];
+          _this2.pool.query(selectQuery, selectValue, function (error, result) {
+            callback(error, result.rows);
+          });
+        }
       });
     }
   }, {
