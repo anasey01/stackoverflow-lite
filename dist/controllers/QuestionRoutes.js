@@ -211,7 +211,7 @@ var QuestionRoute = function () {
         } else {
           res.status(401).json({
             success: false,
-            message: 'Not authorized to approve answer'
+            message: 'Not authorized to accept answer'
           });
         }
       });

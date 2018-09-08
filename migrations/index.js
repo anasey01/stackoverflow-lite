@@ -50,23 +50,34 @@ CREATE TABLE comments (
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 
+const votesQuery = `
+    CREATE TABLE IF NOT EXISTS votes(
+      voteId SERIAL NOT NULL PRIMARY KEY,
+      upvotes INTEGER NOT NULL,
+      downvotes INTEGER NOT NULL,
+      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
+      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+    );`;
+
 pool.query(usersQuery)
   .then((data) => {
-    console.log('Users Table Created')
+    console.log('Users Table Created');
     pool.query(questionsQuery)
       .then((data) => {
-        console.log('Questions Table Created')
+        console.log('Questions Table Created');
         pool.query(answersQuery)
           .then((data) => {
             console.log('Answers Table Created');
             pool.query(commentsQuery)
               .then((data) => {
                 console.log('comments Table Created');
-              })
-              .catch(err => console.log('Error creating comments table', err));
-          })
-          .catch(err => console.log('Error creating Answers table', err));
-      })
-      .catch(err => console.log('Error creating Quesions table', err));
-  })
-  .catch(err => console.log('Error creating Users table', err));
+                pool.query(votesQuery)
+                  .then((data) => {
+                    console.log('Votes table Created');
+                  }).catch(err => console.log('Err creating votes table', err));
+              }).catch(err => console.log('Error creating comments table', err));
+          }).catch(err => console.log('Error creating Answers table', err));
+      }).catch(err => console.log('Error creating Quesions table', err));
+  }).catch(err => console.log('Error creating Users table', err));

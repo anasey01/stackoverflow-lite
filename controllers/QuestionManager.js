@@ -80,6 +80,12 @@ class QuestionManager {
     });
   }
 
+  createVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
+    this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, (err, result) => {
+      callback(err, result);
+    });
+  }
+
   deleteOne(questionId, callback) {
     this.conn.deleteQuestionById(this.table, questionId, (result, err) => {
       callback(result, err);

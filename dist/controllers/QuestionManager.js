@@ -104,6 +104,13 @@ var QuestionManager = function () {
       });
     }
   }, {
+    key: 'createVotes',
+    value: function createVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
+      this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, function (err, result) {
+        callback(err, result);
+      });
+    }
+  }, {
     key: 'deleteOne',
     value: function deleteOne(questionId, callback) {
       this.conn.deleteQuestionById(this.table, questionId, function (result, err) {
