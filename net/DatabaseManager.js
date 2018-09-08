@@ -194,6 +194,15 @@ class DbManager {
     });
   }
 
+  selectQuestionByUserId(userId, callback) {
+    const query = 'SELECT * FROM questions WHERE userid =$1';
+    const value = [userId];
+
+    this.pool.query(query, value, (error, result) => {
+      callback(error, result.rows);
+    });
+  }
+
   updateQuestionAnswer(answerId, answer, callback) {
     const query = {
       name: 'update-answer',

@@ -189,6 +189,16 @@ var DbManager = function () {
       });
     }
   }, {
+    key: 'selectQuestionByUserId',
+    value: function selectQuestionByUserId(userId, callback) {
+      var query = 'SELECT * FROM questions WHERE userid =$1';
+      var value = [userId];
+
+      this.pool.query(query, value, function (error, result) {
+        callback(error, result.rows);
+      });
+    }
+  }, {
     key: 'updateQuestionAnswer',
     value: function updateQuestionAnswer(answerId, answer, callback) {
       var query = {

@@ -142,6 +142,27 @@ var QuestionRoute = function () {
       });
     }
   }, {
+    key: 'getAllQuestionsByUser',
+    value: function getAllQuestionsByUser(req, res) {
+      var userId = req.user.userId;
+
+      questionManager.getUserQuestions(userId, function (error, result) {
+        var userQuestions = result;
+        if (error) {
+          res.status(500).json({
+            success: false,
+            message: 'unable to retrieve questions'
+          });
+        } else {
+          res.status(200).json({
+            success: true,
+            message: 'All Questions by User',
+            userQuestions: userQuestions
+          });
+        }
+      });
+    }
+  }, {
     key: 'deleteQuestion',
     value: function deleteQuestion(req, res) {
       var id = req.params.id;

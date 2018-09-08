@@ -20,8 +20,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var router = _express2.default.Router();
 
-router.put('/questions/:questionId/answers/:answerId/upvote', _validateToken2.default, _Votes2.default.upvote);
-router.put('/questions/:questionId/answers/:answerId/downvote', _validateToken2.default, _Votes2.default.downvote);
+router.post('/questions/:questionId/answers/:answerId/upvote', _validateToken2.default, _Votes2.default.upvote);
+router.post('/questions/:questionId/answers/:answerId/downvote', _validateToken2.default, _Votes2.default.downvote);
 
 exports.default = router;
 //# sourceMappingURL=votesRoute.js.map

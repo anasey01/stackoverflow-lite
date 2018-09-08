@@ -39,6 +39,12 @@ class QuestionManager {
     });
   }
 
+  getUserQuestions(userId, callback) {
+    this.conn.selectQuestionByUserId(userId, (error, result) => {
+      callback(error, result);
+    });
+  }
+
   createAnswer(userId, questionId, answer, callback) {
     this.conn.insertAnswer(userId, questionId, answer, (err, result) => {
       if (err) {

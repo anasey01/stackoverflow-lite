@@ -56,6 +56,13 @@ var QuestionManager = function () {
       });
     }
   }, {
+    key: 'getUserQuestions',
+    value: function getUserQuestions(userId, callback) {
+      this.conn.selectQuestionByUserId(userId, function (error, result) {
+        callback(error, result);
+      });
+    }
+  }, {
     key: 'createAnswer',
     value: function createAnswer(userId, questionId, answer, callback) {
       var _this2 = this;
