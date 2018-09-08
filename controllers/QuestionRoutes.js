@@ -111,6 +111,25 @@ class QuestionRoute {
     });
   }
 
+  static getAllQuestionsByUser(req, res) {
+    const { userId } = req.user;
+    questionManager.getUserQuestions(userId, (error, result) => {
+      const userQuestions = result;
+      if (error) {
+        res.status(500).json({
+          success: false,
+          message: 'unable to retrieve questions',
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: 'All Questions by User',
+          userQuestions,
+        });
+      }
+    });
+  }
+
   static deleteQuestion(req, res) {
     const { id } = req.params;
     questionManager.deleteOne(id, (result, err) => {
