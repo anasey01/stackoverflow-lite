@@ -80,7 +80,7 @@ var DbManager = function () {
       var values = [fullname, gender, username, password, email];
       this.pool.query(query, values, function (error, result) {
         if (error) {
-          throw new Error(error);
+          throw error;
         }
         callback(error, result);
       });
