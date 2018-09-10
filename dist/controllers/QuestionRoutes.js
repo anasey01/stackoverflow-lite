@@ -77,13 +77,8 @@ var QuestionRoute = function () {
           questionContent = _req$body.questionContent;
       var userId = req.user.userId;
 
-      questionManager.createQuestion(userId, questionTitle, questionContent, function (result) {
-        var error = false;
-        if (result === 'error') {
-          error = true;
-        }
-
-        if (error) {
+      questionManager.createQuestion(userId, questionTitle, questionContent, function (err, result) {
+        if (err) {
           return res.status(400).json({
             success: false,
             message: 'unable to create question'
@@ -92,10 +87,11 @@ var QuestionRoute = function () {
         return res.status(200).json({
           success: true,
           message: 'question successfully created',
-          userid: result.userid,
-          questionid: result.questionid,
-          questiontitle: result.questiontitle,
-          questioncontent: result.questioncontent
+          userId: result[0].userid,
+          questionId: result[0].questionid,
+          questionTitle: result[0].questiontitle,
+          questionContent: result[0].questioncontent,
+          createdAt: result[0].createdat
         });
       });
     }
@@ -103,42 +99,25 @@ var QuestionRoute = function () {
     key: 'addAnswer',
     value: function addAnswer(req, res) {
       var questionId = Number(req.params.id);
+      var userId = req.user.userId;
       var answer = req.body.answer;
 
-      questionManager.getQuestion(questionId, function (result) {
-        var questionAndAnswer = {
-          success: true,
-          message: 'Answer added to question ' + questionId,
-          questionId: result.questionid,
-          userId: result.userid,
-          questionTitle: result.questiontitle,
-          questionContent: result.questioncontent,
-          createdAt: result.createdat,
-          answers: []
-        };
-
-        if (result.questiontitle && result.questioncontent) {
-          var userId = req.user.userId;
-
-          questionManager.createAnswer(userId, questionId, answer, function (results, err) {
-            if (results.rows.length > 1) {
-              results.rows.forEach(function (item) {
-                questionAndAnswer.answers.push(item);
-              });
-              res.status(200).json(questionAndAnswer);
-            }
-            if (results.rows.length === 1) {
-              var singleAnswer = results.rows;
-              questionAndAnswer.answers.push(singleAnswer);
-              res.status(200).json(questionAndAnswer);
-            }
+      questionManager.getQuestionAndAnswer(questionId, function (err, result) {
+        var answerNumber = result.length + 1;
+        questionManager.createAnswer(userId, questionId, answer, answerNumber, function (error, data) {
+          if (error) {
+            res.status(500).json({
+              success: false,
+              message: 'Unable to add answer'
+            });
+          }
+          var answerInfo = data.rows[0];
+          res.status(200).json({
+            success: true,
+            message: 'Your answer has been successfully added',
+            answerInfo: answerInfo
           });
-        } else {
-          res.status(404).json({
-            success: false,
-            message: 'No Answer found'
-          });
-        }
+        });
       });
     }
   }, {
@@ -187,52 +166,59 @@ var QuestionRoute = function () {
       });
     }
   }, {
-    key: 'updateQuestion',
-    value: function updateQuestion(req, res) {
+    key: 'updateAnswer',
+    value: function updateAnswer(req, res) {
       var _req$params = req.params,
           questionId = _req$params.questionId,
-          answerId = _req$params.answerId;
+          answerNumber = _req$params.answerNumber;
 
       var currentUserId = req.user.userId;
-      questionManager.getSpecificAnswer(questionId, answerId, function (err, answerResult) {
-        req.userAnswer = answerResult;
-      });
-      questionManager.getQuestion(questionId, function (result) {
-        var questionUserId = result.userid;
-        if (currentUserId === questionUserId) {
-          questionManager.markAnswer(answerId, function (ansResult) {
-            if (ansResult === 'successfully marked') {
-              res.status(200).json({
-                success: true,
-                message: 'Answer marked as approved!'
-              });
-            } else {
-              res.status(500).json({
-                success: false,
-                message: 'unable to mark answer'
-              });
-            }
-          });
-        } else if (currentUserId === req.userAnswer.userid) {
-          var answer = req.body.answer;
+      var answer = req.body.answer;
 
-          questionManager.updateAnswer(answerId, answer, function (ansResult) {
-            if (ansResult === 'answer updated') {
-              res.status(200).json({
-                success: true,
-                message: 'Your answer has been updated'
-              });
-            } else {
-              res.status(500).json({
-                success: false,
-                message: 'Not updated, try again'
-              });
-            }
-          });
+      questionManager.getQuestionAndAnswer(questionId, function (err, result) {
+        var answerData = [];
+        var isAnswer = 'not found';
+        result.forEach(function (item) {
+          if (item.answernumber === Number(answerNumber)) {
+            isAnswer = 'found';
+            return answerData.push(item);
+          }
+        });
+        if (isAnswer === 'found') {
+          if (currentUserId === Number(questionId)) {
+            questionManager.markAnswer(answerNumber, function (result) {
+              if (result === 'successfully marked') {
+                res.status(200).json({
+                  success: true,
+                  message: 'Answer marked as approved!'
+                });
+              } else {
+                res.status(500).json({
+                  success: false,
+                  message: 'unable to mark answer'
+                });
+              }
+            });
+          } else if (currentUserId === answerData[0].userid) {
+            questionManager.updateAnswer(answerNumber, answer, function (error, answerInfo) {
+              if (error) {
+                res.status(500).json({
+                  success: false,
+                  message: 'Unable to update Answer'
+                });
+              } else {
+                res.status(200).json({
+                  success: true,
+                  message: 'Your answer has been updated',
+                  answerInfo: answerInfo
+                });
+              }
+            });
+          }
         } else {
-          res.status(401).json({
+          res.status(404).json({
             success: false,
-            message: 'Not authorized to accept answer'
+            message: isAnswer
           });
         }
       });

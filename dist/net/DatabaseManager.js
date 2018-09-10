@@ -40,7 +40,7 @@ var DbManager = function () {
 
       var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
       var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId SERIAL NOT NULL PRIMARY KEY,\n      accepted BOOLEAN NOT NULL,\n      upvotes INT NOT NULL,\n      downvotes INT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId SERIAL NOT NULL PRIMARY KEY,\n      accepted BOOLEAN NOT NULL,\n      upvotes INT NOT NULL,\n      downvotes INT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      answerNumber INT NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
       var commentsQuery = '\n    CREATE TABLE IF NOT EXISTS comments(\n      commentId SERIAL NOT NULL PRIMARY KEY,\n      comment varchar(250) NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
       var votesQuery = '\n    CREATE TABLE IF NOT EXISTS votes(\n      voteId SERIAL NOT NULL PRIMARY KEY,\n      upvotes INTEGER NOT NULL,\n      downvotes INTEGER NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
@@ -80,7 +80,7 @@ var DbManager = function () {
       var values = [fullname, gender, username, password, email];
       this.pool.query(query, values, function (error, result) {
         if (error) {
-          throw error;
+          throw new Error(error);
         }
         callback(error, result);
       });
@@ -107,7 +107,7 @@ var DbManager = function () {
   }, {
     key: 'insertQuestion',
     value: function insertQuestion(userId, questionTitle, questionContent, callback) {
-      var query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3)';
+      var query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3) RETURNING *';
       var values = [userId, questionTitle, questionContent];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
@@ -115,9 +115,9 @@ var DbManager = function () {
     }
   }, {
     key: 'insertAnswer',
-    value: function insertAnswer(userId, questionId, answer, callback) {
-      var query = 'INSERT INTO answers (userid, questionid, answer, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6)';
-      var values = [userId, questionId, answer, false, 0, 0];
+    value: function insertAnswer(userId, questionId, answer, answerNumber, callback) {
+      var query = 'INSERT INTO answers (userid, questionid, answer, answernumber, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+      var values = [userId, questionId, answer, answerNumber, false, 0, 0];
       this.pool.query(query, values, function (err, result) {
         callback(err, result);
       });
@@ -199,12 +199,22 @@ var DbManager = function () {
       });
     }
   }, {
+    key: 'selectQuestionAndAnswer',
+    value: function selectQuestionAndAnswer(questionId, callback) {
+      var query = 'SELECT answers.answerid, answers.accepted, answers.upvotes, answers.downvotes, answers.questionid, answers.userid, answers.answer, answers.answernumber, answers.createdat FROM answers INNER JOIN questions ON answers.questionid = questions.questionid WHERE answers.questionId=$1';
+      var value = [questionId];
+
+      this.pool.query(query, value, function (error, result) {
+        callback(error, result.rows);
+      });
+    }
+  }, {
     key: 'updateQuestionAnswer',
-    value: function updateQuestionAnswer(answerId, answer, callback) {
+    value: function updateQuestionAnswer(answerNumber, answer, callback) {
       var query = {
         name: 'update-answer',
-        text: 'UPDATE answers SET answer = $1 WHERE answers.answerid = $2',
-        values: [answer, answerId]
+        text: 'UPDATE answers SET answer = $1 WHERE answers.answernumber = $2 RETURNING *',
+        values: [answer, answerNumber]
       };
 
       this.pool.query(query, function (error, result) {
@@ -213,10 +223,9 @@ var DbManager = function () {
     }
   }, {
     key: 'updateMarkedAnswer',
-    value: function updateMarkedAnswer(answerId, callback) {
-      var query = 'UPDATE answers SET accepted = true WHERE answers.answerid = $1';
-      var values = [answerId];
-
+    value: function updateMarkedAnswer(answerNumber, callback) {
+      var query = 'UPDATE answers SET accepted = true WHERE answers.answernumber = $1';
+      var values = [answerNumber];
       this.pool.query(query, values, function (error, result) {
         callback(error, result);
       });
@@ -247,7 +256,6 @@ var DbManager = function () {
     value: function deleteQuestionById(table, questionId, callback) {
       var query = 'DELETE FROM ' + table + ' WHERE questionid = $1';
       var values = [questionId];
-
       this.pool.query(query, values, function (error, result) {
         if (error) {
           callback(error);

@@ -41,6 +41,7 @@ class DbManager {
       questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
       userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
       answer varchar(500) NOT NULL,
+      answerNumber INT NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
     const commentsQuery = `
@@ -118,16 +119,16 @@ class DbManager {
   }
 
   insertQuestion(userId, questionTitle, questionContent, callback) {
-    const query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3)';
+    const query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3) RETURNING *';
     const values = [userId, questionTitle, questionContent];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
     });
   }
 
-  insertAnswer(userId, questionId, answer, callback) {
-    const query = 'INSERT INTO answers (userid, questionid, answer, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6)';
-    const values = [userId, questionId, answer, false, 0, 0];
+  insertAnswer(userId, questionId, answer, answerNumber, callback) {
+    const query = 'INSERT INTO answers (userid, questionid, answer, answernumber, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
+    const values = [userId, questionId, answer, answerNumber, false, 0, 0];
     this.pool.query(query, values, (err, result) => {
       callback(err, result);
     });
@@ -203,11 +204,20 @@ class DbManager {
     });
   }
 
-  updateQuestionAnswer(answerId, answer, callback) {
+  selectQuestionAndAnswer(questionId, callback) {
+    const query = 'SELECT answers.answerid, answers.accepted, answers.upvotes, answers.downvotes, answers.questionid, answers.userid, answers.answer, answers.answernumber, answers.createdat FROM answers INNER JOIN questions ON answers.questionid = questions.questionid WHERE answers.questionId=$1';
+    const value = [questionId];
+
+    this.pool.query(query, value, (error, result) => {
+      callback(error, result.rows);
+    });
+  }
+
+  updateQuestionAnswer(answerNumber, answer, callback) {
     const query = {
       name: 'update-answer',
-      text: 'UPDATE answers SET answer = $1 WHERE answers.answerid = $2',
-      values: [answer, answerId],
+      text: 'UPDATE answers SET answer = $1 WHERE answers.answernumber = $2 RETURNING *',
+      values: [answer, answerNumber],
     };
 
     this.pool.query(query, (error, result) => {
@@ -215,10 +225,9 @@ class DbManager {
     });
   }
 
-  updateMarkedAnswer(answerId, callback) {
-    const query = 'UPDATE answers SET accepted = true WHERE answers.answerid = $1';
-    const values = [answerId];
-
+  updateMarkedAnswer(answerNumber, callback) {
+    const query = 'UPDATE answers SET accepted = true WHERE answers.answernumber = $1';
+    const values = [answerNumber];
     this.pool.query(query, values, (error, result) => {
       callback(error, result);
     });
@@ -245,7 +254,6 @@ class DbManager {
   deleteQuestionById(table, questionId, callback) {
     const query = `DELETE FROM ${table} WHERE questionid = $1`;
     const values = [questionId];
-
     this.pool.query(query, values, (error, result) => {
       if (error) {
         callback(error);

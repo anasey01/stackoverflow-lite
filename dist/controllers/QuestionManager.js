@@ -20,19 +20,8 @@ var QuestionManager = function () {
   _createClass(QuestionManager, [{
     key: 'createQuestion',
     value: function createQuestion(userId, questionTitle, questionContent, callback) {
-      var _this = this;
-
       this.conn.insertQuestion(userId, questionTitle, questionContent, function (err, result) {
-        if (err) {
-          callback('error');
-        }
-        _this.conn.selectById(_this.table, userId, function (res, err) {
-          if (err) {
-            callback(err);
-          } else {
-            callback(res);
-          }
-        });
+        callback(err, result.rows);
       });
     }
   }, {
@@ -64,22 +53,22 @@ var QuestionManager = function () {
     }
   }, {
     key: 'createAnswer',
-    value: function createAnswer(userId, questionId, answer, callback) {
-      var _this2 = this;
-
-      this.conn.insertAnswer(userId, questionId, answer, function (err, result) {
-        if (err) {
-          callback(err);
-        }
-        _this2.getAnswer(questionId, function (result, err) {
-          callback(result);
-        });
+    value: function createAnswer(userId, questionId, answer, answerNumber, callback) {
+      this.conn.insertAnswer(userId, questionId, answer, answerNumber, function (err, result) {
+        callback(err, result);
       });
     }
   }, {
     key: 'getSpecificAnswer',
     value: function getSpecificAnswer(questionId, answerId, callback) {
       this.conn.selectOneAnswer(questionId, answerId, function (result, err) {
+        callback(result, err);
+      });
+    }
+  }, {
+    key: 'getQuestionAndAnswer',
+    value: function getQuestionAndAnswer(questionId, callback) {
+      this.conn.selectQuestionAndAnswer(questionId, function (result, err) {
         callback(result, err);
       });
     }
@@ -92,8 +81,8 @@ var QuestionManager = function () {
     }
   }, {
     key: 'markAnswer',
-    value: function markAnswer(answerId, callback) {
-      this.conn.updateMarkedAnswer(answerId, function (err, result) {
+    value: function markAnswer(answerNumber, callback) {
+      this.conn.updateMarkedAnswer(answerNumber, function (err, result) {
         if (err) {
           callback('error');
         }
@@ -102,12 +91,9 @@ var QuestionManager = function () {
     }
   }, {
     key: 'updateAnswer',
-    value: function updateAnswer(answerId, answer, callback) {
-      this.conn.updateQuestionAnswer(answerId, answer, function (err, result) {
-        if (err) {
-          callback('error');
-        }
-        callback('answer updated');
+    value: function updateAnswer(answerNumber, answer, callback) {
+      this.conn.updateQuestionAnswer(answerNumber, answer, function (err, result) {
+        callback(err, result.rows);
       });
     }
   }, {
