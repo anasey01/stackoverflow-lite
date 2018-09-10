@@ -8,16 +8,7 @@ class QuestionManager {
 
   createQuestion(userId, questionTitle, questionContent, callback) {
     this.conn.insertQuestion(userId, questionTitle, questionContent, (err, result) => {
-      if (err) {
-        callback('error');
-      }
-      this.conn.selectById(this.table, userId, (res, err) => {
-        if (err) {
-          callback(err);
-        } else {
-          callback(res);
-        }
-      });
+      callback(err, result.rows);
     });
   }
 
@@ -45,14 +36,9 @@ class QuestionManager {
     });
   }
 
-  createAnswer(userId, questionId, answer, callback) {
-    this.conn.insertAnswer(userId, questionId, answer, (err, result) => {
-      if (err) {
-        callback(err);
-      }
-      this.getAnswer(questionId, (result, err) => {
-        callback(result);
-      });
+  createAnswer(userId, questionId, answer, answerNumber, callback) {
+    this.conn.insertAnswer(userId, questionId, answer, answerNumber, (err, result) => {
+      callback(err, result);
     });
   }
 
@@ -62,14 +48,20 @@ class QuestionManager {
     });
   }
 
+  getQuestionAndAnswer(questionId, callback) {
+    this.conn.selectQuestionAndAnswer(questionId, (result, err) => {
+      callback(result, err)
+    });
+  }
+
   getAnswer(questionId, callback) {
     this.conn.selectAnswer(this.answerTable, questionId, (err, result) => {
       callback(result, err);
     });
   }
 
-  markAnswer(answerId, callback) {
-    this.conn.updateMarkedAnswer(answerId, (err, result) => {
+  markAnswer(answerNumber, callback) {
+    this.conn.updateMarkedAnswer(answerNumber, (err, result) => {
       if (err) {
         callback('error');
       }
@@ -77,12 +69,9 @@ class QuestionManager {
     });
   }
 
-  updateAnswer(answerId, answer, callback) {
-    this.conn.updateQuestionAnswer(answerId, answer, (err, result) => {
-      if (err) {
-        callback('error');
-      }
-      callback('answer updated');
+  updateAnswer(answerNumber, answer, callback) {
+    this.conn.updateQuestionAnswer(answerNumber, answer, (err, result) => {
+      callback(err, result.rows);
     });
   }
 

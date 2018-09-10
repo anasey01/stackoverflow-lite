@@ -30,7 +30,7 @@ router.get('/question/:userId', _validateToken2.default, _QuestionRoutes2.defaul
 router.post('/questions', _validateToken2.default, _QuestionRoutes2.default.postQuestion);
 router.post('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.addAnswer);
 router.delete('/questions/:id/', _validateToken2.default, _validateAuthor2.default, _QuestionRoutes2.default.deleteQuestion);
-router.put('/questions/:questionId/answers/:answerId', _validateToken2.default, _QuestionRoutes2.default.updateQuestion);
+router.put('/questions/:questionId/answers/:answerNumber', _validateToken2.default, _QuestionRoutes2.default.updateAnswer);
 router.get('*', _QuestionRoutes2.default.notFound);
 
 exports.default = router;

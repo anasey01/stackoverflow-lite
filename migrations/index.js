@@ -37,6 +37,7 @@ CREATE TABLE answers (
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
   answer varchar(500) NOT NULL,
+  answerNumber INT NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 
