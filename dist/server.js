@@ -12,13 +12,13 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
+var _cors = require('cors');
+
+var _cors2 = _interopRequireDefault(_cors);
+
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
-
-var _crossOrigin = require('./middleware/crossOrigin');
-
-var _crossOrigin2 = _interopRequireDefault(_crossOrigin);
 
 var _authRoute = require('./routes/authRoute');
 
@@ -42,7 +42,7 @@ var app = (0, _express2.default)();
 
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
-app.use(_crossOrigin2.default);
+app.use((0, _cors2.default)());
 app.use('/api/v1', _questionRoute2.default);
 app.use('/api/v1/auth/', _authRoute2.default);
 app.use('/api/v1', _votesRoute2.default);
