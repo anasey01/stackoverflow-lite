@@ -21,12 +21,14 @@ const loginUser = () => {
   fetch(url, options)
     .then((response) => {
       console.log('response from login', response);
+      // TODO:
       // Get the Token and store in Local storage
       // Disable login and signup button on nav bar
       // Display logout button
       // redirect the user to view all questions
     })
     .catch(error => console.error(error));
+  // TODO:
   // output error messgae
   // redirect user to login page
 };
