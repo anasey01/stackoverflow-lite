@@ -30,7 +30,6 @@ var handleError = function () {
           message: error.message
         }
       });
-      next();
     }
   }]);
 

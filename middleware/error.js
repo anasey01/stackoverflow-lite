@@ -14,7 +14,6 @@ class handleError {
         message: error.message,
       },
     });
-    next();
   }
 }
 
