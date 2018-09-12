@@ -28,10 +28,6 @@ var _votesRoute = require('./routes/votesRoute');
 
 var _votesRoute2 = _interopRequireDefault(_votesRoute);
 
-var _error = require('./middleware/error');
-
-var _error2 = _interopRequireDefault(_error);
-
 var _questionRoute = require('./routes/questionRoute');
 
 var _questionRoute2 = _interopRequireDefault(_questionRoute);
@@ -47,8 +43,22 @@ app.use('/api/v1', _questionRoute2.default);
 app.use('/api/v1/auth/', _authRoute2.default);
 app.use('/api/v1', _votesRoute2.default);
 app.use((0, _morgan2.default)(':method :url :response-time'));
-app.use(_error2.default.notFound);
-app.use(_error2.default.serverError);
+
+app.use(function (req, res, next) {
+  var error = new Error('Not found');
+  error.status = 404;
+  next(error);
+});
+
+app.use(function (error, req, res, next) {
+  res.status(error.status || 500);
+  res.json({
+    success: false,
+    error: {
+      message: error.message
+    }
+  });
+});
 
 app.set('port', process.env.PORT || 8080);
 
