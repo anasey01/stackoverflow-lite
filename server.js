@@ -4,7 +4,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import authRouter from './routes/authRoute';
 import voteRoute from './routes/votesRoute';
-import errorHandler from './middleware/error';
 import questionRoute from './routes/questionRoute';
 
 const app = express();
@@ -16,8 +15,22 @@ app.use('/api/v1', questionRoute);
 app.use('/api/v1/auth/', authRouter);
 app.use('/api/v1', voteRoute);
 app.use(morgan(':method :url :response-time'));
-app.use(errorHandler.notFound);
-app.use(errorHandler.serverError);
+
+app.use((req, res, next) => {
+  const error = new Error('Not found');
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    success: false,
+    error: {
+      message: error.message,
+    },
+  });
+});
 
 app.set('port', process.env.PORT || 8080);
 
