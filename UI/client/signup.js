@@ -1,8 +1,8 @@
 const btn = document.getElementById('submit');
 
 
-const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup';
-// const url = 'localhost:3000/api/v1/auth/signup';
+ const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup';
+// const url = 'http://localhost:3000/api/v1/auth/signup';
 
 const signupUser = (e) => {
   e.preventDefault();
@@ -23,8 +23,6 @@ const signupUser = (e) => {
     }),
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
     },
   };
   console.log('Options Passed', options);
