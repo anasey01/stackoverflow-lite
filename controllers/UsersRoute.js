@@ -34,20 +34,19 @@ const UsersRoutes = {
     } = req.body;
     userManager.registerUser(fullname, gender, username, password, email, (result) => {
       if (result === 'existing') {
-        res.status(401).json({
+        return res.status(401).json({
           success: false,
-          message: 'username already exists',
-        });
-      } else {
-        const token = jwt.sign({
-          username: result.username,
-          email: result.email,
-        }, process.env.PRIVATE_KEY);
-        res.header('x-auth-token', token).status(200).json({
-          success: true,
-          message: 'user succesfully registered',
+          message: 'username or email exists',
         });
       }
+      const token = jwt.sign({
+        username: result.username,
+        email: result.email,
+      }, process.env.PRIVATE_KEY);
+      return res.header('x-auth-token', token).status(200).json({
+        success: true,
+        message: 'user succesfully registered',
+      });
     });
   },
 };

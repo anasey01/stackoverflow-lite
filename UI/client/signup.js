@@ -1,5 +1,5 @@
 const btn = document.getElementById('submit');
-
+const messageOutput = document.getElementById('message-output');
 
 const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup';
 // const url = 'http://localhost:3000/api/v1/auth/signup';
@@ -25,16 +25,19 @@ const signupUser = (e) => {
       'Content-Type': 'application/json',
     },
   })
-    .then((response) => {
-      if (!response.ok) {
-        const error = new Error(response.statusText);
-        return error;
+    .then(response => response.json())
+    .then((data) => {
+      if (data.success === false) {
+        const messageInfo = `<ul>
+                                <li>${data.message}</li>
+                            </ul>`;
+        messageOutput.innerHTML = messageInfo;
+      } else {
+        window.location.replace('login.html');
       }
-      return response.json();
     })
-    .then(data => data)
     .catch((error) => {
-      const err = new Error(error);
+      let err = new Error(error);
       return err;
     });
 };
