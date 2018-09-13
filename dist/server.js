@@ -12,10 +12,6 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
-var _cors = require('cors');
-
-var _cors2 = _interopRequireDefault(_cors);
-
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
@@ -38,9 +34,20 @@ var app = (0, _express2.default)();
 
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
-app.use('/api/v1', (0, _cors2.default)(), _questionRoute2.default);
-app.use('/api/v1/auth/', (0, _cors2.default)(), _authRoute2.default);
-app.use('/api/v1', (0, _cors2.default)(), _votesRoute2.default);
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  if (req.methods === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+});
+
+app.use('/api/v1', _questionRoute2.default);
+app.use('/api/v1/auth/', _authRoute2.default);
+app.use('/api/v1', _votesRoute2.default);
 app.use((0, _morgan2.default)(':method :url :response-time'));
 
 app.use(function (req, res, next) {

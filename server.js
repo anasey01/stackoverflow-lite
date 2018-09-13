@@ -1,6 +1,5 @@
 import express from 'express';
 import morgan from 'morgan';
-import cors from 'cors';
 import bodyParser from 'body-parser';
 import authRouter from './routes/authRoute';
 import voteRoute from './routes/votesRoute';
@@ -10,9 +9,20 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api/v1', cors(), questionRoute);
-app.use('/api/v1/auth/', cors(), authRouter);
-app.use('/api/v1', cors(), voteRoute);
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  if (req.methods === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+});
+
+app.use('/api/v1', questionRoute);
+app.use('/api/v1/auth/', authRouter);
+app.use('/api/v1', voteRoute);
 app.use(morgan(':method :url :response-time'));
 
 app.use((req, res, next) => {
