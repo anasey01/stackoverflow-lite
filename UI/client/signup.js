@@ -32,7 +32,7 @@ const signupUser = (e) => {
   fetch(url, options)
     .then(response => console.log('Response is', response))
     .then(data => console.log('I can append this here', data))
-    .catch(error => console.error('Error catching URL', error));
+    .catch(error => console.log('Error catching URL', error));
 };
 
 btn.addEventListener('click', signupUser);
