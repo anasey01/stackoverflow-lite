@@ -10,10 +10,9 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
-app.use('/api/v1', questionRoute);
-app.use('/api/v1/auth/', authRouter);
-app.use('/api/v1', voteRoute);
+app.use('/api/v1', cors(), questionRoute);
+app.use('/api/v1/auth/', cors(), authRouter);
+app.use('/api/v1', cors(), voteRoute);
 app.use(morgan(':method :url :response-time'));
 
 app.use((req, res, next) => {
