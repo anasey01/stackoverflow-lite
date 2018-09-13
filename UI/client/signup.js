@@ -5,6 +5,7 @@ const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup'
 // const url = 'localhost:3000/api/v1/auth/signup';
 
 const signupUser = (e) => {
+  e.preventDefault();
   const fullname = document.getElementById('fullname').value;
   const username = document.getElementById('username').value;
   const gender = document.getElementById('gender').value;
@@ -22,11 +23,13 @@ const signupUser = (e) => {
     }),
     headers: {
       'Content-Type': 'application/json',
-      mode: 'no-cors',
+      mode: 'cors',
+      credentials: 'include',
+      cache: 'no-cache',
+      'Access-Control-Allow-Credentials': true,
+      'Access-Control-Allow-Origin': '*',
     },
   };
-
-  e.preventDefault();
   console.log('Options Passed', options);
 
   fetch(url, options)
