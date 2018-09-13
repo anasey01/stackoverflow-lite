@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import path from 'path';
 import bodyParser from 'body-parser';
 import authRouter from './routes/authRoute';
 import voteRoute from './routes/votesRoute';
@@ -14,12 +15,14 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
   if (req.methods === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET, OPTIONS');
     return res.status(200).json({});
   }
   next();
 });
+app.use(express.static(path.resolve(__dirname, './../UI/')));
 
+app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.html')));
 app.use('/api/v1', questionRoute);
 app.use('/api/v1/auth/', authRouter);
 app.use('/api/v1', voteRoute);
