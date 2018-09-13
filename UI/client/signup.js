@@ -8,7 +8,7 @@ const signupUser = (e) => {
   e.preventDefault();
   const fullname = document.getElementById('fullname').value;
   const username = document.getElementById('username').value;
-  const gender = document.getElementById('gender').value;
+  const gender = document.querySelector('input[name=gender][checked]').value;
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
@@ -23,18 +23,15 @@ const signupUser = (e) => {
     }),
     headers: {
       'Content-Type': 'application/json',
-      mode: 'cors',
-      credentials: 'include',
-      cache: 'no-cache',
-      'Access-Control-Allow-Credentials': true,
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
   };
   console.log('Options Passed', options);
 
   fetch(url, options)
     .then(response => console.log('Response is', response))
-    .then(data => console.log('I can append this here', data))
+    .then(data => console.log('I can append to the DOM here', data))
     .catch(error => console.log('Error catching URL', error));
 };
 

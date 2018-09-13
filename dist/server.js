@@ -12,6 +12,10 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
@@ -39,12 +43,16 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
   if (req.methods === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET, OPTIONS');
     return res.status(200).json({});
   }
   next();
 });
+app.use(_express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
 
+app.get('/', function (req, res) {
+  return res.sendFile(_path2.default.resolve(__dirname, './../UI/index.html'));
+});
 app.use('/api/v1', _questionRoute2.default);
 app.use('/api/v1/auth/', _authRoute2.default);
 app.use('/api/v1', _votesRoute2.default);
