@@ -12,6 +12,10 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
+var _cors = require('cors');
+
+var _cors2 = _interopRequireDefault(_cors);
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -39,17 +43,8 @@ var app = (0, _express2.default)();
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  if (req.methods === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET, OPTIONS');
-    return res.status(200).json({});
-  }
-  next();
-});
+app.use((0, _cors2.default)());
 app.use(_express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
-
 app.get('/', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/index.html'));
 });
