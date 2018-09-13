@@ -250,6 +250,21 @@ describe('/PUT', function () {
   });
 });
 
+describe('PUT', function () {
+  it('User 2 marks User 1 answer as approved', function (done) {
+    var questionId = 2;
+    var answerNumber = 1;
+    _chai2.default.request(_server2.default).put('/api/v1/questions/' + questionId + '/answers/' + answerNumber).set('content-type', 'application/json').set('x-auth-token', secondUserValidToken).end(function (err, res) {
+      res.should.have.status(200);
+      res.body.should.have.property('success');
+      res.body.success.should.equal(true);
+      res.body.should.have.property('message');
+      res.body.message.should.equal('Answer marked as approved!');
+      done();
+    });
+  });
+});
+
 describe('/DELETE', function () {
   it('User 3 Deletes his/her Question', function (done) {
     var questionId = 3;
