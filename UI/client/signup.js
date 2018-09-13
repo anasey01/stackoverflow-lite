@@ -1,7 +1,7 @@
 const btn = document.getElementById('submit');
 
 
- const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup';
+const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup';
 // const url = 'http://localhost:3000/api/v1/auth/signup';
 
 const signupUser = (e) => {
@@ -12,7 +12,7 @@ const signupUser = (e) => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  const options = {
+  fetch(url, {
     method: 'POST',
     body: JSON.stringify({
       fullname,
@@ -24,13 +24,19 @@ const signupUser = (e) => {
     headers: {
       'Content-Type': 'application/json',
     },
-  };
-  console.log('Options Passed', options);
-
-  fetch(url, options)
-    .then(response => console.log('Response is', response))
-    .then(data => console.log('I can append to the DOM here', data))
-    .catch(error => console.log('Error catching URL', error));
+  })
+    .then((response) => {
+      if (!response.ok) {
+        const error = new Error(response.statusText);
+        return error;
+      }
+      return response.json();
+    })
+    .then(data => data)
+    .catch((error) => {
+      const err = new Error(error);
+      return err;
+    });
 };
 
 btn.addEventListener('click', signupUser);

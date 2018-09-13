@@ -80,7 +80,8 @@ var DbManager = function () {
       var values = [fullname, gender, username, password, email];
       this.pool.query(query, values, function (error, result) {
         if (error) {
-          throw error;
+          var err = new Error();
+          return err;
         }
         callback(error, result);
       });
@@ -95,7 +96,8 @@ var DbManager = function () {
       };
       this.pool.query(query, function (error, result) {
         if (error) {
-          throw error;
+          var err = new Error();
+          return err;
         }
         if (result.rows.length < 1) {
           callback(error, result.rows);
@@ -110,6 +112,10 @@ var DbManager = function () {
       var query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3) RETURNING *';
       var values = [userId, questionTitle, questionContent];
       this.pool.query(query, values, function (err, result) {
+        if (err) {
+          var error = new Error();
+          return error;
+        }
         callback(err, result);
       });
     }
@@ -119,6 +125,10 @@ var DbManager = function () {
       var query = 'INSERT INTO answers (userid, questionid, answer, answernumber, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
       var values = [userId, questionId, answer, answerNumber, false, 0, 0];
       this.pool.query(query, values, function (err, result) {
+        if (err) {
+          var error = new Error();
+          return error;
+        }
         callback(err, result);
       });
     }
@@ -128,6 +138,10 @@ var DbManager = function () {
       var query = 'SELECT * FROM answers where answers.questionid = $1 and answers.answerid = $2';
       var values = [questionId, answerId];
       this.pool.query(query, values, function (error, result) {
+        if (error) {
+          var err = new Error();
+          return err;
+        }
         callback(error, result.rows[0]);
       });
     }
@@ -152,6 +166,10 @@ var DbManager = function () {
       };
 
       this.pool.query(query, function (err, result) {
+        if (err) {
+          var error = new Error();
+          return error;
+        }
         callback(err, result);
       });
     }
@@ -195,6 +213,10 @@ var DbManager = function () {
       var value = [userId];
 
       this.pool.query(query, value, function (error, result) {
+        if (error) {
+          var err = new Error();
+          return err;
+        }
         callback(error, result.rows);
       });
     }
@@ -205,6 +227,10 @@ var DbManager = function () {
       var value = [questionId];
 
       this.pool.query(query, value, function (error, result) {
+        if (error) {
+          var err = new Error();
+          return err;
+        }
         callback(error, result.rows);
       });
     }
@@ -218,6 +244,10 @@ var DbManager = function () {
       };
 
       this.pool.query(query, function (error, result) {
+        if (error) {
+          var err = new Error();
+          return err;
+        }
         callback(error, result);
       });
     }
@@ -227,6 +257,10 @@ var DbManager = function () {
       var query = 'UPDATE answers SET accepted = true WHERE answers.answernumber = $1';
       var values = [answerNumber];
       this.pool.query(query, values, function (error, result) {
+        if (error) {
+          var err = new Error();
+          return err;
+        }
         callback(error, result);
       });
     }
@@ -241,7 +275,11 @@ var DbManager = function () {
         values: [1, 0, questionId, userId, answerId]
       };
       this.pool.query(query, function (error, result) {
-        if (error) throw error;
+        if (error) {
+          var err = new Error();
+          return err;
+        }
+
         if (result.rowCount === 1) {
           var selectQuery = 'SELECT * FROM votes WHERE answerid = $1';
           var selectValue = [answerId];

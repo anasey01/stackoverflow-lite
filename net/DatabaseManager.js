@@ -94,7 +94,8 @@ class DbManager {
     const values = [fullname, gender, username, password, email];
     this.pool.query(query, values, (error, result) => {
       if (error) {
-        throw error;
+        const err = new Error();
+        return err;
       }
       callback(error, result);
     });
@@ -108,7 +109,8 @@ class DbManager {
     };
     this.pool.query(query, (error, result) => {
       if (error) {
-        throw error;
+        const err = new Error();
+        return err;
       }
       if (result.rows.length < 1) {
         callback(error, result.rows);
@@ -122,6 +124,10 @@ class DbManager {
     const query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3) RETURNING *';
     const values = [userId, questionTitle, questionContent];
     this.pool.query(query, values, (err, result) => {
+      if (err) {
+        const error = new Error();
+        return error;
+      }
       callback(err, result);
     });
   }
@@ -130,6 +136,10 @@ class DbManager {
     const query = 'INSERT INTO answers (userid, questionid, answer, answernumber, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
     const values = [userId, questionId, answer, answerNumber, false, 0, 0];
     this.pool.query(query, values, (err, result) => {
+      if (err) {
+        const error = new Error();
+        return error;
+      }
       callback(err, result);
     });
   }
@@ -138,6 +148,10 @@ class DbManager {
     const query = 'SELECT * FROM answers where answers.questionid = $1 and answers.answerid = $2';
     const values = [questionId, answerId];
     this.pool.query(query, values, (error, result) => {
+      if (error) {
+        const err = new Error();
+        return err;
+      }
       callback(error, result.rows[0]);
     });
   }
@@ -160,6 +174,10 @@ class DbManager {
     };
 
     this.pool.query(query, (err, result) => {
+      if (err) {
+        const error = new Error();
+        return error;
+      }
       callback(err, result);
     });
   }
@@ -200,6 +218,10 @@ class DbManager {
     const value = [userId];
 
     this.pool.query(query, value, (error, result) => {
+      if (error) {
+        const err = new Error();
+        return err;
+      }
       callback(error, result.rows);
     });
   }
@@ -209,6 +231,10 @@ class DbManager {
     const value = [questionId];
 
     this.pool.query(query, value, (error, result) => {
+      if (error) {
+        const err = new Error();
+        return err;
+      }
       callback(error, result.rows);
     });
   }
@@ -221,6 +247,10 @@ class DbManager {
     };
 
     this.pool.query(query, (error, result) => {
+      if (error) {
+        const err = new Error();
+        return err;
+      }
       callback(error, result);
     });
   }
@@ -229,6 +259,10 @@ class DbManager {
     const query = 'UPDATE answers SET accepted = true WHERE answers.answernumber = $1';
     const values = [answerNumber];
     this.pool.query(query, values, (error, result) => {
+      if (error) {
+        const err = new Error();
+        return err;
+      }
       callback(error, result);
     });
   }
@@ -240,7 +274,11 @@ class DbManager {
       values: [1, 0, questionId, userId, answerId],
     };
     this.pool.query(query, (error, result) => {
-      if (error) throw error;
+      if (error) {
+        const err = new Error();
+        return err;
+      }
+
       if (result.rowCount === 1) {
         const selectQuery = 'SELECT * FROM votes WHERE answerid = $1';
         const selectValue = [answerId];
