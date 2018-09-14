@@ -2,16 +2,16 @@ const btn = document.getElementById('submit');
 
 const loginUser = (e) => {
   e.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+  const username = document.getElementById('username');
+  const password = document.getElementById('password');
 
   const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/login';
 
   fetch(url, {
     method: 'POST',
     body: {
-      username,
-      password,
+      username: username.value,
+      password: password.value,
     },
     header: {
       'Content-Type': 'application/json',
