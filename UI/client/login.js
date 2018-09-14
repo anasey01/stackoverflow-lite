@@ -6,18 +6,18 @@ const loginUser = (e) => {
   const password = document.getElementById('password').value;
 
   const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/login';
-console.log('username,', username, 'password', password);
+
   fetch(url, {
     method: 'POST',
-    body: JSON.stringify({
+    body: {
       username,
       password,
-    }),
+    },
     header: {
       'Content-Type': 'application/json',
     },
   })
-    .then(response => response.json())
+    .then(response => console.log(response))
     .then((data) => {
       console.log(data);
     // TODO:

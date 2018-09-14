@@ -27,6 +27,7 @@ const signupUser = (e) => {
   })
     .then(response => response.json())
     .then((data) => {
+      console.log(data);
       if (data.success === false) {
         const messageInfo = `<ul>
                                 <li>${data.message}</li>
