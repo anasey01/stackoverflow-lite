@@ -23,7 +23,11 @@ var userManager = new _UserManager2.default(db);
 
 var UsersRoutes = {
   login: function login(req, res) {
-    userManager.login(req.body.username, req.body.password, function (result) {
+    var _req$body = req.body,
+        username = _req$body.username,
+        password = _req$body.password;
+
+    userManager.login(username, password, function (result) {
       if (!result[0].userid) {
         return res.status(401).json({
           success: false,
@@ -42,29 +46,28 @@ var UsersRoutes = {
     });
   },
   signup: function signup(req, res) {
-    var _req$body = req.body,
-        fullname = _req$body.fullname,
-        gender = _req$body.gender,
-        username = _req$body.username,
-        password = _req$body.password,
-        email = _req$body.email;
+    var _req$body2 = req.body,
+        fullname = _req$body2.fullname,
+        gender = _req$body2.gender,
+        username = _req$body2.username,
+        password = _req$body2.password,
+        email = _req$body2.email;
 
     userManager.registerUser(fullname, gender, username, password, email, function (result) {
       if (result === 'existing') {
-        res.status(401).json({
+        return res.status(401).json({
           success: false,
-          message: 'username already exists'
-        });
-      } else {
-        var token = _jsonwebtoken2.default.sign({
-          username: result.username,
-          email: result.email
-        }, process.env.PRIVATE_KEY);
-        res.header('x-auth-token', token).status(200).json({
-          success: true,
-          message: 'user succesfully registered'
+          message: 'username or email exists'
         });
       }
+      var token = _jsonwebtoken2.default.sign({
+        username: result.username,
+        email: result.email
+      }, process.env.PRIVATE_KEY);
+      return res.header('x-auth-token', token).status(200).json({
+        success: true,
+        message: 'user succesfully registered'
+      });
     });
   }
 };

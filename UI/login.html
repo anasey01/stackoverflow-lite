@@ -24,7 +24,8 @@
     </header>
         <h1 class="form-card-header">Login</h1>
         <div class="form-card">
-            <form>
+            <form method="POST" action="/login">
+                <div id="message-output"></div>
                 <label for="username">Username</label>
                 <input type="text" name="username" id="username" placeholder="Enter your Username..." required>
                 <label for="password">Password</label>
@@ -40,5 +41,6 @@
             <p>Designed by <span><a href="https://twitter.com/OluseyiAnani">Anani Oluseyi</a></span></p>
         </div>
     </footer>
+    <script src="./client/login.js"></script>
 </body>
 </html>

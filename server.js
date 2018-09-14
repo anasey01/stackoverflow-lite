@@ -1,3 +1,4 @@
+import expressValidator from 'express-validator';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -11,7 +12,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(expressValidator());
 app.use(cors());
 app.use(express.static(path.resolve(__dirname, './../UI/')));
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.html')));
@@ -39,6 +40,7 @@ app.use((error, req, res, next) => {
 app.set('port', process.env.PORT || 8080);
 
 app.listen(app.get('port'), () => {
+  // eslint-disable-next-line no-console
   console.log(`Action happening on port ${app.get('port')}`);
 });
 
