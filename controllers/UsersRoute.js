@@ -5,9 +5,10 @@ import DatabaseManager from '../net/DatabaseManager';
 const db = new DatabaseManager();
 const userManager = new UserManager(db);
 
-const UsersRoutes = {
-  login(req, res) {
-    userManager.login(req.body.username, req.body.password, (result) => {
+class UsersRoutes {
+  static login(req, res) {
+    const { username, password } = req.body;
+    userManager.login(username, password, (result) => {
       if (!result[0].userid) {
         return res.status(401).json({
           success: false,
@@ -26,9 +27,9 @@ const UsersRoutes = {
         token,
       });
     });
-  },
+  }
 
-  signup(req, res) {
+  static signup(req, res) {
     const {
       fullname, gender, username, password, email,
     } = req.body;
@@ -48,7 +49,7 @@ const UsersRoutes = {
         message: 'user succesfully registered',
       });
     });
-  },
-};
+  }
+}
 
 export default UsersRoutes;

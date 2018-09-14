@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _expressValidator = require('express-validator');
+
+var _expressValidator2 = _interopRequireDefault(_expressValidator);
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -42,7 +46,7 @@ var app = (0, _express2.default)();
 
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
-
+app.use((0, _expressValidator2.default)());
 app.use((0, _cors2.default)());
 app.use(_express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
 app.get('/', function (req, res) {
@@ -72,6 +76,7 @@ app.use(function (error, req, res, next) {
 app.set('port', process.env.PORT || 8080);
 
 app.listen(app.get('port'), function () {
+  // eslint-disable-next-line no-console
   console.log('Action happening on port ' + app.get('port'));
 });
 

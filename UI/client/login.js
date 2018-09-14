@@ -1,31 +1,30 @@
 const btn = document.getElementById('submit');
 
-const loginUser = () => {
-
+const loginUser = (e) => {
+  e.preventDefault();
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
   const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/login';
-  const options = {
+
+  fetch(url, {
     method: 'POST',
-    header: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    },
     body: {
       username,
       password,
     },
-  };
-
-  fetch(url, options)
-    .then((response) => {
-      console.log('response from login', response);
-      // TODO:
-      // Get the Token and store in Local storage
-      // Disable login and signup button on nav bar
-      // Display logout button
-      // redirect the user to view all questions
+    header: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(response => console.log(response))
+    .then((data) => {
+      console.log(data);
+    // TODO:
+    // Get the Token and store in Local storage
+    // Disable login and signup button on nav bar
+    // Display logout button
+    // redirect the user to view all questions
     })
     .catch(error => console.error(error));
   // TODO:
@@ -33,4 +32,4 @@ const loginUser = () => {
   // redirect user to login page
 };
 
-btn.addEventListener('submit', loginUser);
+btn.addEventListener('click', loginUser);
