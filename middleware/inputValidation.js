@@ -41,6 +41,28 @@ class Validation {
     }
     next();
   }
+
+  static postQuestion(req, res, next) {
+    req.check('questionTitle').notEmpty().withMessage('Title is required')
+      .isString().withMessage('Title can only be a string')
+      .isLength({ max: 100 })
+      .withMessage('Title can only be 100 characters long');
+
+    req.check('questionContent').notEmpty().withMessage('Content is required')
+      .isString().withMessage('Content can only be a string')
+      .isLength({ max: 500 })
+      .withMessage('Content can only be 500 characters long');
+
+    const errors = req.validationErrors();
+    if (errors) {
+      res.status(401).json({
+        success: false,
+        message: 'Invalid question content',
+        errors,
+      });
+    }
+    next();
+  }
 }
 
 export default Validation;
