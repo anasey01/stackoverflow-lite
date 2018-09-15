@@ -55,7 +55,7 @@ class Validation {
 
     const errors = req.validationErrors();
     if (errors) {
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: 'Invalid question content',
         errors,

@@ -1,5 +1,6 @@
 const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/questions';
 const btn = document.getElementById('btn');
+const messageOutput = document.getElementById('messageOutput');
 
 const postQuestion = (e) => {
   e.preventDefault();
@@ -24,16 +25,25 @@ const postQuestion = (e) => {
     },
   })
     .then((response) => {
-      console.log(response);
       if (!response.ok) {
         const err = new Error(response.statusText);
-        console.log('err is ', err);
         return err;
       }
       return response.json();
     })
     .then((data) => {
-      console.log('Data is', data);
+      console.log('Data message', data.message);
+      if (data.message === 'Unauthorized') {
+        messageOutput.innerHTML = '<li>There was a problem posting your question</li>';
+      } else {
+        const messageInfo = `<ul>
+                                <li>${data.message}</li>
+                            </ul>`;
+        messageOutput.innerHTML = messageInfo;
+        setTimeout(() => {
+          window.location.replace('recentquestions.html');
+        }, 1000);
+      }
     })
     .catch((error) => {
       throw error;
