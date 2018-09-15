@@ -34,7 +34,7 @@ class QuestionRoute {
           answer.rows.forEach((item) => {
             questionData.answers.push({ item });
           });
-          res.status(200).json(questionData);
+          return res.status(200).json(questionData);
         }
         if (answer.rows.length === 1) {
           const singleAnswer = answer.rows;
@@ -42,7 +42,7 @@ class QuestionRoute {
           res.status(200).json(questionData);
         }
       });
-      res.status(200).json(questionData);
+      return res.status(200).json(questionData);
     });
   }
 
@@ -76,13 +76,13 @@ class QuestionRoute {
       const answerNumber = result.length + 1;
       questionManager.createAnswer(userId, questionId, answer, answerNumber, (error, data) => {
         if (error) {
-          res.status(500).json({
+          return res.status(500).json({
             success: false,
             message: 'Unable to add answer',
           });
         }
         const answerInfo = data.rows[0];
-        res.status(200).json({
+        return res.status(200).json({
           success: true,
           message: 'Your answer has been successfully added',
           answerInfo,
@@ -96,17 +96,16 @@ class QuestionRoute {
     questionManager.getUserQuestions(userId, (error, result) => {
       const userQuestions = result;
       if (error) {
-        res.status(500).json({
+        return res.status(500).json({
           success: false,
           message: 'unable to retrieve questions',
         });
-      } else {
-        res.status(200).json({
-          success: true,
-          message: 'All Questions by User',
-          userQuestions,
-        });
       }
+      return res.status(200).json({
+        success: true,
+        message: 'All Questions by User',
+        userQuestions,
+      });
     });
   }
 
@@ -150,35 +149,33 @@ class QuestionRoute {
         if (currentUserId === Number(questionId)) {
           questionManager.markAnswer(answerNumber, (result) => {
             if (result === 'successfully marked') {
-              res.status(200).json({
+              return res.status(200).json({
                 success: true,
                 message: 'Answer marked as approved!',
               });
-            } else {
-              res.status(500).json({
-                success: false,
-                message: 'unable to mark answer',
-              });
             }
+            return res.status(500).json({
+              success: false,
+              message: 'unable to mark answer',
+            });
           });
         } else if (currentUserId === answerData[0].userid) {
           questionManager.updateAnswer(answerNumber, answer, (error, answerInfo) => {
             if (error) {
-              res.status(500).json({
+              return res.status(500).json({
                 success: false,
                 message: 'Unable to update Answer',
               });
-            } else {
-              res.status(200).json({
-                success: true,
-                message: 'Your answer has been updated',
-                answerInfo,
-              });
             }
+            return res.status(200).json({
+              success: true,
+              message: 'Your answer has been updated',
+              answerInfo,
+            });
           });
         }
       } else {
-        res.status(404).json({
+        return res.status(404).json({
           success: false,
           message: isAnswer,
         });
@@ -187,7 +184,7 @@ class QuestionRoute {
   }
 
   static notFound(req, res) {
-    res.status(404).json({
+    return res.status(404).json({
       status: false,
       message: 'Not Found!',
     });

@@ -9,10 +9,6 @@ const postQuestion = (e) => {
   const questionContent = document.getElementById('content').value;
   const token = localStorage.getItem('x-auth-token');
 
-  console.log('token is ', token);
-  console.log(questionTitle, typeof questionTitle);
-  console.log(questionContent, typeof questionContent);
-
   fetch(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -32,7 +28,6 @@ const postQuestion = (e) => {
       return response.json();
     })
     .then((data) => {
-      console.log('Data message', data.message);
       if (data.message === 'Unauthorized') {
         messageOutput.innerHTML = '<li>There was a problem posting your question</li>';
       } else {

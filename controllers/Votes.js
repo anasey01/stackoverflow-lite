@@ -9,29 +9,28 @@ class Votes {
     const { questionId, answerId } = req.params;
     const { userId } = req.user;
     questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', (err, result) => {
-      let votes = {
+      const votes = {
         totalVotes: result.length,
         totalUpvote: 0,
         totalDownvote: 0,
         questionId: result[0].questionid,
         answerId: result[0].answerid,
-      }
+      };
       if (err) {
-        res.status(401).json({
+        return res.status(401).json({
           success: false,
           messgae: 'unable to vote',
         });
-      } else {
-        result.forEach((item) => {
-          votes.totalUpvote += item.upvotes;
-          votes.totalDownvote += item.downvotes;
-        });
-        res.status(200).json({
-          success: true,
-          messgage: 'stats for votes',
-          votes,
-        });
       }
+      result.forEach((item) => {
+        votes.totalUpvote += item.upvotes;
+        votes.totalDownvote += item.downvotes;
+      });
+      return res.status(200).json({
+        success: true,
+        messgage: 'stats for votes',
+        votes,
+      });
     });
   }
 
@@ -47,21 +46,20 @@ class Votes {
         answerId: result[0].answerid,
       }
       if (err) {
-        res.status(401).json({
+        return res.status(401).json({
           success: false,
           messgae: 'unable to vote',
         });
-      } else {
-        result.forEach((item) => {
-          votes.totalUpvote += item.upvotes;
-          votes.totalDownvote += item.downvotes;
-        });
-        res.status(200).json({
-          success: true,
-          messgage: 'stats for votes',
-          votes,
-        });
       }
+      result.forEach((item) => {
+        votes.totalUpvote += item.upvotes;
+        votes.totalDownvote += item.downvotes;
+      });
+      return res.status(200).json({
+        success: true,
+        messgage: 'stats for votes',
+        votes,
+      });
     });
   }
 }
