@@ -1,4 +1,8 @@
 const btn = document.getElementById('submit');
+const login = document.getElementById('login');
+const signup = document.getElementById('signup');
+const logout = document.getElementById('logout');
+const messageOutput = document.getElementById('messageOutput');
 
 const loginUser = (e) => {
   e.preventDefault();
@@ -9,27 +13,41 @@ const loginUser = (e) => {
 
   fetch(url, {
     method: 'POST',
-    body: {
+    body: JSON.stringify({
       username: username.value,
       password: password.value,
-    },
-    header: {
+    }),
+    headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then(response => console.log(response))
-    .then((data) => {
-      console.log(data);
-    // TODO:
-    // Get the Token and store in Local storage
-    // Disable login and signup button on nav bar
-    // Display logout button
-    // redirect the user to view all questions
+    .then((response) => {
+      if (!response.ok) {
+        const error = new Error('error');
+        return error;
+      }
+      return response.json();
     })
-    .catch(error => console.error(error));
-  // TODO:
-  // output error messgae
-  // redirect user to login page
+    .then((data) => {
+      if (data.message === 'error') {
+        messageOutput.innerHTML = '<li>Username or Password incorrect</li>';
+        username.value = '';
+        password.value = '';
+      } else {
+        const messageInfo = `<ul>
+                              <li>${data.message}</li>
+                          </ul>`;
+        messageOutput.innerHTML = messageInfo;
+        localStorage.setItem('x-auth-token', data.token);
+        setTimeout(() => {
+          window.location.replace('index.html');
+        }, 1000);
+      }
+    })
+    .catch((error) => {
+      const err = new Error(error);
+      return err;
+    });
 };
 
 btn.addEventListener('click', loginUser);

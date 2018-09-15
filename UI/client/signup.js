@@ -25,20 +25,26 @@ const signupUser = (e) => {
       'Content-Type': 'application/json',
     },
   })
-    .then(response => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        const error = new Error('error');
+        return error;
+      }
+      return response.json();
+    })
     .then((data) => {
       console.log(data);
-      if (data.success === false) {
-        const messageInfo = `<ul>
-                                <li>${data.message}</li>
-                            </ul>`;
-        messageOutput.innerHTML = messageInfo;
+      if (data.message === 'error') {
+        messageOutput.innerHTML = `<li> Unable to Signup </li>`;
       } else {
-        window.location.replace('login.html');
+
+        setTimeout(() => {
+          window.location.replace('login.html');
+        }, 500);
       }
     })
     .catch((error) => {
-      let err = new Error(error);
+      const err = new Error(error);
       return err;
     });
 };

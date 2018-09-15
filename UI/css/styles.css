@@ -50,6 +50,14 @@ ul {
     text-align: justify;
 }
 
+.disabled {
+    display: none;
+}
+
+.enabled {
+    display: inline;
+}
+
 /*header */
 header{
     background-color: #161925;
