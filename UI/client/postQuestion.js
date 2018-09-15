@@ -9,6 +9,9 @@ const postQuestion = (e) => {
   const token = localStorage.getItem('x-auth-token');
 
   console.log('token is ', token);
+  console.log(questionTitle, typeof questionTitle);
+  console.log(questionContent, typeof questionContent);
+
   fetch(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -22,7 +25,12 @@ const postQuestion = (e) => {
   })
     .then((response) => {
       console.log(response);
-      response.json();
+      if (!response.ok) {
+        const err = new Error(response.statusText);
+        console.log('err is ', err);
+        return err;
+      }
+      return response.json();
     })
     .then((data) => {
       console.log('Data is', data);

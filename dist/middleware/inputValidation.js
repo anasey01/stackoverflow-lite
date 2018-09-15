@@ -8,12 +8,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var validation = function () {
-  function validation() {
-    _classCallCheck(this, validation);
+var Validation = function () {
+  function Validation() {
+    _classCallCheck(this, Validation);
   }
 
-  _createClass(validation, null, [{
+  _createClass(Validation, null, [{
     key: 'signup',
     value: function signup(req, res, next) {
       req.check('fullname').notEmpty().withMessage('Fullname is required').isString().withMessage('Enter a string');
@@ -30,7 +30,7 @@ var validation = function () {
       if (errors) {
         return res.status(401).json({
           success: false,
-          message: 'Error with Validation',
+          message: 'Invalid Signup information',
           errors: errors
         });
       }
@@ -39,15 +39,31 @@ var validation = function () {
   }, {
     key: 'login',
     value: function login(req, res, next) {
-      req.check('username').notEmpty().withMessage('Username required to Login').isLength({ max: 10 }).withMessage('Username cannot be more than 10 characters');
-
-      req.check('password').notEmpty().withMessage('Password is required to login').isLength({ min: 6 }).withMessage('Password must be a minimum of 6 characters');
+      req.check('username').notEmpty().withMessage('Username required to Login');
+      req.check('password').notEmpty().withMessage('Password is required to login');
 
       var errors = req.validationErrors();
       if (errors) {
         return res.status(401).json({
           success: false,
-          message: 'Error with validation',
+          message: 'Invalid login information',
+          errors: errors
+        });
+      }
+      next();
+    }
+  }, {
+    key: 'postQuestion',
+    value: function postQuestion(req, res, next) {
+      req.check('questionTitle').notEmpty().withMessage('Title is required').isString().withMessage('Title can only be a string').isLength({ max: 100 }).withMessage('Title can only be 100 characters long');
+
+      req.check('questionContent').notEmpty().withMessage('Content is required').isString().withMessage('Content can only be a string').isLength({ max: 500 }).withMessage('Content can only be 500 characters long');
+
+      var errors = req.validationErrors();
+      if (errors) {
+        res.status(401).json({
+          success: false,
+          message: 'Invalid question content',
           errors: errors
         });
       }
@@ -55,8 +71,8 @@ var validation = function () {
     }
   }]);
 
-  return validation;
+  return Validation;
 }();
 
-exports.default = validation;
+exports.default = Validation;
 //# sourceMappingURL=inputValidation.js.map
