@@ -160,7 +160,7 @@ class DbManager {
   }
 
   selectQuestions(callback) {
-    const query = `SELECT questions.questionid, questions.userid, questions.questiontitle, questions.questioncontent, questions.createdat,
+    const query = `SELECT questions.questionid, questions.userid, questions.questiontitle, questions.questioncontent, questions.createdat, questions.username,
     COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid)
     GROUP BY questions.questionid`;
 
