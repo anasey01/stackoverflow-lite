@@ -19,8 +19,8 @@ var QuestionManager = function () {
 
   _createClass(QuestionManager, [{
     key: 'createQuestion',
-    value: function createQuestion(userId, questionTitle, questionContent, callback) {
-      this.conn.insertQuestion(userId, questionTitle, questionContent, function (err, result) {
+    value: function createQuestion(userId, questionTitle, questionContent, username, callback) {
+      this.conn.insertQuestion(userId, questionTitle, questionContent, username, function (err, result) {
         callback(err, result.rows);
       });
     }
@@ -53,8 +53,8 @@ var QuestionManager = function () {
     }
   }, {
     key: 'createAnswer',
-    value: function createAnswer(userId, questionId, answer, answerNumber, callback) {
-      this.conn.insertAnswer(userId, questionId, answer, answerNumber, function (err, result) {
+    value: function createAnswer(userId, questionId, answer, answerNumber, username, callback) {
+      this.conn.insertAnswer(userId, questionId, answer, answerNumber, username, function (err, result) {
         callback(err, result);
       });
     }
@@ -98,8 +98,8 @@ var QuestionManager = function () {
     }
   }, {
     key: 'createVotes',
-    value: function createVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
-      this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, function (err, result) {
+    value: function createVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
+      this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, function (err, result) {
         callback(err, result);
       });
     }

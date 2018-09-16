@@ -28,6 +28,7 @@ class DbManager {
     CREATE TABLE IF NOT EXISTS questions(
       questionId SERIAL NOT NULL PRIMARY KEY,
       userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+      username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
       questionTitle varchar(100) NOT NULL,
       questionContent varchar(500) NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
@@ -40,6 +41,7 @@ class DbManager {
       downvotes INT NOT NULL,
       questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
       userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+      username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
       answer varchar(500) NOT NULL,
       answerNumber INT NOT NULL,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
@@ -51,6 +53,7 @@ class DbManager {
       questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
       userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
       answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+      username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
       createdAt TIMESTAMP NOT NULL DEFAULT NOW()
     );`;
     const votesQuery = `
@@ -120,9 +123,9 @@ class DbManager {
     });
   }
 
-  insertQuestion(userId, questionTitle, questionContent, callback) {
-    const query = 'INSERT INTO questions (userid, questiontitle, questioncontent) VALUES ($1, $2, $3) RETURNING *';
-    const values = [userId, questionTitle, questionContent];
+  insertQuestion(userId, questionTitle, questionContent, username, callback) {
+    const query = 'INSERT INTO questions (userid, questiontitle, questioncontent, username) VALUES ($1, $2, $3, $4) RETURNING *';
+    const values = [userId, questionTitle, questionContent, username];
     this.pool.query(query, values, (err, result) => {
       if (err) {
         const error = new Error();
@@ -132,9 +135,9 @@ class DbManager {
     });
   }
 
-  insertAnswer(userId, questionId, answer, answerNumber, callback) {
-    const query = 'INSERT INTO answers (userid, questionid, answer, answernumber, accepted, upvotes, downvotes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
-    const values = [userId, questionId, answer, answerNumber, false, 0, 0];
+  insertAnswer(userId, questionId, answer, answerNumber, username, callback) {
+    const query = 'INSERT INTO answers (userid, questionid, answer, answernumber, accepted, upvotes, downvotes, username) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
+    const values = [userId, questionId, answer, answerNumber, false, 0, 0, username];
     this.pool.query(query, values, (err, result) => {
       if (err) {
         const error = new Error();
@@ -157,11 +160,15 @@ class DbManager {
   }
 
   selectQuestions(callback) {
-    const query = 'SELECT * FROM questions';
+    const query = `SELECT questions.questionid, questions.userid, questions.questiontitle, questions.questioncontent, questions.createdat,
+    COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid)
+    GROUP BY questions.questionid`;
+
     this.pool.query(query, (err, result) => {
       if (err) {
         callback('There was and Error getting questions', err);
       }
+      console.log(result.rows);
       callback(result.rows);
     });
   }
@@ -267,11 +274,11 @@ class DbManager {
     });
   }
 
-  insertVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
+  insertVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
     const query = {
       name: 'insert-votes',
-      text: `INSERT INTO votes (${currentVote}, ${otherVote}, questionid, userid, answerid) VALUES ($1, $2, $3, $4, $5)`,
-      values: [1, 0, questionId, userId, answerId],
+      text: `INSERT INTO votes (${currentVote}, ${otherVote}, questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6)`,
+      values: [1, 0, questionId, userId, answerId, username],
     };
     this.pool.query(query, (error, result) => {
       if (error) {

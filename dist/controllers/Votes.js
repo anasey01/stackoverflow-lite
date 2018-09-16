@@ -32,9 +32,11 @@ var Votes = function () {
       var _req$params = req.params,
           questionId = _req$params.questionId,
           answerId = _req$params.answerId;
-      var userId = req.user.userId;
+      var _req$user = req.user,
+          userId = _req$user.userId,
+          username = _req$user.username;
 
-      questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', function (err, result) {
+      questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', username, function (err, result) {
         var votes = {
           totalVotes: result.length,
           totalUpvote: 0,
@@ -43,21 +45,20 @@ var Votes = function () {
           answerId: result[0].answerid
         };
         if (err) {
-          res.status(401).json({
+          return res.status(401).json({
             success: false,
             messgae: 'unable to vote'
           });
-        } else {
-          result.forEach(function (item) {
-            votes.totalUpvote += item.upvotes;
-            votes.totalDownvote += item.downvotes;
-          });
-          res.status(200).json({
-            success: true,
-            messgage: 'stats for votes',
-            votes: votes
-          });
         }
+        result.forEach(function (item) {
+          votes.totalUpvote += item.upvotes;
+          votes.totalDownvote += item.downvotes;
+        });
+        return res.status(200).json({
+          success: true,
+          messgage: 'stats for votes',
+          votes: votes
+        });
       });
     }
   }, {
@@ -77,21 +78,20 @@ var Votes = function () {
           answerId: result[0].answerid
         };
         if (err) {
-          res.status(401).json({
+          return res.status(401).json({
             success: false,
             messgae: 'unable to vote'
           });
-        } else {
-          result.forEach(function (item) {
-            votes.totalUpvote += item.upvotes;
-            votes.totalDownvote += item.downvotes;
-          });
-          res.status(200).json({
-            success: true,
-            messgage: 'stats for votes',
-            votes: votes
-          });
         }
+        result.forEach(function (item) {
+          votes.totalUpvote += item.upvotes;
+          votes.totalDownvote += item.downvotes;
+        });
+        return res.status(200).json({
+          success: true,
+          messgage: 'stats for votes',
+          votes: votes
+        });
       });
     }
   }]);

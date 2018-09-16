@@ -13,7 +13,11 @@ class QuestionRoute {
           message: 'No question found',
         });
       }
-      return res.status(200).json({ questions: data });
+      return res.status(200).json({
+        success: true,
+        message: 'All Questions Retrieved',
+        questions: data,
+      });
     });
   }
 
@@ -48,8 +52,8 @@ class QuestionRoute {
 
   static postQuestion(req, res) {
     const { questionTitle, questionContent } = req.body;
-    const { userId } = req.user;
-    questionManager.createQuestion(userId, questionTitle, questionContent, (err, result) => {
+    const { userId, username } = req.user;
+    questionManager.createQuestion(userId, questionTitle, questionContent, username, (err, result) => {
       if (err) {
         return res.status(400).json({
           success: false,
@@ -59,6 +63,7 @@ class QuestionRoute {
       return res.status(200).json({
         success: true,
         message: 'question successfully created',
+        username: result[0].username,
         userId: result[0].userid,
         questionId: result[0].questionid,
         questionTitle: result[0].questiontitle,
@@ -70,11 +75,11 @@ class QuestionRoute {
 
   static addAnswer(req, res) {
     const questionId = Number(req.params.id);
-    const { userId } = req.user;
+    const { userId, username } = req.user;
     const { answer } = req.body;
     questionManager.getQuestionAndAnswer(questionId, (err, result) => {
       const answerNumber = result.length + 1;
-      questionManager.createAnswer(userId, questionId, answer, answerNumber, (error, data) => {
+      questionManager.createAnswer(userId, questionId, answer, answerNumber, username, (error, data) => {
         if (error) {
           return res.status(500).json({
             success: false,
