@@ -7,8 +7,8 @@ const questionManager = new QuestionManager(db);
 class Votes {
   static upvote(req, res) {
     const { questionId, answerId } = req.params;
-    const { userId } = req.user;
-    questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', (err, result) => {
+    const { userId, username } = req.user;
+    questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', username, (err, result) => {
       const votes = {
         totalVotes: result.length,
         totalUpvote: 0,

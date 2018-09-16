@@ -6,8 +6,8 @@ class QuestionManager {
     this.answerTable = 'answers';
   }
 
-  createQuestion(userId, questionTitle, questionContent, callback) {
-    this.conn.insertQuestion(userId, questionTitle, questionContent, (err, result) => {
+  createQuestion(userId, questionTitle, questionContent, username, callback) {
+    this.conn.insertQuestion(userId, questionTitle, questionContent, username, (err, result) => {
       callback(err, result.rows);
     });
   }
@@ -36,8 +36,8 @@ class QuestionManager {
     });
   }
 
-  createAnswer(userId, questionId, answer, answerNumber, callback) {
-    this.conn.insertAnswer(userId, questionId, answer, answerNumber, (err, result) => {
+  createAnswer(userId, questionId, answer, answerNumber, username, callback) {
+    this.conn.insertAnswer(userId, questionId, answer, answerNumber, username, (err, result) => {
       callback(err, result);
     });
   }
@@ -75,8 +75,8 @@ class QuestionManager {
     });
   }
 
-  createVotes(questionId, answerId, userId, currentVote, otherVote, callback) {
-    this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, (err, result) => {
+  createVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
+    this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, (err, result) => {
       callback(err, result);
     });
   }

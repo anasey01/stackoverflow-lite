@@ -47,7 +47,7 @@ var UsersRoutes = function () {
         var token = _jsonwebtoken2.default.sign({
           userId: result[0].userid,
           username: result[0].username
-        }, process.env.PRIVATE_KEY);
+        }, process.env.PRIVATE_KEY, { expiresIn: '5h' });
         return res.header('x-auth-token', token).status(200).json({
           success: true,
           message: 'Successfully logged in',

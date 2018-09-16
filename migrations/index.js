@@ -8,8 +8,8 @@ if (process.env.NODE_ENV) {
 }
 const pool = new Pool(configString || config.development);
 
-const usersQuery = `DROP TABLE IF EXISTS users CASCADE;
-CREATE TABLE users (
+const usersQuery = `
+CREATE TABLE IF NOT EXISTS users(
   userId SERIAL NOT NULL PRIMARY KEY,
   fullname text NOT NULL,
   gender varchar(1) NOT NULL,
@@ -18,49 +18,48 @@ CREATE TABLE users (
   email varchar(60) UNIQUE NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
-
-const questionsQuery = `DROP TABLE IF EXISTS questions CASCADE;
-CREATE TABLE questions (
+const questionsQuery = `
+CREATE TABLE IF NOT EXISTS questions(
   questionId SERIAL NOT NULL PRIMARY KEY,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+  username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
   questionTitle varchar(100) NOT NULL,
   questionContent varchar(500) NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
-
-const answersQuery = `DROP TABLE IF EXISTS answers CASCADE;
-CREATE TABLE answers (
+const answersQuery = `
+CREATE TABLE IF NOT EXISTS answers(
   answerId SERIAL NOT NULL PRIMARY KEY,
   accepted BOOLEAN NOT NULL,
   upvotes INT NOT NULL,
   downvotes INT NOT NULL,
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+  username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
   answer varchar(500) NOT NULL,
   answerNumber INT NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
-
-const commentsQuery = `DROP TABLE IF EXISTS comments CASCADE;
-CREATE TABLE comments (
+const commentsQuery = `
+CREATE TABLE IF NOT EXISTS comments(
   commentId SERIAL NOT NULL PRIMARY KEY,
   comment varchar(250) NOT NULL,
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
   answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+  username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
-
 const votesQuery = `
-    CREATE TABLE IF NOT EXISTS votes(
-      voteId SERIAL NOT NULL PRIMARY KEY,
-      upvotes INTEGER NOT NULL,
-      downvotes INTEGER NOT NULL,
-      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
-      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
-      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
-      createdAt TIMESTAMP NOT NULL DEFAULT NOW()
-    );`;
+CREATE TABLE IF NOT EXISTS votes(
+  voteId SERIAL NOT NULL PRIMARY KEY,
+  upvotes INTEGER NOT NULL,
+  downvotes INTEGER NOT NULL,
+  questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
+  userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
+  answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
+  createdAt TIMESTAMP NOT NULL DEFAULT NOW()
+);`;
 
 pool.query(usersQuery)
   .then((data) => {
