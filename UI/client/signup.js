@@ -1,8 +1,7 @@
 const btn = document.getElementById('submit');
 const messageOutput = document.getElementById('message-output');
 
-const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/signup';
-// const url = 'http://localhost:3000/api/v1/auth/signup';
+const url = '/api/v1/auth/signup';
 
 const signupUser = (e) => {
   e.preventDefault();

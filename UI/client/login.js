@@ -9,7 +9,7 @@ const loginUser = (e) => {
   const username = document.getElementById('username');
   const password = document.getElementById('password');
 
-  const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/auth/login';
+  const url = '/api/v1/auth/login';
 
   fetch(url, {
     method: 'POST',

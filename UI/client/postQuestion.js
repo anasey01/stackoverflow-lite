@@ -1,4 +1,4 @@
-const url = 'https://anasey-stackoverflow-lite.herokuapp.com/api/v1/questions';
+const url = '/api/v1/questions';
 const btn = document.getElementById('btn');
 const messageOutput = document.getElementById('messageOutput');
 
