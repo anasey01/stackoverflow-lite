@@ -148,13 +148,12 @@ var DbManager = function () {
   }, {
     key: 'selectQuestions',
     value: function selectQuestions(callback) {
-      var query = 'SELECT questions.questionid, questions.userid, questions.questiontitle, questions.questioncontent, questions.createdat,\n    COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid)\n    GROUP BY questions.questionid';
+      var query = 'SELECT questions.questionid, questions.userid, questions.questiontitle, questions.questioncontent, questions.createdat, questions.username,\n    COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid)\n    GROUP BY questions.questionid';
 
       this.pool.query(query, function (err, result) {
         if (err) {
           callback('There was and Error getting questions', err);
         }
-        console.log(result.rows);
         callback(result.rows);
       });
     }

@@ -16,9 +16,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="./login.html" class="enabled">Login</a></li>
-                    <li><a href="./signup.html" class="enabled">Sign Up</a></li>
-                    <li><a href="./logout.html" class="disabled">Logout</a></li>
+                    <li><a href="./login.html" id="login" class="enabled">Login</a></li>
+                    <li><a href="./signup.html" id="signup" class="enabled">Sign Up</a></li>
+                    <li><a id="logout" id="logout" class="disabled">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -35,107 +35,7 @@
         </aside>
         <div class="main-content-title">
             <h1 id="recent-title">Recent Questions</h1>
-            <div class="top-questions-list">
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Unable to SSH from inside Kubernetes container</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">2 <span>answer</span></span>
-                        <a class="asked-by-time">46 secs ago</a>
-                        <a class="asked-by-author" href="#">Oluseyi</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Python: Compare first line of files and save their path</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">0 <span>answer</span></span>
-                        <a class="asked-by-time">58 secs ago</a>
-                        <a class="asked-by-author" href="#">Oluseyi</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Removing information from MS Word default template</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">5 <span>answer</span></span>
-                        <a class="asked-by-time">1 min ago</a>
-                        <a class="asked-by-author" href="#">Akinola</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Simple demo Node JS localhost server not responding</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">1 <span>answer</span></span>
-                        <a class="asked-by-time">3 mins ago</a>
-                        <a class="asked-by-author" href="#">Emeka</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Posting audio files from Angular assets to server</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">0 <span>answer</span></span>
-                        <a class="asked-by-time">4 mins ago</a>
-                        <a class="asked-by-author" href="#">Emeka</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Login does not work on ios(apple) devices</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">2 <span>answer</span></span>
-                        <a class="asked-by-time">5 mins ago</a>
-                        <a class="asked-by-author" href="#">Annu</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">How to read the logs from TFS Build/Release and change the task status accordingly?</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">0 <span>answer</span></span>
-                        <a class="asked-by-time">10 mins ago</a>
-                        <a class="asked-by-author" href="#">williams</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Dropdown select based on another selected range</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">0 <span>answer</span></span>
-                        <a class="asked-by-time">2 days ago</a>
-                        <a class="asked-by-author" href="#">Abey</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">Migrating Discourse user to Django user</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">5 <span>answer</span></span>
-                        <a class="asked-by-time">2 days mins ago</a>
-                        <a class="asked-by-author" href="#">Oyin</a>
-                    </div>
-                </div>
-                <div class="question-summary">
-                    <div class="summary">
-                        <h3><a href="./viewQuestion.html">spring admin server not able to start</a></h3>
-                    </div>
-                    <div class="asked-by">
-                        <span class="number-of-answers">1 <span>answer</span></span>
-                        <a class="asked-by-time">3 days mins ago</a>
-                        <a class="asked-by-author" href="#">Nicolas</a>
-                    </div>
-                </div>
+            <div id="question-container" class="top-questions-list">
             </div>
         </div>
     </main>
@@ -145,5 +45,7 @@
             <p>Designed by <span><a href="https://twitter.com/OluseyiAnani">Anani Oluseyi</a></span></p>
         </div>
     </footer>
+    <script src="./client/index.js"></script>
+    <script src="./client/logout.js"></script>
 </body>
 </html>

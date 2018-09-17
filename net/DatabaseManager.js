@@ -168,7 +168,6 @@ class DbManager {
       if (err) {
         callback('There was and Error getting questions', err);
       }
-      console.log(result.rows);
       callback(result.rows);
     });
   }
