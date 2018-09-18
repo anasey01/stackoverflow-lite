@@ -32,7 +32,7 @@ fetch(url, {
       let questionsCard = '';
       const lastQuestion = data.questions.length - 1;
       for (let i = lastQuestion; i >= 0; i -= 1) {
-        const hrefUrl = `api/v1/questions/${data.questions[i].questionid}`;
+        const hrefUrl = `/questions/${data.questions[i].questionid}`;
         questionsCard = `<div class="question-summary">
                               <div class="summary">
                               <h3><a href=${hrefUrl}>${data.questions[i].questiontitle}</a></h3>

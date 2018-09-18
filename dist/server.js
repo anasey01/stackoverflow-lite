@@ -49,9 +49,15 @@ app.use(_bodyParser2.default.json());
 app.use((0, _expressValidator2.default)());
 app.use((0, _cors2.default)());
 app.use(_express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
+app.use('/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
+
 app.get('/', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/index.html'));
 });
+app.get('/questions/:questionId', function (req, res) {
+  return res.sendFile(_path2.default.resolve(__dirname, './../UI/viewQuestion.html'));
+});
+
 app.use('/api/v1', _questionRoute2.default);
 app.use('/api/v1/auth/', _authRoute2.default);
 app.use('/api/v1', _votesRoute2.default);
