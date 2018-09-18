@@ -1,3 +1,4 @@
+const log = document.getElementById('logout');
 
 const logout = (e) => {
   e.preventDefault();
@@ -7,4 +8,4 @@ const logout = (e) => {
   }, 500);
 };
 
-logoutBtn.addEventListener('click', logout);
+log.addEventListener('click', logout);

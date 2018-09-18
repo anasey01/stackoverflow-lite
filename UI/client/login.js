@@ -40,7 +40,7 @@ const loginUser = (e) => {
         messageOutput.innerHTML = messageInfo;
         localStorage.setItem('x-auth-token', data.token);
         setTimeout(() => {
-          window.location.replace('index.html');
+          window.location.replace('./../UI/index.html');
         }, 1000);
       }
     })

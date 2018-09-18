@@ -15,7 +15,11 @@ app.use(bodyParser.json());
 app.use(expressValidator());
 app.use(cors());
 app.use(express.static(path.resolve(__dirname, './../UI/')));
+app.use('/UI', express.static(path.resolve(__dirname, './../UI/')));
+
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.html')));
+app.get('/questions/:questionId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/viewQuestion.html')));
+
 app.use('/api/v1', questionRoute);
 app.use('/api/v1/auth/', authRouter);
 app.use('/api/v1', voteRoute);
