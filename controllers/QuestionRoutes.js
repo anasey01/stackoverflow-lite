@@ -23,30 +23,19 @@ class QuestionRoute {
 
   static specificQuestion(req, res) {
     const questionId = req.params.id;
-    const questionData = {};
-    questionManager.getQuestion(questionId, (result) => {
-      questionData.success = true;
-      questionData.message = 'Questions retrieved';
-      questionData.questionId = result.questionid;
-      questionData.userId = result.userid;
-      questionData.questionTitle = result.questiontitle;
-      questionData.questionContent = result.questioncontent;
-      questionData.createdAt = result.createdat;
-      questionData.answers = [];
-      questionManager.getAnswer(questionId, (answer) => {
-        if (answer.rows.length > 1) {
-          answer.rows.forEach((item) => {
-            questionData.answers.push({ item });
-          });
-          return res.status(200).json(questionData);
-        }
-        if (answer.rows.length === 1) {
-          const singleAnswer = answer.rows;
-          questionData.answers.push({ singleAnswer });
-          res.status(200).json(questionData);
-        }
+    questionManager.getQuestion(questionId, (error, result) => {
+      const question = result;
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to fetch question',
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        message: 'successfully fetched question',
+        question,
       });
-      return res.status(200).json(questionData);
     });
   }
 
@@ -78,6 +67,12 @@ class QuestionRoute {
     const { userId, username } = req.user;
     const { answer } = req.body;
     questionManager.getQuestionAndAnswer(questionId, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: 'unable to retrieve answers',
+        });
+      }
       const answerNumber = result.length + 1;
       questionManager.createAnswer(userId, questionId, answer, answerNumber, username, (error, data) => {
         if (error) {
@@ -92,6 +87,16 @@ class QuestionRoute {
           message: 'Your answer has been successfully added',
           answerInfo,
         });
+      });
+    });
+  }
+
+  static getAnswer(req, res) {
+    const questionId = Number(req.params.id);
+    questionManager.getQuestionAndAnswer(questionId, (err, result) => {
+      return res.status(200).json({
+        success: true,
+        message: result,
       });
     });
   }

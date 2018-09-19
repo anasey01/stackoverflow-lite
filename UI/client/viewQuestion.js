@@ -1,6 +1,7 @@
 const questionTitle = document.getElementById('question-title');
 const questionContent = document.getElementById('question-content');
-const answerNumber = document.getElementById('number-of-answer');
+const questionAuthor = document.getElementById('question-author');
+const creationDate = document.getElementById('creation-date');
 const viewQuestionLoginBtn = document.getElementById('login');
 const viewQuestionLogoutBtn = document.getElementById('logout');
 const viewQuestionSignupBtn = document.getElementById('signup');
@@ -22,7 +23,6 @@ fetch(url, {
   },
 })
   .then((response) => {
-    console.log(response);
     if (!response.ok) {
       const error = new Error('error');
       return error;
@@ -30,13 +30,14 @@ fetch(url, {
     return response.json();
   })
   .then((data) => {
-    console.log(data);
     if (data.message === 'error') {
       window.location.replace('./../UI/login.html');
     } else {
-      questionTitle.innerHTML = data.questionTitle;
-      questionContent.innerHTML = data.questionContent;
-      answerNumber.innerHTML = data.answers.length;
+      questionTitle.innerHTML = data.question.questiontitle;
+      questionContent.innerHTML = data.question.questioncontent;
+      questionAuthor.innerHTML = data.question.username;
+      creationDate.innerHTML = data.question.createdat;
+      getAnswer();
     }
   })
   .catch(error => new Error(error));

@@ -37,11 +37,8 @@ var QuestionManager = function () {
   }, {
     key: 'getQuestion',
     value: function getQuestion(questionId, callback) {
-      this.conn.selectByQuestionId(this.table, questionId, function (result, err) {
-        if (err) {
-          callback(err);
-        }
-        callback(result);
+      this.conn.selectByQuestionId(this.table, questionId, function (error, result) {
+        callback(error, result);
       });
     }
   }, {
@@ -68,8 +65,8 @@ var QuestionManager = function () {
   }, {
     key: 'getQuestionAndAnswer',
     value: function getQuestionAndAnswer(questionId, callback) {
-      this.conn.selectQuestionAndAnswer(questionId, function (result, err) {
-        callback(result, err);
+      this.conn.selectQuestionAndAnswer(questionId, function (err, result) {
+        callback(err, result);
       });
     }
   }, {

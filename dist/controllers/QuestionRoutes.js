@@ -47,30 +47,19 @@ var QuestionRoute = function () {
     key: 'specificQuestion',
     value: function specificQuestion(req, res) {
       var questionId = req.params.id;
-      var questionData = {};
-      questionManager.getQuestion(questionId, function (result) {
-        questionData.success = true;
-        questionData.message = 'Questions retrieved';
-        questionData.questionId = result.questionid;
-        questionData.userId = result.userid;
-        questionData.questionTitle = result.questiontitle;
-        questionData.questionContent = result.questioncontent;
-        questionData.createdAt = result.createdat;
-        questionData.answers = [];
-        questionManager.getAnswer(questionId, function (answer) {
-          if (answer.rows.length > 1) {
-            answer.rows.forEach(function (item) {
-              questionData.answers.push({ item: item });
-            });
-            return res.status(200).json(questionData);
-          }
-          if (answer.rows.length === 1) {
-            var singleAnswer = answer.rows;
-            questionData.answers.push({ singleAnswer: singleAnswer });
-            res.status(200).json(questionData);
-          }
+      questionManager.getQuestion(questionId, function (error, result) {
+        var question = result;
+        if (error) {
+          return res.status(500).json({
+            success: false,
+            message: 'Failed to fetch question'
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: 'successfully fetched question',
+          question: question
         });
-        return res.status(200).json(questionData);
       });
     }
   }, {
@@ -112,6 +101,12 @@ var QuestionRoute = function () {
       var answer = req.body.answer;
 
       questionManager.getQuestionAndAnswer(questionId, function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: 'unable to retrieve answers'
+          });
+        }
         var answerNumber = result.length + 1;
         questionManager.createAnswer(userId, questionId, answer, answerNumber, username, function (error, data) {
           if (error) {
@@ -126,6 +121,17 @@ var QuestionRoute = function () {
             message: 'Your answer has been successfully added',
             answerInfo: answerInfo
           });
+        });
+      });
+    }
+  }, {
+    key: 'getAnswer',
+    value: function getAnswer(req, res) {
+      var questionId = Number(req.params.id);
+      questionManager.getQuestionAndAnswer(questionId, function (err, result) {
+        return res.status(200).json({
+          success: true,
+          message: result
         });
       });
     }

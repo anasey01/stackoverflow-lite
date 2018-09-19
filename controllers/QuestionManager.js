@@ -22,11 +22,8 @@ class QuestionManager {
   }
 
   getQuestion(questionId, callback) {
-    this.conn.selectByQuestionId(this.table, questionId, (result, err) => {
-      if (err) {
-        callback(err);
-      }
-      callback(result);
+    this.conn.selectByQuestionId(this.table, questionId, (error, result) => {
+      callback(error, result);
     });
   }
 
@@ -49,8 +46,8 @@ class QuestionManager {
   }
 
   getQuestionAndAnswer(questionId, callback) {
-    this.conn.selectQuestionAndAnswer(questionId, (result, err) => {
-      callback(result, err)
+    this.conn.selectQuestionAndAnswer(questionId, (err, result) => {
+      callback(err, result);
     });
   }
 

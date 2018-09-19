@@ -40,33 +40,26 @@
             <div class="question-content">
                 <p id="question-content">
                 </p>
-                <p><a href="#"><span class="number-of-answers" id="number-of-answer"> </span> answer</a></p>
+                <div>
+                    <p> Author:
+                        <span id="question-author"></span>
+                        Posted on:
+                        <span id="creation-date"></span>
+                    </p>
+                </div>
                 <div class="question-answer">
-                    <form action="#" method="POST">
+                        <p id="message-output"></p>
+                    <form action='#' method="POST">
                         <label for="question-answer">Your Answer Here</label>
                         <textarea name="question-answer" id="question-answer"></textarea>
-
-                        <p>You have to be logged in to post your Answer. <a href=".././UI/login.html">Login here</a></p>
-                        <button class="btn question-answer-btn">Post Your Answer</button>
+                        <button id="answer-btn" class="btn question-answer-btn">Post Your Answer</button>
                     </form>
                 </div>
             </div>
-            <div class="answers-section">
+            <div class="answers-section" >
+                <p><a href="#"><span class="number-of-answers" id="number-of-answer"> </span> answer</a></p>
                 <h2>Answers</h2>
-                <div class="answers-by-others">
-                    <p class="name">oluseyi</p>
-                    <p class="answer-by-others-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nam consectetur ornare venenatis.Vestibulum a facilisis nisl.
-                        Duis molestie aliquet sapien, eu varius libero auctor sit amet.
-                    </p>
-                </div>
-                <div class="answers-by-others">
-                    <p class="name">michael</p>
-                    <p class="answer-by-others-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nam consectetur ornare venenatis.Vestibulum a facilisis nisl.
-                        Duis molestie aliquet sapien, eu varius libero auctor sit amet.
-                    </p>
-                </div>
+                <div id="answer-container"></div>
             </div>
         </div>
     </div>
@@ -77,6 +70,7 @@
         </div>
     </footer>
     <script src=".././UI/client/logout.js"></script>
+    <script src=".././UI//client/postAnswer.js"></script>
     <script src=".././UI/client/viewQuestion.js"></script>
 </body>
 </html>

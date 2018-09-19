@@ -194,17 +194,10 @@ var DbManager = function () {
   }, {
     key: 'selectByQuestionId',
     value: function selectByQuestionId(table, questionId, callback) {
-      var query = {
-        name: 'fetch-by-questionid',
-        text: 'SELECT * FROM ' + table + ' WHERE questionid = $1',
-        values: [questionId]
-      };
-      this.pool.query(query, function (error, result) {
-        if (error) {
-          callback(error);
-        } else {
-          callback(result.rows[0]);
-        }
+      var query = 'SELECT * FROM ' + table + ' where questions.questionid = $1';
+      var values = [Number(questionId)];
+      this.pool.query(query, values, function (error, result) {
+        callback(error, result.rows[0]);
       });
     }
   }, {
@@ -224,7 +217,7 @@ var DbManager = function () {
   }, {
     key: 'selectQuestionAndAnswer',
     value: function selectQuestionAndAnswer(questionId, callback) {
-      var query = 'SELECT answers.answerid, answers.accepted, answers.upvotes, answers.downvotes, answers.questionid, answers.userid, answers.answer, answers.answernumber, answers.createdat FROM answers INNER JOIN questions ON answers.questionid = questions.questionid WHERE answers.questionId=$1';
+      var query = 'SELECT answers.* FROM answers INNER JOIN questions ON answers.questionid = questions.questionid WHERE answers.questionId=$1';
       var value = [questionId];
 
       this.pool.query(query, value, function (error, result) {
