@@ -20,7 +20,7 @@ const getAnswer = () => {
       const numberOfAnswer = data.message.length;
       noOfAnswer.innerHTML = numberOfAnswer;
       for (let i = 0; i < data.message.length; i += 1) {
-        let  { answernumber, username, answer, upvotes, downvotes, accepted } = data.message[i];\
+        let  { answernumber, username, answer, upvotes, downvotes, accepted } = data.message[i];
         const upvoteUrl = `api/v1${pathname}/${answernumber}/upvote`;
         const downvoteUrl = `api/v1${pathname}/${answernumber}/downvote`;
 

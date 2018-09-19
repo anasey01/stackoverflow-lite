@@ -30,7 +30,7 @@ fetch(url, {
     return response.json();
   })
   .then((data) => {
-    if (data.message === 'error') {
+    if(data.message === 'error') {
       window.location.replace('./../UI/login.html');
     } else {
       questionTitle.innerHTML = data.question.questiontitle;
@@ -41,3 +41,4 @@ fetch(url, {
     }
   })
   .catch(error => new Error(error));
+  
