@@ -205,17 +205,10 @@ class DbManager {
   }
 
   selectByQuestionId(table, questionId, callback) {
-    const query = {
-      name: 'fetch-by-questionid',
-      text: `SELECT * FROM ${table} WHERE questionid = $1`,
-      values: [questionId],
-    };
-    this.pool.query(query, (error, result) => {
-      if (error) {
-        callback(error);
-      } else {
-        callback(result.rows[0]);
-      }
+    const query = `SELECT * FROM ${table} where questions.questionid = $1`;
+    const values = [Number(questionId)];
+    this.pool.query(query, values, (error, result) => {
+      callback(error, result.rows[0]);
     });
   }
 
@@ -233,7 +226,7 @@ class DbManager {
   }
 
   selectQuestionAndAnswer(questionId, callback) {
-    const query = 'SELECT answers.answerid, answers.accepted, answers.upvotes, answers.downvotes, answers.questionid, answers.userid, answers.answer, answers.answernumber, answers.createdat FROM answers INNER JOIN questions ON answers.questionid = questions.questionid WHERE answers.questionId=$1';
+    const query = 'SELECT answers.* FROM answers INNER JOIN questions ON answers.questionid = questions.questionid WHERE answers.questionId=$1';
     const value = [questionId];
 
     this.pool.query(query, value, (error, result) => {

@@ -11,6 +11,7 @@ router.get('/questions/:id', validateToken, QuestionRoute.specificQuestion);
 router.get('/question/:userId', validateToken, QuestionRoute.getAllQuestionsByUser);
 router.post('/questions', inputValidator.postQuestion, validateToken, QuestionRoute.postQuestion);
 router.post('/questions/:id/answers', validateToken, QuestionRoute.addAnswer);
+router.get('/questions/:id/answers', validateToken, QuestionRoute.getAnswer);
 router.delete('/questions/:id/', validateToken, validateAuthor, QuestionRoute.deleteQuestion);
 router.put('/questions/:questionId/answers/:answerNumber', validateToken, QuestionRoute.updateAnswer);
 router.get('*', QuestionRoute.notFound);

@@ -204,7 +204,6 @@ describe('/GET', function () {
       res.body.should.have.property('questionId');
       res.body.should.have.property('createdAt');
       res.body.should.have.property('questionTitle');
-      res.body.should.have.property('answers');
       res.body.should.have.property('questionContent');
       done();
     });

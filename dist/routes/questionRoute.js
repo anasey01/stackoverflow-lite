@@ -33,6 +33,7 @@ router.get('/questions/:id', _validateToken2.default, _QuestionRoutes2.default.s
 router.get('/question/:userId', _validateToken2.default, _QuestionRoutes2.default.getAllQuestionsByUser);
 router.post('/questions', _inputValidation2.default.postQuestion, _validateToken2.default, _QuestionRoutes2.default.postQuestion);
 router.post('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.addAnswer);
+router.get('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.getAnswer);
 router.delete('/questions/:id/', _validateToken2.default, _validateAuthor2.default, _QuestionRoutes2.default.deleteQuestion);
 router.put('/questions/:questionId/answers/:answerNumber', _validateToken2.default, _QuestionRoutes2.default.updateAnswer);
 router.get('*', _QuestionRoutes2.default.notFound);
