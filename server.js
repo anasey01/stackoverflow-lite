@@ -16,9 +16,11 @@ app.use(expressValidator());
 app.use(cors());
 app.use(express.static(path.resolve(__dirname, './../UI/')));
 app.use('/UI', express.static(path.resolve(__dirname, './../UI/')));
+app.use('/questions/:questionId/UI', express.static(path.resolve(__dirname, './../UI/')));
 
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.html')));
 app.get('/questions/:questionId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/viewQuestion.html')));
+app.get('/questions/:questionId/answers/:answerId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/updateAnswer.html')));
 
 app.use('/api/v1', questionRoute);
 app.use('/api/v1/auth/', authRouter);

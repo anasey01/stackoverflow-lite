@@ -3,7 +3,9 @@ const noOfAnswer = document.getElementById('number-of-answer');
 const messageOutput = document.getElementById('message-output');
 const answerContainer = document.getElementById('answer-container');
 
+
 const accessToken = localStorage.getItem('x-auth-token');
+const currentUser = localStorage.getItem('currentUser');
 const { pathname } = new URL(window.location.href);
 const answerUrl = `/api/v1${pathname}/answers`;
 
@@ -23,13 +25,21 @@ const getAnswer = () => {
         let  { answernumber, username, answer, upvotes, downvotes, accepted } = data.message[i];
         const upvoteUrl = `api/v1${pathname}/${answernumber}/upvote`;
         const downvoteUrl = `api/v1${pathname}/${answernumber}/downvote`;
+        const editAnswerUrl = `${pathname}/answers/${answernumber}`;
 
         const answerCard = `<div class="answers-by-others">
-      <p class="name">${username}</p>
+      <p id="username" class="name">${username}</p>
       <p class="answer-by-others-content">${answer}</p>
+      <p><a id="visibility" href=${editAnswerUrl}>Edit Answer<a/></p>
       <p><span><a href=${upvoteUrl}>upvote ${upvotes}</a></span> <span><a href=${downvoteUrl}>downvote ${downvotes} </a></span><span><a href=>prefered ${accepted}</a></span></p>
       </div>`;
         answerContainer.innerHTML += answerCard;
+
+        let editBtnVisibility = document.getElementById('visibility');
+        let answerAuthor = document.getElementById('username');
+        if(currentUser !== answerAuthor.innerHTML) {
+          editBtnVisibility.classList.add('disabled');
+        }
       }
     })
     .catch(error => new Error(error));

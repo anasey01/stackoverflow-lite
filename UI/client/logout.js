@@ -1,6 +1,8 @@
 const log = document.getElementById('logout');
 
 const logout = (e) => {
+  localStorage.removeItem('currentQuestion');
+  localStorage.removeItem('currentUser');
   e.preventDefault();
   localStorage.removeItem('x-auth-token');
   setTimeout(() => {

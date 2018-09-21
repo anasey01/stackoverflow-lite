@@ -39,6 +39,7 @@ const loginUser = (e) => {
                           </ul>`;
         messageOutput.innerHTML = messageInfo;
         localStorage.setItem('x-auth-token', data.token);
+        localStorage.setItem('currentUser', data.username);
         setTimeout(() => {
           window.location.replace('./../UI/index.html');
         }, 1000);

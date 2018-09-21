@@ -88,8 +88,8 @@ var QuestionManager = function () {
     }
   }, {
     key: 'updateAnswer',
-    value: function updateAnswer(answerNumber, answer, callback) {
-      this.conn.updateQuestionAnswer(answerNumber, answer, function (err, result) {
+    value: function updateAnswer(answerNumber, answer, questionId, callback) {
+      this.conn.updateQuestionAnswer(answerNumber, answer, questionId, function (err, result) {
         callback(err, result.rows);
       });
     }

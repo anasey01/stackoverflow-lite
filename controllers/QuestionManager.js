@@ -66,8 +66,8 @@ class QuestionManager {
     });
   }
 
-  updateAnswer(answerNumber, answer, callback) {
-    this.conn.updateQuestionAnswer(answerNumber, answer, (err, result) => {
+  updateAnswer(answerNumber, answer, questionId, callback) {
+    this.conn.updateQuestionAnswer(answerNumber, answer, questionId, (err, result) => {
       callback(err, result.rows);
     });
   }
