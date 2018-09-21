@@ -34,7 +34,7 @@ const signupUser = (e) => {
     .then((data) => {
       console.log(data);
       if (data.message === 'error') {
-        messageOutput.innerHTML = `<li> Unable to Signup </li>`;
+        messageOutput.innerHTML = '<li> Unable to Signup </li>';
       } else {
 
         setTimeout(() => {

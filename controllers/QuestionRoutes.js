@@ -144,52 +144,19 @@ class QuestionRoute {
 
   static updateAnswer(req, res) {
     const { questionId, answerNumber } = req.params;
-    const currentUserId = req.user.userId;
     const { answer } = req.body;
-    questionManager.getQuestionAndAnswer(questionId, (err, result) => {
-      const answerData = [];
-      let isAnswer = 'not found';
-      result.forEach((item) => {
-        if (item.answernumber === Number(answerNumber)) {
-          isAnswer = 'found';
-          return answerData.push(item);
-        }
-      });
-      if (isAnswer === 'found') {
-        if (currentUserId === Number(questionId)) {
-          questionManager.markAnswer(answerNumber, (result) => {
-            if (result === 'successfully marked') {
-              return res.status(200).json({
-                success: true,
-                message: 'Answer marked as approved!',
-              });
-            }
-            return res.status(500).json({
-              success: false,
-              message: 'unable to mark answer',
-            });
-          });
-        } else if (currentUserId === answerData[0].userid) {
-          questionManager.updateAnswer(answerNumber, answer, (error, answerInfo) => {
-            if (error) {
-              return res.status(500).json({
-                success: false,
-                message: 'Unable to update Answer',
-              });
-            }
-            return res.status(200).json({
-              success: true,
-              message: 'Your answer has been updated',
-              answerInfo,
-            });
-          });
-        }
-      } else {
-        return res.status(404).json({
+    questionManager.updateAnswer(answerNumber, answer, questionId, (error, answerUpdate) => {
+      if (error) {
+        return res.status(500).json({
           success: false,
-          message: isAnswer,
+          message: 'Unable to update Answer',
         });
       }
+      return res.status(200).json({
+        success: true,
+        message: 'Your answer has been updated',
+        answer: answerUpdate[0],
+      });
     });
   }
 

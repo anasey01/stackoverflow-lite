@@ -7,8 +7,9 @@ const viewQuestionLogoutBtn = document.getElementById('logout');
 const viewQuestionSignupBtn = document.getElementById('signup');
 
 const token = localStorage.getItem('x-auth-token');
+const currentPath = new URL(window.location.href).pathname;
 const url = `/api/v1${new URL(window.location.href).pathname}`;
-
+localStorage.setItem('currentQuestion', currentPath);
 
 if (token) {
   viewQuestionLoginBtn.classList.add('disabled');
@@ -41,4 +42,4 @@ fetch(url, {
     }
   })
   .catch(error => new Error(error));
-  
+

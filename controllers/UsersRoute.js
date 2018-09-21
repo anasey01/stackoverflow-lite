@@ -25,6 +25,7 @@ class UsersRoutes {
       return res.header('x-auth-token', token).status(200).json({
         success: true,
         message: 'Successfully logged in',
+        username: result[0].username,
         token,
       });
     });

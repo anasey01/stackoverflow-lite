@@ -238,18 +238,14 @@ class DbManager {
     });
   }
 
-  updateQuestionAnswer(answerNumber, answer, callback) {
+  updateQuestionAnswer(answerNumber, answer, questionId, callback) {
     const query = {
       name: 'update-answer',
-      text: 'UPDATE answers SET answer = $1 WHERE answers.answernumber = $2 RETURNING *',
-      values: [answer, answerNumber],
+      text: 'UPDATE answers SET answer = $1 WHERE answers.answernumber = $2 AND answers.questionid = $3 RETURNING *',
+      values: [answer, answerNumber, questionId],
     };
 
     this.pool.query(query, (error, result) => {
-      if (error) {
-        const err = new Error();
-        return err;
-      }
       callback(error, result);
     });
   }

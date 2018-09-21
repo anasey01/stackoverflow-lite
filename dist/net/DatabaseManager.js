@@ -230,18 +230,14 @@ var DbManager = function () {
     }
   }, {
     key: 'updateQuestionAnswer',
-    value: function updateQuestionAnswer(answerNumber, answer, callback) {
+    value: function updateQuestionAnswer(answerNumber, answer, questionId, callback) {
       var query = {
         name: 'update-answer',
-        text: 'UPDATE answers SET answer = $1 WHERE answers.answernumber = $2 RETURNING *',
-        values: [answer, answerNumber]
+        text: 'UPDATE answers SET answer = $1 WHERE answers.answernumber = $2 AND answers.questionid = $3 RETURNING *',
+        values: [answer, answerNumber, questionId]
       };
 
       this.pool.query(query, function (error, result) {
-        if (error) {
-          var err = new Error();
-          return err;
-        }
         callback(error, result);
       });
     }
