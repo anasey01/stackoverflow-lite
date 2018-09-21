@@ -1,6 +1,7 @@
 const log = document.getElementById('logout');
 
 const logout = (e) => {
+  localStorage.removeItem('currentAuthor');
   localStorage.removeItem('currentQuestion');
   localStorage.removeItem('currentUser');
   e.preventDefault();

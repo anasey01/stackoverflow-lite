@@ -1,6 +1,9 @@
 const url = '/api/v1/questions';
 const btn = document.getElementById('btn');
 const messageOutput = document.getElementById('messageOutput');
+const usernameGreeting = document.getElementById('greeting-username');
+
+usernameGreeting.innerHTML = localStorage.getItem('currentUser');
 
 const postQuestion = (e) => {
   e.preventDefault();

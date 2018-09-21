@@ -5,7 +5,9 @@ const creationDate = document.getElementById('creation-date');
 const viewQuestionLoginBtn = document.getElementById('login');
 const viewQuestionLogoutBtn = document.getElementById('logout');
 const viewQuestionSignupBtn = document.getElementById('signup');
+const deleteQuestBtn = document.getElementById('deleteQuestion');
 
+const currentLoggedInUser = localStorage.getItem('currentUser');
 const token = localStorage.getItem('x-auth-token');
 const currentPath = new URL(window.location.href).pathname;
 const url = `/api/v1${new URL(window.location.href).pathname}`;
@@ -16,6 +18,7 @@ if (token) {
   viewQuestionSignupBtn.classList.add('disabled');
   viewQuestionLogoutBtn.classList.add('enabled');
 }
+
 
 fetch(url, {
   method: 'GET',
@@ -38,6 +41,10 @@ fetch(url, {
       questionContent.innerHTML = data.question.questioncontent;
       questionAuthor.innerHTML = data.question.username;
       creationDate.innerHTML = data.question.createdat;
+      localStorage.setItem('currentAuthor', data.question.username);
+      if (data.question.username !== currentLoggedInUser) {
+        deleteQuestBtn.classList.add('disabled');
+      }
       getAnswer();
     }
   })

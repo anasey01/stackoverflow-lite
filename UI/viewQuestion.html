@@ -36,6 +36,13 @@
             </div>
         </aside>
         <div class="main-content-title">
+            <div id="deleteModal" class="modal">
+                <div id="modal-content" class="modal-content">
+                    <span id="close-modal" class="close-btn">&times;</span>
+                    <h1 id="modalHeader"></h1>
+                    <p id="modalText"></p>
+                </div>
+            </div>
             <h1 id="question-title"></h1>
             <div class="question-content">
                 <p id="question-content">
@@ -46,6 +53,9 @@
                         Posted on:
                         <span id="creation-date"></span>
                     </p>
+                    <div>
+                        <a href="" class="btn deleteBtn" id="deleteQuestion">Delete Question</a>
+                    </div>
                 </div>
                 <div class="question-answer">
                         <p id="message-output"></p>
@@ -72,5 +82,6 @@
     <script src=".././UI/client/logout.js"></script>
     <script src=".././UI/client/postAnswer.js"></script>
     <script src=".././UI/client/viewQuestion.js"></script>
+    <script src=".././UI/client/deleteQuestion.js"></script>
 </body>
 </html>
