@@ -8,57 +8,52 @@ class Votes {
   static upvote(req, res) {
     const { questionId, answerId } = req.params;
     const { userId, username } = req.user;
-    questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', username, (err, result) => {
-      const votes = {
-        totalVotes: result.length,
-        totalUpvote: 0,
-        totalDownvote: 0,
-        questionId: result[0].questionid,
-        answerId: result[0].answerid,
-      };
+    questionManager.createVotes(Number(questionId), Number(answerId), userId, 'upvotes', 'downvotes', username, (err, vote) => {
       if (err) {
         return res.status(401).json({
           success: false,
           messgae: 'unable to vote',
         });
       }
-      result.forEach((item) => {
-        votes.totalUpvote += item.upvotes;
-        votes.totalDownvote += item.downvotes;
-      });
       return res.status(200).json({
         success: true,
         messgage: 'stats for votes',
-        votes,
+        vote,
       });
     });
   }
 
   static downvote(req, res) {
+    const { userId, username } = req.user;
     const { questionId, answerId } = req.params;
-    const { userId } = req.user;
-    questionManager.createVotes(questionId, answerId, userId, 'downvotes', 'upvotes', (err, result) => {
-      let votes = {
-        totalVotes: result.length,
-        totalUpvote: 0,
-        totalDownvote: 0,
-        questionId: result[0].questionid,
-        answerId: result[0].answerid,
-      }
+    questionManager.createVotes(Number(questionId), Number(answerId), userId, 'downvotes', 'upvotes', username, (err, vote) => {
       if (err) {
         return res.status(401).json({
           success: false,
           messgae: 'unable to vote',
         });
       }
-      result.forEach((item) => {
-        votes.totalUpvote += item.upvotes;
-        votes.totalDownvote += item.downvotes;
-      });
       return res.status(200).json({
         success: true,
         messgage: 'stats for votes',
-        votes,
+        vote,
+      });
+    });
+  }
+
+  static getAllVotes(req, res) {
+    const { questionId, answerId } = req.params;
+    questionManager.getVotes(Number(questionId), Number(answerId), (err, allVotes) => {
+      if (err) {
+        return res.status(401).json({
+          success: false,
+          message: 'unable to get all votes',
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        message: 'All votes',
+        allVotes,
       });
     });
   }

@@ -32,11 +32,9 @@ const signupUser = (e) => {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       if (data.message === 'error') {
         messageOutput.innerHTML = '<li> Unable to Signup </li>';
       } else {
-
         setTimeout(() => {
           window.location.replace('login.html');
         }, 500);

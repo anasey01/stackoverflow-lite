@@ -38,11 +38,11 @@ var DbManager = function () {
     value: function createAllTables() {
       var _this = this;
 
-      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(10) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(60) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      username varchar(10) REFERENCES users(username) ON DELETE CASCADE,\n      questionTitle varchar(100) NOT NULL,\n      questionContent varchar(500) NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId SERIAL NOT NULL PRIMARY KEY,\n      accepted BOOLEAN NOT NULL,\n      upvotes INT NOT NULL,\n      downvotes INT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      username varchar(10) REFERENCES users(username) ON DELETE CASCADE,\n      answer varchar(500) NOT NULL,\n      answerNumber INT NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-      var commentsQuery = '\n    CREATE TABLE IF NOT EXISTS comments(\n      commentId SERIAL NOT NULL PRIMARY KEY,\n      comment varchar(250) NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      username varchar(10) REFERENCES users(username) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
-      var votesQuery = '\n    CREATE TABLE IF NOT EXISTS votes(\n      voteId SERIAL NOT NULL PRIMARY KEY,\n      upvotes INTEGER NOT NULL,\n      downvotes INTEGER NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var usersQuery = '\n    CREATE TABLE IF NOT EXISTS users(\n      userId SERIAL NOT NULL PRIMARY KEY,\n      fullname text NOT NULL,\n      gender varchar(1) NOT NULL,\n      username varchar(25) UNIQUE NOT NULL,\n      password text NOT NULL,\n      email varchar(150) UNIQUE NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var questionsQuery = '\n    CREATE TABLE IF NOT EXISTS questions(\n      questionId SERIAL NOT NULL PRIMARY KEY,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      username varchar(25) REFERENCES users(username) ON DELETE CASCADE,\n      questionTitle TEXT NOT NULL,\n      questionContent TEXT NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var answersQuery = '\n    CREATE TABLE IF NOT EXISTS answers(\n      answerId SERIAL NOT NULL PRIMARY KEY,\n      accepted BOOLEAN NOT NULL,\n      upvotes INT NOT NULL,\n      downvotes INT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      username varchar(25) REFERENCES users(username) ON DELETE CASCADE,\n      answer TEXT NOT NULL,\n      answerNumber INT NOT NULL,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var commentsQuery = '\n    CREATE TABLE IF NOT EXISTS comments(\n      commentId SERIAL NOT NULL PRIMARY KEY,\n      comment TEXT NOT NULL,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      username varchar(25) REFERENCES users(username) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
+      var votesQuery = '\n    CREATE TABLE IF NOT EXISTS votes(\n      voteId SERIAL NOT NULL PRIMARY KEY,\n      upvotes INTEGER NOT NULL,\n      downvotes INTEGER NOT NULL,\n      username varchar(25) REFERENCES users(username) ON DELETE CASCADE,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
       this.pool.query(usersQuery).then(function (data) {
         console.log('Users Table Created');
@@ -257,26 +257,22 @@ var DbManager = function () {
   }, {
     key: 'insertVotes',
     value: function insertVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
-      var _this2 = this;
-
       var query = {
         name: 'insert-votes',
-        text: 'INSERT INTO votes (' + currentVote + ', ' + otherVote + ', questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6)',
+        text: 'INSERT INTO votes (' + currentVote + ', ' + otherVote + ', questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
         values: [1, 0, questionId, userId, answerId, username]
       };
-      this.pool.query(query, function (error, result) {
-        if (error) {
-          var err = new Error();
-          return err;
-        }
-
-        if (result.rowCount === 1) {
-          var selectQuery = 'SELECT * FROM votes WHERE answerid = $1';
-          var selectValue = [answerId];
-          _this2.pool.query(selectQuery, selectValue, function (error, result) {
-            callback(error, result.rows);
-          });
-        }
+      this.pool.query(query, function (error, vote) {
+        callback(error, vote.rows[0]);
+      });
+    }
+  }, {
+    key: 'selectVotes',
+    value: function selectVotes(questionId, answerId, callback) {
+      var query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2';
+      var values = [questionId, answerId];
+      this.pool.query(query, values, function (error, allVotes) {
+        callback(error, allVotes.rows);
       });
     }
   }, {

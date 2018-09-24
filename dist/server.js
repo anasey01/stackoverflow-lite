@@ -62,9 +62,9 @@ app.get('/questions/:questionId/answers/:answerId', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/updateAnswer.html'));
 });
 
-app.use('/api/v1', _questionRoute2.default);
 app.use('/api/v1/auth/', _authRoute2.default);
 app.use('/api/v1', _votesRoute2.default);
+app.use('/api/v1', _questionRoute2.default);
 app.use((0, _morgan2.default)(':method :url :response-time'));
 
 app.use(function (req, res, next) {

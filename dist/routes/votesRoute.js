@@ -18,10 +18,12 @@ var _Votes2 = _interopRequireDefault(_Votes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var router = _express2.default.Router();
+var voteRouter = _express2.default.Router();
 
-router.post('/questions/:questionId/answers/:answerId/upvote', _validateToken2.default, _Votes2.default.upvote);
-router.post('/questions/:questionId/answers/:answerId/downvote', _validateToken2.default, _Votes2.default.downvote);
+voteRouter.get('/questions/:questionId/answers/:answerId/upvote', _validateToken2.default, _Votes2.default.getAllVotes);
+voteRouter.get('/questions/:questionId/answers/:answerId/downvote', _validateToken2.default, _Votes2.default.getAllVotes);
+voteRouter.post('/questions/:questionId/answers/:answerId/upvote', _validateToken2.default, _Votes2.default.upvote);
+voteRouter.post('/questions/:questionId/answers/:answerId/downvote', _validateToken2.default, _Votes2.default.downvote);
 
-exports.default = router;
+exports.default = voteRouter;
 //# sourceMappingURL=votesRoute.js.map

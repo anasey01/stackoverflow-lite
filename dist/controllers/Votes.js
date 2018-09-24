@@ -36,61 +36,62 @@ var Votes = function () {
           userId = _req$user.userId,
           username = _req$user.username;
 
-      questionManager.createVotes(questionId, answerId, userId, 'upvotes', 'downvotes', username, function (err, result) {
-        var votes = {
-          totalVotes: result.length,
-          totalUpvote: 0,
-          totalDownvote: 0,
-          questionId: result[0].questionid,
-          answerId: result[0].answerid
-        };
+      questionManager.createVotes(Number(questionId), Number(answerId), userId, 'upvotes', 'downvotes', username, function (err, vote) {
         if (err) {
           return res.status(401).json({
             success: false,
             messgae: 'unable to vote'
           });
         }
-        result.forEach(function (item) {
-          votes.totalUpvote += item.upvotes;
-          votes.totalDownvote += item.downvotes;
-        });
         return res.status(200).json({
           success: true,
           messgage: 'stats for votes',
-          votes: votes
+          vote: vote
         });
       });
     }
   }, {
     key: 'downvote',
     value: function downvote(req, res) {
+      var _req$user2 = req.user,
+          userId = _req$user2.userId,
+          username = _req$user2.username;
       var _req$params2 = req.params,
           questionId = _req$params2.questionId,
           answerId = _req$params2.answerId;
-      var userId = req.user.userId;
 
-      questionManager.createVotes(questionId, answerId, userId, 'downvotes', 'upvotes', function (err, result) {
-        var votes = {
-          totalVotes: result.length,
-          totalUpvote: 0,
-          totalDownvote: 0,
-          questionId: result[0].questionid,
-          answerId: result[0].answerid
-        };
+      questionManager.createVotes(Number(questionId), Number(answerId), userId, 'downvotes', 'upvotes', username, function (err, vote) {
         if (err) {
           return res.status(401).json({
             success: false,
             messgae: 'unable to vote'
           });
         }
-        result.forEach(function (item) {
-          votes.totalUpvote += item.upvotes;
-          votes.totalDownvote += item.downvotes;
-        });
         return res.status(200).json({
           success: true,
           messgage: 'stats for votes',
-          votes: votes
+          vote: vote
+        });
+      });
+    }
+  }, {
+    key: 'getAllVotes',
+    value: function getAllVotes(req, res) {
+      var _req$params3 = req.params,
+          questionId = _req$params3.questionId,
+          answerId = _req$params3.answerId;
+
+      questionManager.getVotes(Number(questionId), Number(answerId), function (err, allVotes) {
+        if (err) {
+          return res.status(401).json({
+            success: false,
+            message: 'unable to get all votes'
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: 'All votes',
+          allVotes: allVotes
         });
       });
     }
