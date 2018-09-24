@@ -23,18 +23,17 @@ const getAnswer = () => {
       noOfAnswer.innerHTML = numberOfAnswer;
       for (let i = 0; i < data.message.length; i += 1) {
         let  { answernumber, username, answer, upvotes, downvotes, accepted } = data.message[i];
-        const upvoteUrl = `api/v1${pathname}/${answernumber}/upvote`;
-        const downvoteUrl = `api/v1${pathname}/${answernumber}/downvote`;
+        const upvoteUrl = `/api/v1${pathname}/answers/${answernumber}/upvote`;
+        const downvoteUrl = `/api/v1${pathname}/answers/${answernumber}/downvote`;
         const editAnswerUrl = `${pathname}/answers/${answernumber}`;
 
         const answerCard = `<div class="answers-by-others">
       <p id="username" class="name">${username}</p>
       <p class="answer-by-others-content">${answer}</p>
       <p><a id="visibility" href=${editAnswerUrl}>Edit Answer<a/></p>
-      <p><span><a href=${upvoteUrl}>upvote ${upvotes}</a></span> <span><a href=${downvoteUrl}>downvote ${downvotes} </a></span><span><a href=>prefered ${accepted}</a></span></p>
+      <p id="interactions"><a id="upvotes" href=${upvoteUrl}>upvote <span id="upvoteDisplay">${upvotes} </span></a><a id="downvotes" href=${downvoteUrl}> downvote <span id="downvoteDisplay">${downvotes} </span></a> <a id="preferred" href=>Mark as preferred <span id="markAnswerDisplay"> ${accepted} </span></a></p>
       </div>`;
         answerContainer.innerHTML += answerCard;
-
         let editBtnVisibility = document.getElementById('visibility');
         let answerAuthor = document.getElementById('username');
         if(currentUser !== answerAuthor.innerHTML) {
@@ -73,7 +72,9 @@ const postAnswer = (e) => {
         messageOutput.innerHTML = data.message;
         setTimeout(() => {
           getAnswer();
-        });
+          messageOutput.innerHTML = '';
+          window.location.reload();
+        }, 500);
       }
     })
     .catch((error) => {

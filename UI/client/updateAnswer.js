@@ -80,7 +80,7 @@ const updateAnswer = (e) => {
       const updateAnswerCard = `<div class="answers-by-others">
       <p class="name">${data.answer.username}</p>
       <p class="answer-by-others-content">${data.answer.answer}</p>
-      <p><span><a>upvote ${data.answer.upvotes}</a></span> <span><a>downvote ${data.answer.downvotes} </a></span><span><a>prefered ${data.answer.accepted}</a></span></p>
+      <p><span><a id="upvotes">upvote ${data.answer.upvotes}</a></span> <span><a id="downvotes">downvote ${data.answer.downvotes} </a></span><span><a id="preferred">preferred ${data.answer.accepted}</a></span></p>
       </div>`;
 
       editMessageContainer.innerHTML = updateAnswerCard;

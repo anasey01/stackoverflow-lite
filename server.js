@@ -22,9 +22,9 @@ app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.h
 app.get('/questions/:questionId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/viewQuestion.html')));
 app.get('/questions/:questionId/answers/:answerId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/updateAnswer.html')));
 
-app.use('/api/v1', questionRoute);
 app.use('/api/v1/auth/', authRouter);
 app.use('/api/v1', voteRoute);
+app.use('/api/v1', questionRoute);
 app.use(morgan(':method :url :response-time'));
 
 app.use((req, res, next) => {

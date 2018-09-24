@@ -73,8 +73,14 @@ class QuestionManager {
   }
 
   createVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
-    this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, (err, result) => {
-      callback(err, result);
+    this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, (err, vote) => {
+      callback(err, vote);
+    });
+  }
+
+  getVotes(questionId, answerId, callback) {
+    this.conn.selectVotes(questionId, answerId, (err, allVotes) => {
+      callback(err, allVotes);
     });
   }
 

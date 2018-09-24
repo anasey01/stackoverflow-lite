@@ -13,18 +13,18 @@ CREATE TABLE IF NOT EXISTS users(
   userId SERIAL NOT NULL PRIMARY KEY,
   fullname text NOT NULL,
   gender varchar(1) NOT NULL,
-  username varchar(10) UNIQUE NOT NULL,
+  username varchar(25) UNIQUE NOT NULL,
   password text NOT NULL,
-  email varchar(60) UNIQUE NOT NULL,
+  email varchar(150) UNIQUE NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 const questionsQuery = `
 CREATE TABLE IF NOT EXISTS questions(
   questionId SERIAL NOT NULL PRIMARY KEY,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
-  username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
-  questionTitle varchar(100) NOT NULL,
-  questionContent varchar(500) NOT NULL,
+  username varchar(25) REFERENCES users(username) ON DELETE CASCADE,
+  questionTitle TEXT NOT NULL,
+  questionContent TEXT NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 const answersQuery = `
@@ -35,19 +35,19 @@ CREATE TABLE IF NOT EXISTS answers(
   downvotes INT NOT NULL,
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
-  username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
-  answer varchar(500) NOT NULL,
+  username varchar(25) REFERENCES users(username) ON DELETE CASCADE,
+  answer TEXT NOT NULL,
   answerNumber INT NOT NULL,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 const commentsQuery = `
 CREATE TABLE IF NOT EXISTS comments(
   commentId SERIAL NOT NULL PRIMARY KEY,
-  comment varchar(250) NOT NULL,
+  comment TEXT NOT NULL,
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
   answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,
-  username varchar(10) REFERENCES users(username) ON DELETE CASCADE,
+  username varchar(25) REFERENCES users(username) ON DELETE CASCADE,
   createdAt TIMESTAMP NOT NULL DEFAULT NOW()
 );`;
 const votesQuery = `
@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS votes(
   voteId SERIAL NOT NULL PRIMARY KEY,
   upvotes INTEGER NOT NULL,
   downvotes INTEGER NOT NULL,
+  username varchar(25) REFERENCES users(username) ON DELETE CASCADE,
   questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,
   userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,
   answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,

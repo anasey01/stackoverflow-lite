@@ -96,8 +96,15 @@ var QuestionManager = function () {
   }, {
     key: 'createVotes',
     value: function createVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
-      this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, function (err, result) {
-        callback(err, result);
+      this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, function (err, vote) {
+        callback(err, vote);
+      });
+    }
+  }, {
+    key: 'getVotes',
+    value: function getVotes(questionId, answerId, callback) {
+      this.conn.selectVotes(questionId, answerId, function (err, allVotes) {
+        callback(err, allVotes);
       });
     }
   }, {

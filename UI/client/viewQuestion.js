@@ -49,4 +49,3 @@ fetch(url, {
     }
   })
   .catch(error => new Error(error));
-

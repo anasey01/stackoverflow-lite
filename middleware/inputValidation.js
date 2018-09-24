@@ -7,8 +7,8 @@ class Validation {
     req.check('gender').notEmpty().withMessage('Select your gender from the option');
 
     req.check('username').notEmpty().withMessage('Enter a username')
-      .isLength({ max: 10 })
-      .withMessage('Username cannot be more than 10 characters');
+      .isLength({ max: 25 })
+      .withMessage('Username cannot be more than 25 characters');
 
     req.check('password').notEmpty().withMessage('Password is required')
       .isLength({ min: 6 })
@@ -45,13 +45,13 @@ class Validation {
   static postQuestion(req, res, next) {
     req.check('questionTitle').notEmpty().withMessage('Title is required')
       .isString().withMessage('Title can only be a string')
-      .isLength({ max: 100 })
-      .withMessage('Title can only be 100 characters long');
+      .isLength({ max: 250 })
+      .withMessage('Title can only be 250 characters long');
 
     req.check('questionContent').notEmpty().withMessage('Content is required')
       .isString().withMessage('Content can only be a string')
-      .isLength({ max: 500 })
-      .withMessage('Content can only be 500 characters long');
+      .isLength({ max: 2500 })
+      .withMessage('Content can only be 2500 characters long');
 
     const errors = req.validationErrors();
     if (errors) {
