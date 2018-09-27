@@ -8,7 +8,8 @@ const router = express.Router();
 
 router.get('/questions', QuestionRoute.allQuestion);
 router.get('/questions/:id', validateToken, QuestionRoute.specificQuestion);
-router.get('/question/:userId', validateToken, QuestionRoute.getAllQuestionsByUser);
+router.get('/question/:username', validateToken, QuestionRoute.getAllQuestionsByUser);
+router.get('/question/:username/mostanswers', validateToken, QuestionRoute.mostAnswers);
 router.post('/questions', inputValidator.postQuestion, validateToken, QuestionRoute.postQuestion);
 router.post('/questions/:id/answers', validateToken, QuestionRoute.addAnswer);
 router.get('/questions/:id/answers', validateToken, QuestionRoute.getAnswer);

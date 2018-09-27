@@ -102,8 +102,8 @@ class QuestionRoute {
   }
 
   static getAllQuestionsByUser(req, res) {
-    const { userId } = req.user;
-    questionManager.getUserQuestions(userId, (error, result) => {
+    const { username } = req.user;
+    questionManager.getUserQuestions(username, (error, result) => {
       const userQuestions = result;
       if (error) {
         return res.status(500).json({
@@ -156,6 +156,23 @@ class QuestionRoute {
         success: true,
         message: 'Your answer has been updated',
         answer: answerUpdate[0],
+      });
+    });
+  }
+
+  static mostAnswers(req, res) {
+    const { username } = req.user;
+    questionManager.orderedByMostAnswers(username, (error, mostAnswers) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: 'unable to get most answered question',
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        message: 'Questions by user with the most answers',
+        mostAnswers,
       });
     });
   }

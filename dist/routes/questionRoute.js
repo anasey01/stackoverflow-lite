@@ -30,7 +30,8 @@ var router = _express2.default.Router();
 
 router.get('/questions', _QuestionRoutes2.default.allQuestion);
 router.get('/questions/:id', _validateToken2.default, _QuestionRoutes2.default.specificQuestion);
-router.get('/question/:userId', _validateToken2.default, _QuestionRoutes2.default.getAllQuestionsByUser);
+router.get('/question/:username', _validateToken2.default, _QuestionRoutes2.default.getAllQuestionsByUser);
+router.get('/question/:username/mostanswers', _validateToken2.default, _QuestionRoutes2.default.mostAnswers);
 router.post('/questions', _inputValidation2.default.postQuestion, _validateToken2.default, _QuestionRoutes2.default.postQuestion);
 router.post('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.addAnswer);
 router.get('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.getAnswer);

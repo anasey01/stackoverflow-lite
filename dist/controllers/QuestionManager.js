@@ -43,8 +43,8 @@ var QuestionManager = function () {
     }
   }, {
     key: 'getUserQuestions',
-    value: function getUserQuestions(userId, callback) {
-      this.conn.selectQuestionByUserId(userId, function (error, result) {
+    value: function getUserQuestions(username, callback) {
+      this.conn.selectQuestionByUsername(username, function (error, result) {
         callback(error, result);
       });
     }
@@ -91,6 +91,13 @@ var QuestionManager = function () {
     value: function updateAnswer(answerNumber, answer, questionId, callback) {
       this.conn.updateQuestionAnswer(answerNumber, answer, questionId, function (err, result) {
         callback(err, result.rows);
+      });
+    }
+  }, {
+    key: 'orderedByMostAnswers',
+    value: function orderedByMostAnswers(username, callback) {
+      this.conn.selectMostAnswered(username, function (error, mostAnswer) {
+        callback(error, mostAnswer.rows);
       });
     }
   }, {

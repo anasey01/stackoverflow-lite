@@ -189,6 +189,15 @@ class DbManager {
     });
   }
 
+  selectMostAnswered(username, callback) {
+    const query = 'SELECT questions.*, COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid) WHERE questions.username = $1 GROUP BY questions.questionid ORDER BY COUNT(answers.questionid) DESC';
+    const values = [username];
+
+    this.pool.query(query, values, (error, mostAnswered) => {
+      callback(error, mostAnswered);
+    });
+  }
+
   selectById(table, userId, callback) {
     const query = {
       name: 'fetch-byid',
@@ -213,10 +222,9 @@ class DbManager {
     });
   }
 
-  selectQuestionByUserId(userId, callback) {
-    const query = 'SELECT * FROM questions WHERE userid =$1';
-    const value = [userId];
-
+  selectQuestionByUsername(username, callback) {
+    const query = 'SELECT questions.*, COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid) WHERE questions.username = $1 GROUP BY questions.questionid';
+    const value = [username];
     this.pool.query(query, value, (error, result) => {
       if (error) {
         const err = new Error();

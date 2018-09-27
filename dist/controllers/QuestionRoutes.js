@@ -138,9 +138,9 @@ var QuestionRoute = function () {
   }, {
     key: 'getAllQuestionsByUser',
     value: function getAllQuestionsByUser(req, res) {
-      var userId = req.user.userId;
+      var username = req.user.username;
 
-      questionManager.getUserQuestions(userId, function (error, result) {
+      questionManager.getUserQuestions(username, function (error, result) {
         var userQuestions = result;
         if (error) {
           return res.status(500).json({
@@ -198,6 +198,25 @@ var QuestionRoute = function () {
           success: true,
           message: 'Your answer has been updated',
           answer: answerUpdate[0]
+        });
+      });
+    }
+  }, {
+    key: 'mostAnswers',
+    value: function mostAnswers(req, res) {
+      var username = req.user.username;
+
+      questionManager.orderedByMostAnswers(username, function (error, mostAnswers) {
+        if (error) {
+          return res.status(500).json({
+            success: false,
+            message: 'unable to get most answered question'
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: 'Questions by user with the most answers',
+          mostAnswers: mostAnswers
         });
       });
     }
