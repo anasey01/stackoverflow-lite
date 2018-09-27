@@ -175,6 +175,16 @@ var DbManager = function () {
       });
     }
   }, {
+    key: 'selectMostAnswered',
+    value: function selectMostAnswered(username, callback) {
+      var query = 'SELECT questions.*, COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid) WHERE questions.username = $1 GROUP BY questions.questionid ORDER BY COUNT(answers.questionid) DESC';
+      var values = [username];
+
+      this.pool.query(query, values, function (error, mostAnswered) {
+        callback(error, mostAnswered);
+      });
+    }
+  }, {
     key: 'selectById',
     value: function selectById(table, userId, callback) {
       var query = {
@@ -201,11 +211,10 @@ var DbManager = function () {
       });
     }
   }, {
-    key: 'selectQuestionByUserId',
-    value: function selectQuestionByUserId(userId, callback) {
-      var query = 'SELECT * FROM questions WHERE userid =$1';
-      var value = [userId];
-
+    key: 'selectQuestionByUsername',
+    value: function selectQuestionByUsername(username, callback) {
+      var query = 'SELECT questions.*, COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid) WHERE questions.username = $1 GROUP BY questions.questionid';
+      var value = [username];
       this.pool.query(query, value, function (error, result) {
         if (error) {
           var err = new Error();

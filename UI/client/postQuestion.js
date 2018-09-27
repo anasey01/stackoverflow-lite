@@ -1,16 +1,16 @@
 const url = '/api/v1/questions';
+const username = localStorage.getItem('currentUser');
 const btn = document.getElementById('btn');
 const messageOutput = document.getElementById('messageOutput');
 const usernameGreeting = document.getElementById('greeting-username');
-
-usernameGreeting.innerHTML = localStorage.getItem('currentUser');
+usernameGreeting.innerHTML = username;
+const token = localStorage.getItem('x-auth-token');
 
 const postQuestion = (e) => {
   e.preventDefault();
 
   const questionTitle = document.getElementById('title').value;
   const questionContent = document.getElementById('content').value;
-  const token = localStorage.getItem('x-auth-token');
 
   fetch(url, {
     method: 'POST',

@@ -17,7 +17,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="./dashboard.html">Welcome <span>Oluseyi</span></a></li>
+                    <li><a href="./dashboard.html">Welcome <span id="username-greeting"></span></a></li>
                     <li><a id="logout">LogOut</a></li>
                 </ul>
             </nav>
@@ -28,7 +28,7 @@
             <div id="left-sidebar">
                 <nav>
                     <ul>
-                        <li><a id="allquestion"  class="highlight" href="./questionbyuser.html">View all Questions</a></li>
+                        <li><a id="allquestion"  class="highlight" href="./questionbyuser.html">View Questions By You</a></li>
                         <li><a id="mostanswered" href="./mostansweredquestions.html">Most Answered Question</a></li>
                         <li><a href="./postQuestion.html">Ask a Questions</a></li>
                     </ul>
@@ -36,27 +36,7 @@
             </div>
         </aside>
         <div id="text-content" class="main-content-title">
-            <h1>Dashboard</h1>
-            <div class="question-summary">
-                <div class="summary">
-                    <h3><a href="./viewQuestion.html">Login does not work on ios(apple) devices</a></h3>
-                </div>
-                <div class="asked-by">
-                    <span class="number-of-answers">2 <span>answer</span></span>
-                    <a class="asked-by-time">5 mins ago</a>
-                    <a class="asked-by-author" href="#">Oluseyi</a>
-                </div>
-            </div>
-            <div class="question-summary">
-                <div class="summary">
-                    <h3><a href="./viewQuestion.html">How to read the logs from TFS Build/Release and change the task status accordingly?</a></h3>
-                </div>
-                <div class="asked-by">
-                    <span class="number-of-answers">0 <span>answer</span></span>
-                    <a class="asked-by-time">10 mins ago</a>
-                    <a class="asked-by-author" href="#">Oluseyi</a>
-                </div>
-            </div>
+            <h1 id="currentTab"></h1>
         </div>
     </div>
     <footer>
@@ -66,5 +46,6 @@
         </div>
     </footer>
     <script src="./client/logout.js"></script>
+    <script src="./client/dashboard.js"></script>
 </body>
 </html>

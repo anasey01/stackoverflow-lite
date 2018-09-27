@@ -1,6 +1,7 @@
 const loginBtn = document.getElementById('login');
 const signupBtn = document.getElementById('signup');
 const logoutBtn = document.getElementById('logout');
+const dashboard  = document.getElementById('dashboard');
 const questionContainer = document.getElementById('question-container');
 const url = '/api/v1/questions';
 
@@ -11,6 +12,7 @@ if (token) {
   loginBtn.classList.add('disabled');
   signupBtn.classList.add('disabled');
   logoutBtn.classList.add('enabled');
+  dashboard.classList.add('enabled');
 }
 
 fetch(url, {

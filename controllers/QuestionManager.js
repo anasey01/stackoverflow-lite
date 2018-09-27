@@ -27,8 +27,8 @@ class QuestionManager {
     });
   }
 
-  getUserQuestions(userId, callback) {
-    this.conn.selectQuestionByUserId(userId, (error, result) => {
+  getUserQuestions(username, callback) {
+    this.conn.selectQuestionByUsername(username, (error, result) => {
       callback(error, result);
     });
   }
@@ -69,6 +69,12 @@ class QuestionManager {
   updateAnswer(answerNumber, answer, questionId, callback) {
     this.conn.updateQuestionAnswer(answerNumber, answer, questionId, (err, result) => {
       callback(err, result.rows);
+    });
+  }
+
+  orderedByMostAnswers(username, callback) {
+    this.conn.selectMostAnswered(username, (error, mostAnswer) => {
+      callback(error, mostAnswer.rows);
     });
   }
 
