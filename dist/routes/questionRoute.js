@@ -29,6 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 
 router.get('/questions', _QuestionRoutes2.default.allQuestion);
+router.get('/search', _QuestionRoutes2.default.searchQuestion);
 router.get('/questions/:id', _validateToken2.default, _QuestionRoutes2.default.specificQuestion);
 router.get('/question/:username', _validateToken2.default, _QuestionRoutes2.default.getAllQuestionsByUser);
 router.get('/question/:username/mostanswers', _validateToken2.default, _QuestionRoutes2.default.mostAnswers);

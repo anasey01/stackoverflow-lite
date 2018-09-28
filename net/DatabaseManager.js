@@ -222,6 +222,14 @@ class DbManager {
     });
   }
 
+  searchAllQuestion(questionsQuery, callback) {
+    const query = `SELECT * FROM questions where questions.questiontitle ILIKE '%${questionsQuery}%' or questions.questioncontent ILIKE '%${questionsQuery}%'`;
+
+    this.pool.query(query, (error, match) => {
+      callback(error, match.rows);
+    });
+  }
+
   selectQuestionByUsername(username, callback) {
     const query = 'SELECT questions.*, COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid) WHERE questions.username = $1 GROUP BY questions.questionid';
     const value = [username];

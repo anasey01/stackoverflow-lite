@@ -62,6 +62,18 @@ ul {
 .enabled {
     display: inline;
 }
+
+/* search functionality display */
+
+#search-display {
+    margin: 100px 10px 0 10px;
+}
+
+#search-content h2 {
+    text-align: center;
+    margin-top: 10px;
+}
+
 /* Modal Sample gotten from https://www.w3schools.com/howto/howto_css_modals.asp */
 .modal {
     display: none;

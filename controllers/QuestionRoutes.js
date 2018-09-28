@@ -177,6 +177,23 @@ class QuestionRoute {
     });
   }
 
+  static searchQuestion(req, res) {
+    const queryParameter = req.query.q;
+    questionManager.searchQuestion(queryParameter, (error, match) => {
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: 'An error occurred while searching for question',
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        message: 'Search result successful',
+        match,
+      });
+    });
+  }
+
   static notFound(req, res) {
     return res.status(404).json({
       status: false,

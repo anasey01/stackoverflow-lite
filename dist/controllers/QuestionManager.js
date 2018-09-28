@@ -49,6 +49,13 @@ var QuestionManager = function () {
       });
     }
   }, {
+    key: 'searchQuestion',
+    value: function searchQuestion(questionQuery, callback) {
+      this.conn.searchAllQuestion(questionQuery, function (error, match) {
+        callback(error, match);
+      });
+    }
+  }, {
     key: 'createAnswer',
     value: function createAnswer(userId, questionId, answer, answerNumber, username, callback) {
       this.conn.insertAnswer(userId, questionId, answer, answerNumber, username, function (err, result) {

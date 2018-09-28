@@ -211,6 +211,15 @@ var DbManager = function () {
       });
     }
   }, {
+    key: 'searchAllQuestion',
+    value: function searchAllQuestion(questionsQuery, callback) {
+      var query = 'SELECT * FROM questions where questions.questiontitle ILIKE \'%' + questionsQuery + '%\' or questions.questioncontent ILIKE \'%' + questionsQuery + '%\'';
+
+      this.pool.query(query, function (error, match) {
+        callback(error, match.rows);
+      });
+    }
+  }, {
     key: 'selectQuestionByUsername',
     value: function selectQuestionByUsername(username, callback) {
       var query = 'SELECT questions.*, COUNT(answers.questionid) AS noOfAnswer FROM questions LEFT JOIN answers on (questions.questionid = answers.questionid) WHERE questions.username = $1 GROUP BY questions.questionid';
