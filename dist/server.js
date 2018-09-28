@@ -55,6 +55,9 @@ app.use('/questions/:questionId/UI', _express2.default.static(_path2.default.res
 app.get('/', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/index.html'));
 });
+app.get('/search', function (req, res) {
+  return res.sendFile(_path2.default.resolve(__dirname, './../UI/search.html'));
+});
 app.get('/questions/:questionId', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/viewQuestion.html'));
 });

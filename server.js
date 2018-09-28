@@ -19,6 +19,7 @@ app.use('/UI', express.static(path.resolve(__dirname, './../UI/')));
 app.use('/questions/:questionId/UI', express.static(path.resolve(__dirname, './../UI/')));
 
 app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.html')));
+app.get('/search', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/search.html')));
 app.get('/questions/:questionId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/viewQuestion.html')));
 app.get('/questions/:questionId/answers/:answerId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/updateAnswer.html')));
 

@@ -33,6 +33,12 @@ class QuestionManager {
     });
   }
 
+  searchQuestion(questionQuery, callback) {
+    this.conn.searchAllQuestion(questionQuery, (error, match) => {
+      callback(error, match);
+    });
+  }
+
   createAnswer(userId, questionId, answer, answerNumber, username, callback) {
     this.conn.insertAnswer(userId, questionId, answer, answerNumber, username, (err, result) => {
       callback(err, result);

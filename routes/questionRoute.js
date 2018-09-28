@@ -7,6 +7,7 @@ import QuestionRoute from '../controllers/QuestionRoutes';
 const router = express.Router();
 
 router.get('/questions', QuestionRoute.allQuestion);
+router.get('/search', QuestionRoute.searchQuestion);
 router.get('/questions/:id', validateToken, QuestionRoute.specificQuestion);
 router.get('/question/:username', validateToken, QuestionRoute.getAllQuestionsByUser);
 router.get('/question/:username/mostanswers', validateToken, QuestionRoute.mostAnswers);

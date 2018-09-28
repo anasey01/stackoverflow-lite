@@ -221,6 +221,24 @@ var QuestionRoute = function () {
       });
     }
   }, {
+    key: 'searchQuestion',
+    value: function searchQuestion(req, res) {
+      var queryParameter = req.query.q;
+      questionManager.searchQuestion(queryParameter, function (error, match) {
+        if (error) {
+          return res.status(500).json({
+            success: false,
+            message: 'An error occurred while searching for question'
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: 'Search result successful',
+          match: match
+        });
+      });
+    }
+  }, {
     key: 'notFound',
     value: function notFound(req, res) {
       return res.status(404).json({

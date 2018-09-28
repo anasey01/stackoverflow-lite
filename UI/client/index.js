@@ -3,8 +3,8 @@ const signupBtn = document.getElementById('signup');
 const logoutBtn = document.getElementById('logout');
 const dashboard  = document.getElementById('dashboard');
 const questionContainer = document.getElementById('question-container');
-const url = '/api/v1/questions';
 
+const url = '/api/v1/questions';
 const token = localStorage.getItem('x-auth-token');
 
 
