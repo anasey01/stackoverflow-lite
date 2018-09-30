@@ -128,10 +128,18 @@ var QuestionRoute = function () {
     key: 'getAnswer',
     value: function getAnswer(req, res) {
       var questionId = Number(req.params.id);
+      var userComment = req.userComment;
+
       questionManager.getQuestionAndAnswer(questionId, function (err, result) {
+        var data = {
+          answer: {
+            result: result, userComment: userComment
+          }
+        };
         return res.status(200).json({
           success: true,
-          message: result
+          message: 'Successfully retrieved all answers',
+          data: data
         });
       });
     }

@@ -6,6 +6,8 @@ const logout = (e) => {
   localStorage.removeItem('currentUser');
   localStorage.removeItem('currentPathname');
   localStorage.removeItem('currentVoteStats');
+  localStorage.removeItem('currentQuestion');
+  localStorage.removeItem('questionByUser');
   e.preventDefault();
   localStorage.removeItem('x-auth-token');
   setTimeout(() => {

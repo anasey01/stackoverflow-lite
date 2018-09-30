@@ -122,6 +122,20 @@ var QuestionManager = function () {
       });
     }
   }, {
+    key: 'createComments',
+    value: function createComments(userId, questionId, answerId, comment, username, callback) {
+      this.conn.insertComment(userId, questionId, answerId, comment, username, function (error, resComment) {
+        callback(error, resComment);
+      });
+    }
+  }, {
+    key: 'getAllComments',
+    value: function getAllComments(questionId, callback) {
+      this.conn.selectComments(questionId, function (error, comments) {
+        callback(error, comments);
+      });
+    }
+  }, {
     key: 'deleteOne',
     value: function deleteOne(questionId, callback) {
       this.conn.deleteQuestionById(this.table, questionId, function (result, err) {

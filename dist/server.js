@@ -36,6 +36,10 @@ var _votesRoute = require('./routes/votesRoute');
 
 var _votesRoute2 = _interopRequireDefault(_votesRoute);
 
+var _commentRoute = require('./routes/commentRoute');
+
+var _commentRoute2 = _interopRequireDefault(_commentRoute);
+
 var _questionRoute = require('./routes/questionRoute');
 
 var _questionRoute2 = _interopRequireDefault(_questionRoute);
@@ -51,6 +55,7 @@ app.use((0, _cors2.default)());
 app.use(_express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
 app.use('/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
 app.use('/questions/:questionId/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
+app.use('/questions/:questionId/answers/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
 
 app.get('/', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/index.html'));
@@ -64,9 +69,13 @@ app.get('/questions/:questionId', function (req, res) {
 app.get('/questions/:questionId/answers/:answerId', function (req, res) {
   return res.sendFile(_path2.default.resolve(__dirname, './../UI/updateAnswer.html'));
 });
+app.get('/questions/:questionId/answers/:answerId/comment', function (req, res) {
+  return res.sendFile(_path2.default.resolve(__dirname, './../UI/addcomment.html'));
+});
 
 app.use('/api/v1/auth/', _authRoute2.default);
 app.use('/api/v1', _votesRoute2.default);
+app.use('/api/v1', _commentRoute2.default);
 app.use('/api/v1', _questionRoute2.default);
 app.use((0, _morgan2.default)(':method :url :response-time'));
 

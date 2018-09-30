@@ -96,6 +96,18 @@ class QuestionManager {
     });
   }
 
+  createComments(userId, questionId, answerId, comment, username, callback) {
+    this.conn.insertComment(userId, questionId, answerId, comment, username, (error, resComment) => {
+      callback(error, resComment);
+    });
+  }
+
+  getAllComments(questionId, callback) {
+    this.conn.selectComments(questionId, (error, comments) => {
+      callback(error, comments);
+    });
+  }
+
   deleteOne(questionId, callback) {
     this.conn.deleteQuestionById(this.table, questionId, (result, err) => {
       callback(result, err);

@@ -285,6 +285,25 @@ var DbManager = function () {
       });
     }
   }, {
+    key: 'insertComment',
+    value: function insertComment(userId, questionId, answerId, comment, username, callback) {
+      var query = 'INSERT INTO comments (userId, questionId, answerId, comment, username) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+      var values = [userId, questionId, answerId, comment, username];
+
+      this.pool.query(query, values, function (error, resComment) {
+        callback(error, resComment.rows[0]);
+      });
+    }
+  }, {
+    key: 'selectComments',
+    value: function selectComments(questionId, callback) {
+      var query = 'SELECT * FROM comments where comments.questionId=$1';
+      var values = [questionId];
+      this.pool.query(query, values, function (error, allComments) {
+        callback(error, allComments.rows);
+      });
+    }
+  }, {
     key: 'selectVotes',
     value: function selectVotes(questionId, answerId, callback) {
       var query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2';

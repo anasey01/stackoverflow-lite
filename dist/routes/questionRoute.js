@@ -20,6 +20,10 @@ var _inputValidation = require('../middleware/inputValidation');
 
 var _inputValidation2 = _interopRequireDefault(_inputValidation);
 
+var _Comments = require('../controllers/Comments');
+
+var _Comments2 = _interopRequireDefault(_Comments);
+
 var _QuestionRoutes = require('../controllers/QuestionRoutes');
 
 var _QuestionRoutes2 = _interopRequireDefault(_QuestionRoutes);
@@ -35,7 +39,7 @@ router.get('/question/:username', _validateToken2.default, _QuestionRoutes2.defa
 router.get('/question/:username/mostanswers', _validateToken2.default, _QuestionRoutes2.default.mostAnswers);
 router.post('/questions', _inputValidation2.default.postQuestion, _validateToken2.default, _QuestionRoutes2.default.postQuestion);
 router.post('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.addAnswer);
-router.get('/questions/:id/answers', _validateToken2.default, _QuestionRoutes2.default.getAnswer);
+router.get('/questions/:id/answers', _validateToken2.default, _Comments2.default.getComments, _QuestionRoutes2.default.getAnswer);
 router.delete('/questions/:id/', _validateToken2.default, _validateAuthor2.default, _QuestionRoutes2.default.deleteQuestion);
 router.put('/questions/:questionId/answers/:answerNumber', _validateToken2.default, _QuestionRoutes2.default.updateAnswer);
 router.get('*', _QuestionRoutes2.default.notFound);
