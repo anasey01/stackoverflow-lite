@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href=".././UI/css/styles.css">
+    <link rel="stylesheet" href=".././UI/css/viewQuestion.css">
+    <title>Add Comment To Answer | StackOverFlow Lite</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="company-logo">
+                <a href=".././UI/index.html"><h1>Stack <span class="highlight">OverFlow-Lite</span></h1></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href=".././UI/login.html" id="login">Login</a></li>
+                    <li><a href=".././UI/signup.html" id="signup">Sign Up</a></li>
+                    <li><a id="logout" class="disabled">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="main">
+        <aside>
+            <div id="left-sidebar">
+                <nav>
+                    <ul>
+                        <li class="highlight-current"><a href=".././UI/index.html">Home</a></li>
+                        <li><a href=".././UI/recentquestions.html">Recent Questions</a></li>
+                        <li id="hidden"><a href=".././UI/postQuestion.html">Ask a Questions</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <div class="main-content-title">
+            <h1 id="question-title"></h1>
+            <div class="question-content">
+                <p id="question-content">
+                </p>
+                <div class="question-answer">
+                        <p id="comment-message-output"></p>
+                    <form action='#' method="POST">
+                        <label for="comment-answer">Add Comment Here</label>
+                        <textarea name="comment-answer" id="comment-answer" placeholder="Add comment to answer here..."></textarea>
+                        <button id="comment-answer-btn" class="btn question-answer-btn">Add Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-center">
+            <p>StackOverFlow Lite &copy; 2018</p>
+            <p>Designed by <span><a href="https://twitter.com/OluseyiAnani">Anani Oluseyi</a></span></p>
+        </div>
+    </footer>
+    <script src="./../UI/client/logout.js"></script>
+    <script src="./../UI/client/addComment.js"></script>
+</body>
+</html>

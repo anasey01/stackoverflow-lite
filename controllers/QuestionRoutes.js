@@ -93,10 +93,17 @@ class QuestionRoute {
 
   static getAnswer(req, res) {
     const questionId = Number(req.params.id);
+    const { userComment } = req;
     questionManager.getQuestionAndAnswer(questionId, (err, result) => {
+      const data = {
+        answer: {
+          result, userComment,
+        },
+      };
       return res.status(200).json({
         success: true,
-        message: result,
+        message: 'Successfully retrieved all answers',
+        data,
       });
     });
   }

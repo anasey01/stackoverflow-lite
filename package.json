@@ -15,7 +15,7 @@
     "build-test": "npm run clean-test && cd dist && mkdir test && babel ../test -s -d test",
     "clean-routes": "cd dist && rm routes -rf",
     "build-routes": "npm run clean-routes && cd dist && mkdir routes && babel ../routes -s -d routes",
-    "build": "npm run clean && mkdir dist && babel server.js model/dbConfig.js controllers/QuestionManager.js controllers/QuestionRoutes.js controllers/UserManager.js controllers/UsersRoute.js controllers/Votes.js net/DatabaseManager.js middleware/validateToken.js middleware/inputValidation.js middleware/validateAuthor.js -s -d dist && npm run build-routes && npm run build-test",
+    "build": "npm run clean && mkdir dist && babel server.js model/dbConfig.js controllers/QuestionManager.js controllers/QuestionRoutes.js controllers/UserManager.js controllers/UsersRoute.js controllers/Votes.js controllers/Comments.js net/DatabaseManager.js middleware/validateToken.js middleware/inputValidation.js middleware/validateAuthor.js -s -d dist && npm run build-routes && npm run build-test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "test": "cross-env NODE_ENV=test npm run migration && cross-env NODE_ENV=test npm run clean-test && cross-env NODE_ENV=test npm run build-test && cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 10000 \"dist/test/routes/routeTest.js\" --exit",
     "production": "cross-env NODE_ENV=production npm run build && cross-env NODE_ENV=production npm run build-routes && cross-env NODE_ENV=production npm run migration && cross-env NODE_ENV=production node bin/production",

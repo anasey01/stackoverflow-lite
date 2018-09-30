@@ -290,6 +290,23 @@ class DbManager {
     });
   }
 
+  insertComment(userId, questionId, answerId, comment, username, callback) {
+    const query = 'INSERT INTO comments (userId, questionId, answerId, comment, username) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+    const values = [userId, questionId, answerId, comment, username];
+
+    this.pool.query(query, values, (error, resComment) => {
+      callback(error, resComment.rows[0]);
+    });
+  }
+
+  selectComments(questionId, callback) {
+    const query = 'SELECT * FROM comments WHERE comments.questionId=$1';
+    const values = [questionId];
+    this.pool.query(query, values, (error, allComments) => {
+      callback(error, allComments.rows);
+    });
+  }
+
   selectVotes(questionId, answerId, callback) {
     const query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2';
     const values = [questionId, answerId];
