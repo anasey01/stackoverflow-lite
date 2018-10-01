@@ -16,6 +16,10 @@ var _dbConfig = require('../model/dbConfig');
 
 var _dbConfig2 = _interopRequireDefault(_dbConfig);
 
+var _helper = require('../helper/helper');
+
+var _helper2 = _interopRequireDefault(_helper);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45,29 +49,29 @@ var DbManager = function () {
       var votesQuery = '\n    CREATE TABLE IF NOT EXISTS votes(\n      voteId SERIAL NOT NULL PRIMARY KEY,\n      upvotes INTEGER NOT NULL,\n      downvotes INTEGER NOT NULL,\n      username varchar(25) REFERENCES users(username) ON DELETE CASCADE,\n      questionId INTEGER REFERENCES questions(questionId) ON DELETE CASCADE,\n      userId INTEGER REFERENCES users(userId) ON DELETE CASCADE,\n      answerId INTEGER REFERENCES answers(answerId) ON DELETE CASCADE,\n      createdAt TIMESTAMP NOT NULL DEFAULT NOW()\n    );';
 
       this.pool.query(usersQuery).then(function (data) {
-        console.log('Users Table Created');
+        _helper2.default.log('Users Table Created');
         _this.pool.query(questionsQuery).then(function (data) {
-          console.log('Questions Table Created');
+          _helper2.default.log('Questions Table Created');
           _this.pool.query(answersQuery).then(function (data) {
-            console.log('Answers Table Created');
+            _helper2.default.log('Answers Table Created');
             _this.pool.query(commentsQuery).then(function (data) {
-              console.log('comments Table Created');
+              _helper2.default.log('comments Table Created');
               _this.pool.query(votesQuery).then(function (data) {
-                console.log('Votes table Created');
+                _helper2.default.log('Votes table Created');
               }).catch(function (err) {
-                return console.log('Err creating votes table', err);
+                return _helper2.default.log('Err creating votes table', err);
               });
             }).catch(function (err) {
-              return console.log('Error creating comments table', err);
+              return _helper2.default.log('Error creating comments table', err);
             });
           }).catch(function (err) {
-            return console.log('Error creating Answers table', err);
+            return _helper2.default.log('Error creating Answers table', err);
           });
         }).catch(function (err) {
-          return console.log('Error creating Quesions table', err);
+          return _helper2.default.log('Error creating Quesions table', err);
         });
       }).catch(function (err) {
-        return console.log('Error creating Users table', err);
+        return _helper2.default.log('Error creating Users table', err);
       });
     }
   }, {
@@ -273,15 +277,27 @@ var DbManager = function () {
       });
     }
   }, {
-    key: 'insertVotes',
-    value: function insertVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
+    key: 'insertUpvotes',
+    value: function insertUpvotes(questionId, answerId, userId, username, callback) {
       var query = {
         name: 'insert-votes',
-        text: 'INSERT INTO votes (' + currentVote + ', ' + otherVote + ', questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+        text: 'INSERT INTO votes (upvotes, downvotes, questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
         values: [1, 0, questionId, userId, answerId, username]
       };
-      this.pool.query(query, function (error, vote) {
-        callback(error, vote.rows[0]);
+      this.pool.query(query, function (error, upvote) {
+        callback(error, upvote.rows);
+      });
+    }
+  }, {
+    key: 'insertDownvotes',
+    value: function insertDownvotes(questionId, answerId, userId, username, callback) {
+      var query = {
+        name: 'insert-votes',
+        text: 'INSERT INTO votes (upvotes, downvotes, questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6)',
+        values: [0, 1, questionId, userId, answerId, username]
+      };
+      this.pool.query(query, function (error, downvote) {
+        callback(error, downvote.rows);
       });
     }
   }, {
@@ -304,12 +320,41 @@ var DbManager = function () {
       });
     }
   }, {
-    key: 'selectVotes',
-    value: function selectVotes(questionId, answerId, callback) {
-      var query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2';
-      var values = [questionId, answerId];
+    key: 'selectUpvotes',
+    value: function selectUpvotes(questionId, answerId, callback) {
+      var query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2 AND votes.upvotes = $3';
+      var values = [questionId, answerId, 1];
       this.pool.query(query, values, function (error, allVotes) {
         callback(error, allVotes.rows);
+      });
+    }
+  }, {
+    key: 'selectDownvotes',
+    value: function selectDownvotes(questionId, answerId, callback) {
+      var query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2 AND votes.downvotes = $3';
+      var values = [questionId, answerId, 1];
+      this.pool.query(query, values, function (error, allDownvotes) {
+        callback(error, allDownvotes.rows);
+      });
+    }
+  }, {
+    key: 'insertTotalNumberOfUpvotes',
+    value: function insertTotalNumberOfUpvotes(questionId, answerId, totalUpvotes, callback) {
+      var query = 'UPDATE answers SET upvotes = $1 WHERE answernumber = $2 AND questionid = $3 RETURNING *';
+      var values = [totalUpvotes, answerId, questionId];
+
+      this.pool.query(query, values, function (error, data) {
+        callback(error, data.rows);
+      });
+    }
+  }, {
+    key: 'insertTotalNumberOfDownvotes',
+    value: function insertTotalNumberOfDownvotes(questionId, answerId, totalDownvotes, callback) {
+      var query = 'UPDATE answers SET downvotes = $1 WHERE answernumber = $2 AND questionid = $3 RETURNING *';
+      var values = [totalDownvotes, answerId, questionId];
+
+      this.pool.query(query, values, function (error, data) {
+        callback(error, data.rows);
       });
     }
   }, {

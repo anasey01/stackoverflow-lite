@@ -84,16 +84,40 @@ class QuestionManager {
     });
   }
 
-  createVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
-    this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, (err, vote) => {
+  createUpvotes(questionId, answerId, userId, username, callback) {
+    this.conn.insertUpvotes(questionId, answerId, userId, username, (err, vote) => {
       callback(err, vote);
     });
   }
 
-  getVotes(questionId, answerId, callback) {
-    this.conn.selectVotes(questionId, answerId, (err, allVotes) => {
-      callback(err, allVotes);
+  createDownvotes(questionId, answerId, userId, username, callback) {
+    this.conn.insertDownvotes(questionId, answerId, userId, username, (err, vote) => {
+      callback(err, vote);
     });
+  }
+
+  getUpvotes(questionId, answerId, callback) {
+    this.conn.selectUpvotes(questionId, answerId, (err, upvotes) => {
+      callback(err, upvotes);
+    });
+  }
+
+  getDownvotes(questionId, answerId, callback) {
+    this.conn.selectDownvotes(questionId, answerId, (err, upvotes) => {
+      callback(err, upvotes);
+    });
+  }
+
+  updateAnswerWithUpvotes(questionId, answerId, totalUpvotes, callback) {
+    this.conn.insertTotalNumberOfUpvotes(questionId, answerId, totalUpvotes, (error, data) => {
+      callback(error, data);
+    })
+  }
+
+  updateAnswerWithDownvotes(questionId, answerId, totalDownvotes, callback) {
+    this.conn.insertTotalNumberOfDownvotes(questionId, answerId, totalDownvotes, (error, data) => {
+      callback(error, data);
+    })
   }
 
   createComments(userId, questionId, answerId, comment, username, callback) {

@@ -32,7 +32,6 @@ fetch(url, {
   .then((data) => {
     if (data.success !== false) {
       data.questions.forEach((question) => {
-        console.log(question)
         let date = question.createdat.toString();
         const hrefUrl = `/questions/${question.questionid}`;
         let questionsCard = `<div class="question-summary">

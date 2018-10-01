@@ -108,17 +108,45 @@ var QuestionManager = function () {
       });
     }
   }, {
-    key: 'createVotes',
-    value: function createVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
-      this.conn.insertVotes(questionId, answerId, userId, currentVote, otherVote, username, function (err, vote) {
+    key: 'createUpvotes',
+    value: function createUpvotes(questionId, answerId, userId, username, callback) {
+      this.conn.insertUpvotes(questionId, answerId, userId, username, function (err, vote) {
         callback(err, vote);
       });
     }
   }, {
-    key: 'getVotes',
-    value: function getVotes(questionId, answerId, callback) {
-      this.conn.selectVotes(questionId, answerId, function (err, allVotes) {
-        callback(err, allVotes);
+    key: 'createDownvotes',
+    value: function createDownvotes(questionId, answerId, userId, username, callback) {
+      this.conn.insertDownvotes(questionId, answerId, userId, username, function (err, vote) {
+        callback(err, vote);
+      });
+    }
+  }, {
+    key: 'getUpvotes',
+    value: function getUpvotes(questionId, answerId, callback) {
+      this.conn.selectUpvotes(questionId, answerId, function (err, upvotes) {
+        callback(err, upvotes);
+      });
+    }
+  }, {
+    key: 'getDownvotes',
+    value: function getDownvotes(questionId, answerId, callback) {
+      this.conn.selectDownvotes(questionId, answerId, function (err, upvotes) {
+        callback(err, upvotes);
+      });
+    }
+  }, {
+    key: 'updateAnswerWithUpvotes',
+    value: function updateAnswerWithUpvotes(questionId, answerId, totalUpvotes, callback) {
+      this.conn.insertTotalNumberOfUpvotes(questionId, answerId, totalUpvotes, function (error, data) {
+        callback(error, data);
+      });
+    }
+  }, {
+    key: 'updateAnswerWithDownvotes',
+    value: function updateAnswerWithDownvotes(questionId, answerId, totalDownvotes, callback) {
+      this.conn.insertTotalNumberOfDownvotes(questionId, answerId, totalDownvotes, function (error, data) {
+        callback(error, data);
       });
     }
   }, {
