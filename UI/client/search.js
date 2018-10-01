@@ -34,7 +34,7 @@ const search = () => {
                           <h3><a href=${questionMatchUrl}>${quesMatch.questiontitle}</a></h3>
                       </div>
                       <div class="asked-by">
-                        <a class="asked-by-time">${quesMatch.createdat}</a>
+                        <a class="asked-by-time">${calculateTiming(quesMatch.createdat.toString())}</a>
                         <a class="asked-by-author" href="#">${quesMatch.username}</a>
                         </div>
                       </div>`;

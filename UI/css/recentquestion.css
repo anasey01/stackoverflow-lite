@@ -3,11 +3,11 @@ main.container{
 }
 
 div.main-content-title{
-    width: 80%;
+    width: 75%;
 }
 
 main#main-recent-question.container{
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 h1#recent-title{
@@ -29,3 +29,4 @@ h1#recent-title{
         margin-top: 50px;
     }
 }
+

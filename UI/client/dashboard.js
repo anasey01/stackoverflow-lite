@@ -24,6 +24,7 @@ window.onload = (e) => {
         currentTab.innerHTML = `All Questions Asked By ${currentUserOnDashboard}`;
         let cardQuestion = '';
         allQuestions.userQuestions.forEach((que) => {
+          let questionData = que.createdat.toString();
           const questionUrlhref = `/questions/${que.questionid}`;
           cardQuestion = `
           <div class="question-summary">
@@ -32,7 +33,7 @@ window.onload = (e) => {
           </div>
           <div class="asked-by">
         <span class="number-of-answers"> ${que.noofanswer}<span> answer</span></span>
-              <a class="asked-by-time"> ${que.createdat}</a>
+              <a class="asked-by-time"> ${calculateTiming(questionData)}</a>
               <a class="asked-by-author" href="#"> ${que.username}</a>
           </div>
       </div>`;

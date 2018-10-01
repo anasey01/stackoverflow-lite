@@ -31,22 +31,22 @@ fetch(url, {
   })
   .then((data) => {
     if (data.success !== false) {
-      let questionsCard = '';
-      const lastQuestion = data.questions.length - 1;
-      for (let i = lastQuestion; i >= 0; i -= 1) {
-        const hrefUrl = `/questions/${data.questions[i].questionid}`;
-        questionsCard = `<div class="question-summary">
+      data.questions.forEach((question) => {
+        console.log(question)
+        let date = question.createdat.toString();
+        const hrefUrl = `/questions/${question.questionid}`;
+        let questionsCard = `<div class="question-summary">
                               <div class="summary">
-                              <h3><a href=${hrefUrl}>${data.questions[i].questiontitle}</a></h3>
+                              <h3><a class="summary-title" href=${hrefUrl}>${question.questiontitle}</a></h3>
                           </div>
-                          <div class="asked-by">
-                            <span class="number-of-answers">${data.questions[i].noofanswer} <span>answer</span></span>
-                            <a class="asked-by-time">${data.questions[i].createdat}</a>
-                            <a class="asked-by-author" href="#">${data.questions[i].username}</a>
+                          <div class="answer-stats">
+                            <span class="number-of-answers">${question.noofanswer} <span>answer</span></span>
+                            <a class="asked-by-time">${calculateTiming(date)}</a>
+                            <a class="asked-by-author" href="#">${question.username}</a>
                           </div>
                         </div>`;
 
         questionContainer.innerHTML += questionsCard;
-      }
+      });
     }
   });

@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 body{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 15px;
     line-height: 1.5;
     background-color: #f4f4f4;
@@ -50,9 +50,13 @@ ul {
 }
 
 .question-content{
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Lato', sans-serif;
     line-height: 2.0;
     text-align: justify;
+}
+
+a.summary-title {
+    font-weight: 900;
 }
 
 .disabled {
@@ -63,6 +67,17 @@ ul {
     display: inline;
 }
 
+.error {
+    list-style: none;
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+
+.success {
+    list-style: none;
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
 /* search functionality display */
 
 #search-display {
@@ -251,7 +266,7 @@ aside#left-sidebar {
     margin:25px 25px 0 0;
     padding: 0;
     float:left;
-    min-width: 15%;
+    min-width: 20%;
     min-height: 550px;
     border-right: 2px solid rgba(102,102,102, 0.3);
 }
@@ -284,7 +299,7 @@ main:after{
 
 /*Content title */
 div.main-content-title{
-    width: 55%;
+    width: 70%;
     min-height: 100%;
     float: left;
     overflow: hidden;
@@ -317,7 +332,7 @@ div.main-content-title{
 }
 
 .question-summary{
-    margin-top: 20px;
+    padding: 10px;
     border-bottom:1px solid rgba(102,102,102, 0.1);
 }
 .summary{
@@ -333,15 +348,32 @@ div.main-content-title{
     color:rgb(0,89,153, 0.4);
 }
 
+.answer-stats {
+    margin-top: 10px;
+    height: 20px;
+}
+
 .asked-by-author{
     text-decoration: none;
-    color: rgb(0,89,153);
+    background: rgb(0,89,153, 0.8);
+    color: #fff;
+    padding: 8px;
+    margin: 3px;
 }
 
-.asked-by-author:hover{
-    color:rgb(0,89,153, 0.4);
+.asked-by-time {
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    padding: 8px;
+    margin: 3px;
 }
 
+.number-of-answers {
+    background: #0adac0;
+    color: #fff;
+    padding: 8px;
+    margin: 3px;
+}
 footer{
     background-color: #161925;
     min-height: 80px;
@@ -419,7 +451,7 @@ footer a:hover{
         float: none;
         border-right:none;
         margin:25px 0 5px 0;
-        min-height:30px;
+        min-height:20%;
     }
     #left-sidebar ul li{
         display: inline-block;
@@ -445,6 +477,39 @@ footer a:hover{
         text-align: center;
     }
 
+}
+
+@media (max-width: 414px) {
+    body {
+        padding: 0px;
+    }
+    div.container {
+        width:90%;
+    }
+
+    div.main-content-title {
+      padding: 0px;
+       width: 100%;
+    }
+
+    div.main-content-title h1{
+        margin-top: 10px;
+        font-size: 25px;
+      }
+
+    aside#left-sidebar nav ul li a {
+        font-size: 18px;
+    }
+
+    div.question-summary{
+        padding: 0px;
+        margin-bottom: 10px;
+    }
+    div.answer-stats {
+        width: 100%;
+        height:20%;
+        font-size: 12px;
+    }
 }
 
 @media(max-width:282px){

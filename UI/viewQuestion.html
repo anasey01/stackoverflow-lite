@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href=".././UI/css/styles.css">
     <link rel="stylesheet" href="../UI/css/viewQuestion.css">
     <title>view Question | StackOverFlow Lite</title>
@@ -17,13 +19,14 @@
             <nav>
                 <ul>
                     <li><a href=".././UI/login.html" id="login">Login</a></li>
+                    <li><a href="./../UI/dashboard.html" id="dashboard">Dashboard</a></li>
                     <li><a href=".././UI/signup.html" id="signup">Sign Up</a></li>
                     <li><a id="logout" class="disabled">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
-    <div class="main">
+    <div class="main container">
         <aside>
             <div id="left-sidebar">
                 <nav>
@@ -47,13 +50,14 @@
             <div class="question-content">
                 <p id="question-content">
                 </p>
-                <div>
-                    <p> Author:
-                        <span id="question-author"></span>
-                        Posted on:
+                <div id="question-data-btns">
+                    <p class="asked-by-author" id="question-auth">
+                        <span id="question-author" ></span>
+                        </p>
+                        <p class="asked-by-time" id="question-time">
                         <span id="creation-date"></span>
                     </p>
-                    <div>
+                    <div id="deleteQuestion">
                         <a href="" class="btn deleteBtn" id="deleteQuestion">Delete Question</a>
                     </div>
                 </div>
@@ -61,13 +65,13 @@
                         <p id="message-output"></p>
                     <form action='#' method="POST">
                         <label for="question-answer">Your Answer Here</label>
-                        <textarea name="question-answer" id="question-answer"></textarea>
+                        <textarea name="question-answer" id="question-answer" placeholder="Enter your answer here..."></textarea>
                         <button id="answer-btn" class="btn question-answer-btn">Post Your Answer</button>
                     </form>
                 </div>
             </div>
             <div class="answers-section" >
-                <p><a href="#"><span class="number-of-answers" id="number-of-answer"> </span> answer</a></p>
+                <p class="number-of-answers" id="answer-count"><a href="#"><span id="number-of-answer"> </span> answer</a></p>
                 <h2>Answers</h2>
                 <div id="answer-container"></div>
             </div>
@@ -79,6 +83,7 @@
             <p>Designed by <span><a href="https://twitter.com/OluseyiAnani">Anani Oluseyi</a></span></p>
         </div>
     </footer>
+    <script src=".././UI/js/datetimeformat.js"></script>
     <script src=".././UI/client/logout.js"></script>
     <script src=".././UI/client/postAnswer.js"></script>
     <script src=".././UI/client/viewQuestion.js"></script>

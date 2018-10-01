@@ -37,10 +37,11 @@ fetch(url, {
     if(data.message === 'error') {
       window.location.replace('./../UI/login.html');
     } else {
+      const postedDate = calculateTiming(data.question.createdat.toString());
       questionTitle.innerHTML = data.question.questiontitle;
       questionContent.innerHTML = data.question.questioncontent;
       questionAuthor.innerHTML = data.question.username;
-      creationDate.innerHTML = data.question.createdat;
+      creationDate.innerHTML = postedDate;
       localStorage.setItem('currentAuthor', data.question.username);
       if (data.question.username !== currentLoggedInUser) {
         deleteQuestBtn.classList.add('disabled');

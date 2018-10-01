@@ -25,6 +25,7 @@ app.get('/search', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/s
 app.get('/questions/:questionId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/viewQuestion.html')));
 app.get('/questions/:questionId/answers/:answerId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/updateAnswer.html')));
 app.get('/questions/:questionId/answers/:answerId/comment', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/addcomment.html')));
+// app.get('*', (req, res) => path.resolve(__dirname, './../UI/404.html'));
 
 app.use('/api/v1/auth/', authRouter);
 app.use('/api/v1', voteRoute);

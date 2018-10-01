@@ -297,7 +297,7 @@ var DbManager = function () {
   }, {
     key: 'selectComments',
     value: function selectComments(questionId, callback) {
-      var query = 'SELECT * FROM comments where comments.questionId=$1';
+      var query = 'SELECT * FROM comments WHERE comments.questionId=$1';
       var values = [questionId];
       this.pool.query(query, values, function (error, allComments) {
         callback(error, allComments.rows);

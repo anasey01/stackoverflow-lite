@@ -30,12 +30,12 @@ const loginUser = (e) => {
     })
     .then((data) => {
       if (data.message === 'error') {
-        messageOutput.innerHTML = '<li>Username or Password incorrect</li>';
+        messageOutput.innerHTML = '<li class="error">Username or Password incorrect</li>';
         username.value = '';
         password.value = '';
       } else {
         const messageInfo = `<ul>
-                              <li>${data.message}</li>
+                              <li class="success">${data.message}</li>
                           </ul>`;
         messageOutput.innerHTML = messageInfo;
         localStorage.setItem('x-auth-token', data.token);
