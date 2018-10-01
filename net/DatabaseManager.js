@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 import bcrypt from 'bcrypt';
 import config from '../model/dbConfig';
+import helper from '../helper/helper';
 
 class DbManager {
   constructor() {
@@ -70,24 +71,24 @@ class DbManager {
 
     this.pool.query(usersQuery)
       .then((data) => {
-        console.log('Users Table Created');
+        helper.log('Users Table Created');
         this.pool.query(questionsQuery)
           .then((data) => {
-            console.log('Questions Table Created');
+            helper.log('Questions Table Created');
             this.pool.query(answersQuery)
               .then((data) => {
-                console.log('Answers Table Created');
+                helper.log('Answers Table Created');
                 this.pool.query(commentsQuery)
                   .then((data) => {
-                    console.log('comments Table Created');
+                    helper.log('comments Table Created');
                     this.pool.query(votesQuery)
                       .then((data) => {
-                        console.log('Votes table Created');
-                      }).catch(err => console.log('Err creating votes table', err));
-                  }).catch(err => console.log('Error creating comments table', err));
-              }).catch(err => console.log('Error creating Answers table', err));
-          }).catch(err => console.log('Error creating Quesions table', err));
-      }).catch(err => console.log('Error creating Users table', err));
+                        helper.log('Votes table Created');
+                      }).catch(err => helper.log('Err creating votes table', err));
+                  }).catch(err => helper.log('Error creating comments table', err));
+              }).catch(err => helper.log('Error creating Answers table', err));
+          }).catch(err => helper.log('Error creating Quesions table', err));
+      }).catch(err => helper.log('Error creating Users table', err));
   }
 
   insertUser(fullname, gender, username, password, email, callback) {
@@ -279,14 +280,25 @@ class DbManager {
     });
   }
 
-  insertVotes(questionId, answerId, userId, currentVote, otherVote, username, callback) {
+  insertUpvotes(questionId, answerId, userId, username, callback) {
     const query = {
       name: 'insert-votes',
-      text: `INSERT INTO votes (${currentVote}, ${otherVote}, questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      text: 'INSERT INTO votes (upvotes, downvotes, questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       values: [1, 0, questionId, userId, answerId, username],
     };
-    this.pool.query(query, (error, vote) => {
-      callback(error, vote.rows[0]);
+    this.pool.query(query, (error, upvote) => {
+      callback(error, upvote.rows);
+    });
+  }
+
+  insertDownvotes(questionId, answerId, userId, username, callback) {
+    const query = {
+      name: 'insert-votes',
+      text: 'INSERT INTO votes (upvotes, downvotes, questionid, userid, answerid, username) VALUES ($1, $2, $3, $4, $5, $6)',
+      values: [0, 1, questionId, userId, answerId, username],
+    };
+    this.pool.query(query, (error, downvote) => {
+      callback(error, downvote.rows);
     });
   }
 
@@ -307,11 +319,37 @@ class DbManager {
     });
   }
 
-  selectVotes(questionId, answerId, callback) {
-    const query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2';
-    const values = [questionId, answerId];
+  selectUpvotes(questionId, answerId, callback) {
+    const query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2 AND votes.upvotes = $3';
+    const values = [questionId, answerId, 1];
     this.pool.query(query, values, (error, allVotes) => {
       callback(error, allVotes.rows);
+    });
+  }
+
+  selectDownvotes(questionId, answerId, callback) {
+    const query = 'SELECT * FROM votes WHERE votes.questionid = $1 AND votes.answerid = $2 AND votes.downvotes = $3';
+    const values = [questionId, answerId, 1];
+    this.pool.query(query, values, (error, allDownvotes) => {
+      callback(error, allDownvotes.rows);
+    });
+  }
+
+  insertTotalNumberOfUpvotes(questionId, answerId, totalUpvotes, callback) {
+    const query = 'UPDATE answers SET upvotes = $1 WHERE answernumber = $2 AND questionid = $3 RETURNING *';
+    const values = [totalUpvotes, answerId, questionId];
+
+    this.pool.query(query, values, (error, data) => {
+      callback(error, data.rows);
+    });
+  }
+
+  insertTotalNumberOfDownvotes(questionId, answerId, totalDownvotes, callback) {
+    const query = 'UPDATE answers SET downvotes = $1 WHERE answernumber = $2 AND questionid = $3 RETURNING *';
+    const values = [totalDownvotes, answerId, questionId];
+
+    this.pool.query(query, values, (error, data) => {
+      callback(error, data.rows);
     });
   }
 

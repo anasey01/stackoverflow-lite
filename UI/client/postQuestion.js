@@ -32,7 +32,7 @@ const postQuestion = (e) => {
     })
     .then((data) => {
       if (data.message === 'Unauthorized') {
-        messageOutput.innerHTML = '<li>There was a problem posting your question</li>';
+        messageOutput.innerHTML = '<li class="error">There was a problem posting your question</li>';
       } else {
         const messageInfo = `<ul>
                                 <li>${data.message}</li>

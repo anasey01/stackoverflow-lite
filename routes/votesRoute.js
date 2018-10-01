@@ -4,9 +4,7 @@ import Votes from '../controllers/Votes';
 
 const voteRouter = express.Router();
 
-voteRouter.get('/questions/:questionId/answers/:answerId/upvote', validateToken, Votes.getAllVotes);
-voteRouter.get('/questions/:questionId/answers/:answerId/downvote', validateToken, Votes.getAllVotes);
-voteRouter.post('/questions/:questionId/answers/:answerId/upvote', validateToken, Votes.upvote);
-voteRouter.post('/questions/:questionId/answers/:answerId/downvote', validateToken, Votes.downvote);
+voteRouter.post('/questions/:questionId/answers/:answerId/upvote', validateToken, Votes.upvote, Votes.getTotalUpvotes, Votes.saveUpvotes);
+voteRouter.post('/questions/:questionId/answers/:answerId/downvote', validateToken, Votes.downvote, Votes.getTotalDownvotes, Votes.saveDownvotes);
 
 export default voteRouter;
