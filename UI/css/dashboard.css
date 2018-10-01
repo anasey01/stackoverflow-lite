@@ -18,3 +18,25 @@ footer{
     bottom:0;
     width:100%;
  }
+
+ @media(max-width:414px){
+    #left-sidebar nav ul li {
+         display: block;
+     }
+
+     #currentTab {
+         font-size: 18px;
+     }
+     span.number-of-answers, a.asked-by-time, a.asked-by-author {
+         font-size: 12px;
+     }
+ }
+
+ @media(min-width: 768px) {
+    .main-content-title {
+        margin-top: 5px;
+    }
+    div.main-content-title {
+        width: 100%;
+    }
+ }

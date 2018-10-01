@@ -1,4 +1,5 @@
 const currentTextMostAnswer = document.getElementById('text-most-answered');
+const selectCurrentUser = document.getElementById('dashboard-username');
 const allQuestionByUser = document.getElementById('allquestion');
 const mostAnsweredCurrentUser = localStorage.getItem('currentUser');
 const textContentMostAnswer = document.getElementById('text-content-most');
@@ -18,8 +19,10 @@ fetch(mostAnsweredQuestionUrl, {
   .then((mostAnswers) => {
     if (mostAnswers.success === true) {
       currentTextMostAnswer.innerHTML = `Most Answers to Question By ${mostAnsweredCurrentUser}`;
+      selectCurrentUser.innerHTML = mostAnsweredCurrentUser;
       let cardQuestion = '';
       mostAnswers.mostAnswers.forEach((que) => {
+        let mostQuestionDate = que.createdat.toString();
         const questionUrlhref = `/questions/${que.questionid}`;
         cardQuestion = `
             <div class="question-summary">
@@ -28,7 +31,7 @@ fetch(mostAnsweredQuestionUrl, {
             </div>
             <div class="asked-by">
           <span class="number-of-answers"> ${que.noofanswer}<span> answer</span></span>
-                <a class="asked-by-time"> ${que.createdat}</a>
+                <a class="asked-by-time"> ${calculateTiming(mostQuestionDate)}</a>
                 <a class="asked-by-author" href="#"> ${que.username}</a>
             </div>
         </div>`;

@@ -64,17 +64,16 @@ const getAnswer = () => {
 
         if (formatedData[currentAnswerIndex].userComments.length > 0) {
           formatedData[currentAnswerIndex].userComments.forEach((com) => {
+            let createdDate = com.createdAt.toString();
 
             let displayCard = `<div class="answers-by-others">
                 <p id="username" class="name">${username}</p>
                 <p class="answer-by-others-content">${answer}</p>
-                <p><a id="visibility" href=${editAnswerUrl}>Edit Answer<a/></p>
-                <p><a id="add-comment" href=${commentUrl}>Add Comment</a></p>
-                <p id="interactions"><a id="upvotes" href=${upvoteUrl}>upvote <span id="upvoteDisplay">${upvotes} </span></a><a id="downvotes" href=${downvoteUrl}> downvote <span id="downvoteDisplay">${downvotes} </span></a> <a id="preferred" href=>Mark as preferred <span id="markAnswerDisplay"> ${accepted} </span></a></p>
+                <p class="edit-container"><a id="visibility" class="edit-answer" href=${editAnswerUrl}>Edit Answer<a/></p>
+                <p class="comment-container"><a id="add-comment" href=${commentUrl}>Add Comment</a></p>
+                <p id="interactions"><a id="upvotes" href=${upvoteUrl}> upvote <span id="upvoteDisplay"> ${upvotes} </span></a> <a id="downvotes" href=${downvoteUrl}> downvote <span id="downvoteDisplay"> ${downvotes} </span></a> <a id="preferred" href=''> preferred <span id="markAnswerDisplay"> ${accepted} </span></a></p>
                 <div id="comment-container" class="comment-section">
-                    <div>
-                        <span id="comment-text">${com.comment} </span><span id="comment-author"> ${com.username}</span><span id="createdAtComment">${com.createdAt}</span>
-                    </div>
+                  <span id="comment-text">${com.comment} </span><span id="comment-author"> ${com.username}</span><span id="createdAtComment">${calculateTiming(createdDate)}</span>
                 </div>
             </div>`;
             answerContainer.innerHTML += displayCard;
@@ -85,7 +84,7 @@ const getAnswer = () => {
           <p class="answer-by-others-content">${answer}</p>
           <p><a id="visibility" href=${editAnswerUrl}>Edit Answer<a/></p>
           <p><a id="add-comment" href=${commentUrl}>Add Comment</a></p>
-          <p id="interactions"><a id="upvotes" href=${upvoteUrl}>upvote <span id="upvoteDisplay">${upvotes} </span></a><a id="downvotes" href=${downvoteUrl}> downvote <span id="downvoteDisplay">${downvotes} </span></a> <a id="preferred" href=>Mark as preferred <span id="markAnswerDisplay"> ${accepted} </span></a></p>
+          <p id="interactions"><a id="upvotes" href=${upvoteUrl}> upvote <span id="upvoteDisplay"> ${upvotes} </span></a><a id="downvotes" href=${downvoteUrl}> downvote <span id="downvoteDisplay"> ${downvotes} </span></a> <a id="preferred" href=''> preferred <span id="markAnswerDisplay"> ${accepted} </span></a></p>
           </div>`;
           answerContainer.innerHTML += answerCard;
         }

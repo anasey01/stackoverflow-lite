@@ -25,9 +25,74 @@
 }
 
 .question-answer textarea {
-    min-width: 500px;
-    min-height: 250px;
+    width: 75%;
+    height: 300px;;
+    outline: none;
+    border: 1px solid #666;
+    box-shadow: 0 0 5px #666;
     resize: none;
+}
+
+div.answers-by-others{
+    margin-bottom: 5px;
+}
+
+p#interactions {
+    margin-top: 15px;
+}
+
+a#upvotes, a#downvotes, a#preferred {
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+span#comment-author, span#createdAtComment {
+    float: right;
+    background: rgba(102,102,102, 0.8);
+    color: #fff;
+    padding-right: 10px;
+}
+
+#answer-count {
+    width: 15px;
+    display: inline;
+}
+
+p #answer-count.number-of-answers a {
+    text-decoration: none;
+}
+
+#answer-count a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.edit-container {
+    text-decoration: none;
+    background-color: #666;
+    color: #fff;
+    padding: 8px;
+    display: inline;
+}
+
+a#visibility.edit-answer {
+    text-decoration: none;
+    color: #fff;
+}
+
+p #add-comment {
+    background-color: #666;
+    padding: 8px;
+    display: inline;
+}
+
+a#add-comment {
+    text-decoration: none;
+    color: #fff;
+}
+
+.comment-container {
+    display: inline;
 }
 
 .question-answer-btn {
@@ -35,6 +100,31 @@
     height: 30px;
     border: 0;
     padding: 5px;
+}
+
+#question-title {
+    font-size:28px;
+}
+
+#question-content {
+    font-size: 15.5px;
+    margin-bottom: 15px;
+}
+
+#question-auth {
+    display: inline;
+}
+
+#question-time {
+    display: inline;
+}
+
+#deleteQuestion {
+    display: inline;
+}
+
+.deleteBtn{
+    padding: 8px;
 }
 
 /* answers Section */
@@ -52,8 +142,49 @@
     border-bottom: 1px solid #666;
 }
 
-@media(max-width:282px){
-    header a{
-        font-size: 12px;
+.answers-by-others p {
+    margin-bottom: 5px;
+}
+
+@media (min-width:1024px) {
+    .main {
+        margin-top: 50px;
+    }
+    .question-answer textarea {
+        width: 100%;
     }
 }
+
+@media (min-width: 768px) {
+    div.main-content-title {
+        width: 77%;
+    }
+
+    .question-answer textarea {
+        width: 100%;
+    }
+   }
+
+
+@media(max-width:414px){
+   p#question-auth.asked-by-author, p#question-time.asked-by-time, a#deleteQuestion.btn.deleteBtn{
+    font-size: 1em;
+    text-align: center;
+    /* display: block; */
+    width: 50%;
+    padding: 2%;
+   }
+
+   .question-content p, .deleteBtn {
+       margin-top: 5px;
+   }
+
+   .question-answer textarea {
+       width: 100%;
+   }
+
+   #question-content {
+       width: 100%;
+   }
+}
+  
