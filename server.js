@@ -1,37 +1,22 @@
-import expressValidator from 'express-validator';
 import express from 'express';
 import morgan from 'morgan';
-import cors from 'cors';
-import path from 'path';
 import bodyParser from 'body-parser';
-import authRouter from './routes/authRoute';
-import voteRoute from './routes/votesRoute';
-import commentRoute from './routes/commentRoute';
-import questionRoute from './routes/questionRoute';
+import userRoutes from './v1/routes/usersRoute';
+import questionsRoute from './v1/routes/questionsRoute';
+import answersRoute from './v1/routes/answersRoute';
+import commentsRoute from './v1/routes/commentsRoute';
+import votesRoute from './v1/routes/votesRoute';
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(expressValidator());
-app.use(cors());
-app.use(express.static(path.resolve(__dirname, './../UI/')));
-app.use('/UI', express.static(path.resolve(__dirname, './../UI/')));
-app.use('/questions/:questionId/UI', express.static(path.resolve(__dirname, './../UI/')));
-app.use('/questions/:questionId/answers/UI', express.static(path.resolve(__dirname, './../UI/')));
-
-app.get('/', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/index.html')));
-app.get('/search', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/search.html')));
-app.get('/questions/:questionId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/viewQuestion.html')));
-app.get('/questions/:questionId/answers/:answerId', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/updateAnswer.html')));
-app.get('/questions/:questionId/answers/:answerId/comment', (req, res) => res.sendFile(path.resolve(__dirname, './../UI/addcomment.html')));
-// app.get('*', (req, res) => path.resolve(__dirname, './../UI/404.html'));
-
-app.use('/api/v1/auth/', authRouter);
-app.use('/api/v1', voteRoute);
-app.use('/api/v1', commentRoute);
-app.use('/api/v1', questionRoute);
-app.use(morgan(':method :url :response-time'));
+app.use(morgan('dev'));
+app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/', questionsRoute);
+app.use('/api/v1/', answersRoute);
+app.use('/api/v1/', commentsRoute);
+app.use('/api/v1/', votesRoute);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');

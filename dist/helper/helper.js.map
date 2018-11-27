@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../helper/helper.js"],"names":["log","console","item"],"mappings":";;;;;;AACA,IAAMA,MAAM,SAANA,GAAM;AAAA,SAAQC,QAAQD,GAAR,CAAYE,IAAZ,CAAR;AAAA,CAAZ;;kBAEe;AACbF;AADa,C","file":"helper.js","sourcesContent":["\nconst log = item => console.log(item);\n\nexport default {\n  log,\n};\n"]}

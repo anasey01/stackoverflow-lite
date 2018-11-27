@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _expressValidator = require('express-validator');
-
-var _expressValidator2 = _interopRequireDefault(_expressValidator);
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -16,33 +12,29 @@ var _morgan = require('morgan');
 
 var _morgan2 = _interopRequireDefault(_morgan);
 
-var _cors = require('cors');
-
-var _cors2 = _interopRequireDefault(_cors);
-
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
 var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _authRoute = require('./routes/authRoute');
+var _usersRoute = require('./v1/routes/usersRoute');
 
-var _authRoute2 = _interopRequireDefault(_authRoute);
+var _usersRoute2 = _interopRequireDefault(_usersRoute);
 
-var _votesRoute = require('./routes/votesRoute');
+var _questionsRoute = require('./v1/routes/questionsRoute');
+
+var _questionsRoute2 = _interopRequireDefault(_questionsRoute);
+
+var _answersRoute = require('./v1/routes/answersRoute');
+
+var _answersRoute2 = _interopRequireDefault(_answersRoute);
+
+var _commentsRoute = require('./v1/routes/commentsRoute');
+
+var _commentsRoute2 = _interopRequireDefault(_commentsRoute);
+
+var _votesRoute = require('./v1/routes/votesRoute');
 
 var _votesRoute2 = _interopRequireDefault(_votesRoute);
-
-var _commentRoute = require('./routes/commentRoute');
-
-var _commentRoute2 = _interopRequireDefault(_commentRoute);
-
-var _questionRoute = require('./routes/questionRoute');
-
-var _questionRoute2 = _interopRequireDefault(_questionRoute);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50,35 +42,12 @@ var app = (0, _express2.default)();
 
 app.use(_bodyParser2.default.urlencoded({ extended: false }));
 app.use(_bodyParser2.default.json());
-app.use((0, _expressValidator2.default)());
-app.use((0, _cors2.default)());
-app.use(_express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
-app.use('/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
-app.use('/questions/:questionId/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
-app.use('/questions/:questionId/answers/UI', _express2.default.static(_path2.default.resolve(__dirname, './../UI/')));
-
-app.get('/', function (req, res) {
-  return res.sendFile(_path2.default.resolve(__dirname, './../UI/index.html'));
-});
-app.get('/search', function (req, res) {
-  return res.sendFile(_path2.default.resolve(__dirname, './../UI/search.html'));
-});
-app.get('/questions/:questionId', function (req, res) {
-  return res.sendFile(_path2.default.resolve(__dirname, './../UI/viewQuestion.html'));
-});
-app.get('/questions/:questionId/answers/:answerId', function (req, res) {
-  return res.sendFile(_path2.default.resolve(__dirname, './../UI/updateAnswer.html'));
-});
-app.get('/questions/:questionId/answers/:answerId/comment', function (req, res) {
-  return res.sendFile(_path2.default.resolve(__dirname, './../UI/addcomment.html'));
-});
-// app.get('*', (req, res) => path.resolve(__dirname, './../UI/404.html'));
-
-app.use('/api/v1/auth/', _authRoute2.default);
-app.use('/api/v1', _votesRoute2.default);
-app.use('/api/v1', _commentRoute2.default);
-app.use('/api/v1', _questionRoute2.default);
-app.use((0, _morgan2.default)(':method :url :response-time'));
+app.use((0, _morgan2.default)('dev'));
+app.use('/api/v1/auth', _usersRoute2.default);
+app.use('/api/v1/', _questionsRoute2.default);
+app.use('/api/v1/', _answersRoute2.default);
+app.use('/api/v1/', _commentsRoute2.default);
+app.use('/api/v1/', _votesRoute2.default);
 
 app.use(function (req, res, next) {
   var error = new Error('Not found');
@@ -104,4 +73,3 @@ app.listen(app.get('port'), function () {
 });
 
 exports.default = app;
-//# sourceMappingURL=server.js.map
