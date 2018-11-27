@@ -6,7 +6,6 @@ branches:
   only:
   - master
   - develop
-  - refactor
 
 install:
   - npm install
@@ -18,8 +17,8 @@ before_script:
 script:
   - npm test
 
-cache:
-  directories:
-  - node_modules
+# cache:
+#   directories:
+#   - node_modules
 after_success:
 - npm run coveralls
