@@ -5,7 +5,7 @@ api/
 .nyc_output/
 coverage/
 .env
-
+dist/
 
 
 

@@ -1,55 +1,51 @@
 {
   "name": "stackoverflow-lite",
   "version": "1.0.0",
-  "engines": {
-    "node": "8.10.0"
-  },
   "description": "",
   "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
-    "babel": "rm -rf server-babel.js && babel server/server.js -o server/server-babel.js",
     "start": "cross-env NODE_ENV=production npm run build && cross-env NODE_ENV=production node bin/production",
-    "clean": "rm dist -rf",
-    "lint": "./node_modules/.bin/eslint ./app/app.js",
-    "clean-test": "cd dist && rm test -rf",
-    "build-test": "npm run clean-test && cd dist && mkdir test && babel ../test -s -d test",
-    "clean-routes": "cd dist && rm routes -rf",
-    "build-routes": "npm run clean-routes && cd dist && mkdir routes && babel ../routes -s -d routes",
-    "build": "npm run clean && mkdir dist && babel server.js model/dbConfig.js controllers/QuestionManager.js controllers/QuestionRoutes.js controllers/UserManager.js controllers/UsersRoute.js controllers/Votes.js controllers/Comments.js net/DatabaseManager.js middleware/validateToken.js middleware/inputValidation.js middleware/validateAuthor.js helper/helper.js -s -d dist && npm run build-routes && npm run build-test",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test": "cross-env NODE_ENV=test npm run migration && cross-env NODE_ENV=test npm run clean-test && cross-env NODE_ENV=test npm run build-test && cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --timeout 10000 \"dist/test/routes/routeTest.js\" --exit",
-    "production": "cross-env NODE_ENV=production npm run build && cross-env NODE_ENV=production npm run build-routes && cross-env NODE_ENV=production npm run migration && cross-env NODE_ENV=production node bin/production",
-    "dev": "npm run build && npm run build-routes && node bin/production",
-    "migration": "babel-node migrations/dropdatabase.js && babel-node migrations/index.js --exit"
+    "clean-test": "cd dist/v1 && rm -rf test",
+    "build-test": "npm run clean-test && cd dist/v1 && mkdir test && babel ../../v1/test/ -d ../../dist/v1/test/",
+    "test": "npm run clean-test-sql && npm run create-test-sql && cross-env NODE_ENV=test npm run create-test-db &&cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --require babel-core/register --timeout 10000 \"v1/test/index.js\" --exit",
+    "clean": "rm -rf dist/",
+    "build": "npm run clean && mkdir dist && babel server.js -d dist/ && mkdir dist/v1 && babel ./v1/ -d dist/v1",
+    "create-test-db": "cross-env NODE_ENV=test babel-node v1/migrations/createDatabase.js --timeout 500 --exit",
+    "clean-test-sql": "psql -c 'DROP DATABASE IF EXISTS stackoverflowdb;' -U root",
+    "create-test-sql": "psql -c 'CREATE DATABASE stackoverflowdb;' -U root",
+    "dev": "nodemon server.js --exec babel-node"
   },
   "author": "Anani Oluseyi",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "chai-http": "^4.0.0",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
-    "eslint": "^5.4.0",
+    "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "mocha-lcov-reporter": "^1.3.0",
-    "nyc": "^12.0.2"
+    "nodemon": "^1.18.4",
+    "nyc": "^13.1.0",
+    "pg-hstore": "^2.3.2"
   },
   "dependencies": {
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
-    "cors": "^2.8.4",
-    "dotenv": "^6.0.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "dotenv": "^6.1.0",
     "express": "^4.16.3",
-    "express-validator": "^5.3.0",
     "jsonwebtoken": "^8.3.0",
-    "morgan": "^1.9.0",
-    "pg": "^7.4.3"
+    "morgan": "^1.9.1",
+    "pg": "^7.5.0"
   }
 }
