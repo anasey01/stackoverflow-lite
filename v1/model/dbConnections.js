@@ -23,7 +23,6 @@ ${dbQuery.commentTableQuery}
 ${dbQuery.votesTableQuery}
 `;
 
-console.log(configString)
 
 const pool = new Pool(configString);
 
@@ -32,7 +31,6 @@ pool.query(query)
     helper.log('Database Tables Created');
   })
   .catch((error) => {
-    console.log(error);
     helper.log('Error Creating Database', error.message);
   });
 

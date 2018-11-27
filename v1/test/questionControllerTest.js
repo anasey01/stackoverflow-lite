@@ -60,7 +60,6 @@ describe('Question Routes', () => {
         password: 'password12',
       })
       .end((error, response) => {
-        console.log(response.body);
         if (error) done(error);
         response.should.have.status(200);
         response.body.should.be.a('object');
@@ -80,7 +79,6 @@ describe('Question Routes', () => {
         password: 'password12',
       })
       .end((error, response) => {
-        console.log(response.body);
         if (error) done(error);
         response.should.have.status(200);
         response.body.should.be.a('object');
@@ -100,7 +98,6 @@ describe('Question Routes', () => {
         password: 'password12',
       })
       .end((error, response) => {
-        console.log(response.body);
         if (error) done(error);
         response.should.have.status(200);
         response.body.should.be.a('object');
@@ -376,4 +373,5 @@ describe('Question Routes', () => {
 export default {
   userOneDetails,
   userThreeDetails,
+  userTwoDetails
 };

@@ -69,7 +69,7 @@ const selectAllQuestionsQuery = `SELECT questions.question_id, questions.user_id
 GROUP BY questions.question_id`;
 const selectQuestionByIdQuery = 'SELECT * FROM questions where questions.question_id = $1';
 const deleQuestionQuery = 'DELETE FROM questions WHERE questions.question_id = $1';
-const answersForAQuestionQuery = 'SELECT answers.* FROM answers INNER JOIN questions ON answers.question_id = questions.question~_id WHERE answers.question_id=$1';
+const answersForAQuestionQuery = 'SELECT answers.* FROM answers INNER JOIN questions ON answers.question_id = questions.question_id WHERE answers.question_id=$1';
 const answerForAQuestionQuery = 'SELECT answers.* FROM answers WHERE answers.answer_number = $1 AND answers.question_id = $2';
 const updateAnswerQuery = 'UPDATE answers SET answer = $1 WHERE answers.answer_number = $2 AND answers.question_id = $3 RETURNING *';
 const updateAnswerWithUpvotesQuery = 'UPDATE answers SET upvotes = $1 WHERE answer_number = $2 AND question_id = $3 RETURNING *';
