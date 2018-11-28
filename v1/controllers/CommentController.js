@@ -2,7 +2,7 @@ import dbQuery from '../model/dbQuery';
 import pool from '../model/dbConnections';
 
 class CommentController {
-  static addCommentToQuestion(request, response) {
+  static addCommentToAnswer(request, response) {
     const { userId, username } = request.user;
     const { answerNumber } = request.params;
     const questionId = request.params.id;

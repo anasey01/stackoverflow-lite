@@ -6,6 +6,7 @@ api/
 coverage/
 .env
 dist/
+package-lock.json
 
 
 

@@ -118,7 +118,6 @@ describe('Signup a user', () => {
         email: 'johndoe@email.com',
       })
       .end((error, response) => {
-        console.log(response.body);
         if (error) done(error);
         response.should.have.status(200);
         response.body.should.be.a('object');
@@ -139,7 +138,6 @@ describe('Signup a user', () => {
         email: 'janet_doe@email.com',
       })
       .end((error, response) => {
-        console.log(response.body);
         if (error) done(error);
         response.should.have.status(200);
         response.body.should.be.a('object');

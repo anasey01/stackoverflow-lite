@@ -27,8 +27,7 @@ ${dbQuery.votesTableQuery}
 `;
 
 const pool = new Pool(configString);
-// console.log(configString);
 
 pool.query(query)
-  .then(() => helper.log('Database Tables Created'))
-  .catch(error => helper.log('Error Creating Database', error.message));
+  .then(() => console.log('Database Tables Created'))
+  .catch(error => console.log('Error Creating Database>>>>', error));

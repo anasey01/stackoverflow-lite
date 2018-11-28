@@ -2,18 +2,13 @@ language: node_js
 node_js:
   - "8.10.0"
   # safelist
-branches:
-  only:
-  - master
-  - develop
-  - refactor
-
 install:
   - npm install
 
 before_script:
   - psql -c "create database stackoverflowdb;" -U postgres
   - psql -c "create user root with password 'password';" -U postgres
+  - psql -c "create database root;" -U postgres
 
 script:
   - npm test

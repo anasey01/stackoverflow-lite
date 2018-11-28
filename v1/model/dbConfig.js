@@ -30,6 +30,7 @@ const config = {
     port: '5432',
     max: 20,
     idleTimeoutMillis: 30000,
+    ssl: true,
   },
 };
 

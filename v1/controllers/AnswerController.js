@@ -129,7 +129,7 @@ class AnswerController {
         const answerUpdate = data.rows[0];
         return response.status(200).json({
           success: true,
-          message: 'answer succeffully updated.',
+          message: 'answer successfully updated.',
           answerUpdate,
         });
       })

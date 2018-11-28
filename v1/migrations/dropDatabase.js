@@ -16,11 +16,10 @@ switch (process.env.NODE_ENV) {
 }
 
 const query = 'DROP DATABASE IF EXISTS stackoverflowdb;';
-// console.log(query);
 const pool = new Pool(configString);
 
 pool.query(query)
   .then(() => {
     pool.query('CREATE DATABASE stackoverflowdb;').then(() => helper.log('Database Dropped!'));
   })
-  .catch(error => console.log('Error dropping database', error.message));
+  .catch(error => helper.log('Error dropping database', error.message));
