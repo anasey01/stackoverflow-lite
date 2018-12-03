@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import userRoutes from './v1/routes/usersRoute';
 import questionsRoute from './v1/routes/questionsRoute';
 import answersRoute from './v1/routes/answersRoute';
@@ -8,9 +9,9 @@ import commentsRoute from './v1/routes/commentsRoute';
 import votesRoute from './v1/routes/votesRoute';
 
 const app = express();
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(morgan('dev'));
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/', questionsRoute);

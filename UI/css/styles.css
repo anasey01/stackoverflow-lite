@@ -345,7 +345,7 @@ div.main-content-title{
 }
 
 .summary a:hover{
-    color:rgb(0,89,153, 0.4);
+    color:rgba(0,89,153, 0.4);
 }
 
 .answer-stats {

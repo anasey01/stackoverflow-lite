@@ -7,6 +7,8 @@ coverage/
 .env
 dist/
 package-lock.json
+.DS_Store
+dist/
 
 
 
