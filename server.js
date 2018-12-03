@@ -9,10 +9,9 @@ import commentsRoute from './v1/routes/commentsRoute';
 import votesRoute from './v1/routes/votesRoute';
 
 const app = express();
-
-app.use(cors);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(morgan('dev'));
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/', questionsRoute);
