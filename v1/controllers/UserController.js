@@ -25,19 +25,20 @@ class UserController {
     pool.query(dbQuery.registerUserQuery, values)
       .then((userData) => {
         const newUser = {
-          user_id: userData.rows.user_id,
-          username: userData.rows.username,
-          email: userData.rows.email,
+          user_id: userData.rows[0].user_id,
+          username: userData.rows[0].username,
+          email: userData.rows[0].email,
         };
         const token = jwt.sign({
           userId: newUser.user_id,
           username: newUser.username,
           email: newUser.email,
         }, process.env.PRIVATE_KEY, { expiresIn: '5h' });
-
         return response.header('x-auth-token', token).status(200).json({
           success: true,
           message: 'succesfully registered',
+          token,
+          user: newUser,
         });
       })
       .catch(error => response.status(409).json({
