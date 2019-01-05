@@ -80,7 +80,7 @@ class UserController {
             userId: currentUser.user_id,
             username: currentUser.username,
           }, process.env.PRIVATE_KEY,
-          { expiresIn: '5h' });
+          { expiresIn: '52w' });
           return response.header('x-auth-token', token).status(200).json({
             success: true,
             message: 'Successfully logged in, Welcome back',
