@@ -9,11 +9,19 @@ const validateToken = (req, res, next) => {
     });
   }
   try {
-    const decoded = jwt.verify(tokenHeader, process.env.PRIVATE_KEY);
-    req.user = decoded;
-    next();
+    jwt.verify(tokenHeader, process.env.PRIVATE_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid token.',
+          expiredAt: err.expiredAt,
+        });
+      }
+      req.user = decoded;
+      return next();
+    });
   } catch (err) {
-    res.status(400).json({
+    return res.status(400).json({
       success: false,
       message: 'Invalid token.',
     });
