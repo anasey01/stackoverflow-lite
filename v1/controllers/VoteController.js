@@ -41,8 +41,8 @@ class VotesController {
    * @param { callback } next - call next method on success
    */
   static upvoteAnswer(request, response, next) {
-    const { answerNumber } = request.params;
-    const questionId = request.params.id;
+    const { answerNumber } = +request.params;
+    const questionId = +request.params.id;
     const { userId, username } = request.user;
 
     const values = [1, 0, questionId, userId, answerNumber, username];
@@ -63,8 +63,8 @@ class VotesController {
    * @return { object } - total upvotes returned on request object.
    */
   static countTotalUpvotes(request, response, next) {
-    const questionId = request.params.id;
-    const { answerNumber } = request.params;
+    const questionId = +request.params.id;
+    const { answerNumber } = +request.params;
 
     const values = [questionId, answerNumber, 1];
     pool.query(dbQuery.selectAllUpvotes, values)
@@ -86,8 +86,8 @@ class VotesController {
    */
   static saveCurrentTotalUpvoteToAnswer(request, response) {
     const { totalUpvotes } = request;
-    const { answerNumber } = request.params;
-    const questionId = request.params.id;
+    const { answerNumber } = +request.params;
+    const questionId = +request.params.id;
     const values = [totalUpvotes, answerNumber, questionId];
     pool.query(dbQuery.updateAnswerWithUpvotesQuery, values)
       .then((data) => {
@@ -112,8 +112,8 @@ class VotesController {
    * @param { callback } next - call next method on success
    */
   static downvoteAnswer(request, response, next) {
-    const { answerNumber } = request.params;
-    const questionId = request.params.id;
+    const { answerNumber } = +request.params;
+    const questionId = +request.params.id;
     const { userId, username } = request.user;
 
     const values = [0, 1, questionId, userId, answerNumber, username];
@@ -134,8 +134,8 @@ class VotesController {
    * @return { object } - total downvotes returned on request object.
    */
   static countTotalDownvotes(request, response, next) {
-    const questionId = request.params.id;
-    const { answerNumber } = request.params;
+    const questionId = +request.params.id;
+    const { answerNumber } = +request.params;
 
     const values = [questionId, answerNumber, 1];
     pool.query(dbQuery.selectAllDownvotes, values)
@@ -157,8 +157,8 @@ class VotesController {
    */
   static saveCurrentTotalDownvoteToAnswer(request, response) {
     const { totalDownvotes } = request;
-    const { answerNumber } = request.params;
-    const questionId = request.params.id;
+    const { answerNumber } = +request.params;
+    const questionId = +request.params.id;
     const values = [totalDownvotes, answerNumber, questionId];
     pool.query(dbQuery.updateAnswerWithDownvotesQuery, values)
       .then((data) => {
