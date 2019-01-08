@@ -16,8 +16,8 @@ app.use(morgan('dev'));
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/', questionsRoute);
 app.use('/api/v1/', answersRoute);
-app.use('/api/v1/', commentsRoute);
 app.use('/api/v1/', votesRoute);
+app.use('/api/v1/', commentsRoute);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');
