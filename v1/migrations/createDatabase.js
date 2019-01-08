@@ -1,7 +1,6 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import config from '../model/dbConfig';
-import helper from '../helpers/helper';
 import dbQuery from '../model/dbQuery';
 
 dotenv.config();
@@ -30,4 +29,4 @@ const pool = new Pool(configString);
 
 pool.query(query)
   .then(() => console.log('Database Tables Created'))
-  .catch(error => console.log('Error Creating Database>>>>', error));
+  .catch(error => console.log('Error Creating Database', error));
